@@ -1,0 +1,21 @@
+project_id,project_name,client_industry,team_size,duration_weeks,budget_usd,complexity,requirements_clarity,stakeholder_engagement,timeline_buffer_days,past_similar_projects,current_week,tasks_completed,tasks_total,budget_spent_pct,team_experience_avg,risk_level,on_time_delivery
+P001,IBM Cloud Migration,Banking,8,12,500000,High,Low,Medium,5,2,6,28,45,55,3.2,High,0
+P002,watsonx.ai POC,Retail,4,8,150000,Medium,High,High,10,5,4,18,24,40,4.1,Low,1
+P003,ERP Integration,Manufacturing,12,20,1200000,Very High,Low,Low,2,1,10,35,80,70,2.8,Critical,0
+P004,Data Analytics Platform,Healthcare,6,16,800000,High,Medium,High,7,3,8,40,60,50,3.8,Medium,1
+P005,CRM Implementation,Insurance,5,10,300000,Medium,High,Medium,8,4,5,22,30,45,4.2,Low,1
+P006,AI Chatbot Development,Telecom,3,6,100000,Low,High,High,14,6,3,15,18,35,4.5,Low,1
+P007,Legacy System Modernization,Government,15,24,2000000,Very High,Low,Low,1,0,12,40,100,65,2.5,Critical,0
+P008,Supply Chain Optimization,Logistics,7,14,600000,High,Medium,Medium,6,2,7,32,50,58,3.5,High,0
+P009,Digital Transformation,Energy,10,18,1500000,Very High,Medium,High,4,1,9,45,72,60,3.3,High,0
+P010,Mobile App Development,Fintech,4,8,200000,Medium,High,High,12,5,4,20,24,42,4.3,Low,1
+P011,Data Warehouse Migration,Banking,9,16,900000,High,Medium,Medium,5,3,8,38,56,62,3.6,Medium,0
+P012,IoT Platform Setup,Manufacturing,6,12,450000,High,Low,Medium,3,1,6,22,40,68,3.1,High,0
+P013,HR System Upgrade,Retail,5,10,250000,Medium,High,High,10,4,5,25,30,48,4.0,Low,1
+P014,Cybersecurity Assessment,Banking,4,6,180000,Medium,High,High,15,6,3,18,18,38,4.4,Low,1
+P015,Cloud Cost Optimization,Technology,3,8,120000,Low,High,High,20,7,4,22,24,30,4.6,Low,1
+P016,Blockchain POC,Finance,5,10,350000,High,Low,Medium,4,1,5,18,35,72,3.0,High,0
+P017,API Gateway Implementation,Telecom,6,12,400000,Medium,Medium,Medium,8,3,6,28,40,55,3.7,Medium,1
+P018,Data Governance Framework,Healthcare,8,14,700000,High,Medium,Low,3,2,7,30,50,65,3.2,High,0
+P019,Microservices Migration,Technology,10,20,1100000,Very High,Medium,Medium,5,2,10,42,70,60,3.4,High,0
+P020,Customer Analytics,Retail,5,8,220000,Medium,High,High,12,5,4,22,24,40,4.2,Low,1

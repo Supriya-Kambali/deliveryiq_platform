@@ -1,0 +1,302 @@
+IBM DELIVERY CONSULTING KNOWLEDGE BASE
+=======================================
+IBM DeliveryIQ — Internal Knowledge Document
+Version 1.0 | March 2026
+
+This document contains IBM delivery consulting frameworks, methodologies,
+templates, and best practices used by IBM GBS delivery consultants.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1: IBM PROJECT STATUS REPORTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1.1 RAG Status Definitions
+---------------------------
+IBM uses RAG (Red/Amber/Green) status for all project reporting:
+
+GREEN: Project is on track. All milestones met. Budget within 10% of plan.
+No critical risks. Stakeholder satisfaction high.
+
+AMBER: Project has issues requiring attention. One or more milestones at risk.
+Budget variance between 10-20%. At least one high-priority risk open.
+Corrective action plan in place.
+
+RED: Project is in trouble. Multiple milestones missed. Budget variance >20%.
+Critical risks with no mitigation. Immediate escalation required.
+
+1.2 IBM Weekly Status Report Format
+-------------------------------------
+Every IBM project must submit a weekly status report with the following sections:
+
+EXECUTIVE SUMMARY (2-3 sentences max):
+State overall RAG status, key achievement this week, and top concern.
+
+ACCOMPLISHMENTS THIS WEEK:
+- Bullet list of completed deliverables
+- Include % completion for major workstreams
+- Reference milestone IDs from project plan
+
+PLAN FOR NEXT WEEK:
+- Specific tasks with owner and due date
+- Highlight any dependencies on client or third parties
+
+RISKS AND ISSUES:
+Format: [ID] | [Description] | [Probability: H/M/L] | [Impact: H/M/L] | [Mitigation]
+Example: R001 | Client SME unavailable for UAT | H | H | Escalate to client PM, identify backup SME
+
+DECISIONS REQUIRED:
+List any decisions needed from client or IBM leadership with deadline.
+
+BUDGET STATUS:
+Planned spend to date: $XXX,XXX
+Actual spend to date: $XXX,XXX
+Variance: +/- $XX,XXX (X%)
+Forecast to complete: $XXX,XXX
+
+1.3 IBM Escalation Protocol
+-----------------------------
+Level 1: Project Manager resolves within project team (0-2 days)
+Level 2: Delivery Manager engaged (2-5 days, AMBER status)
+Level 3: IBM Partner/Associate Partner engaged (5+ days, RED status)
+Level 4: IBM Executive Sponsor engaged (critical project failure risk)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2: IBM GARAGE METHODOLOGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2.1 What is IBM Garage?
+------------------------
+IBM Garage is IBM's innovation methodology that combines Design Thinking,
+Lean Startup, and Agile practices to help clients move from idea to
+production-ready solution rapidly.
+
+IBM Garage has three phases:
+1. DISCOVER: Understand the problem (Design Thinking workshops, user research)
+2. EXPLORE: Build and test solutions (MVPs, prototypes, user testing)
+3. SCALE: Deploy and grow (production deployment, change management)
+
+2.2 IBM Garage Principles
+---------------------------
+- Co-creation: IBM and client work together, not IBM delivering to client
+- Fail fast: Small experiments, quick learning, rapid iteration
+- Minimum Viable Product (MVP): Build the smallest thing that delivers value
+- Continuous delivery: Deploy frequently, get feedback early
+- Measure everything: Define success metrics before building
+
+2.3 IBM Garage Roles
+---------------------
+- Garage Lead: IBM consultant who facilitates the Garage process
+- Product Owner: Client representative who owns the product vision
+- Squad: Cross-functional team (IBM + client) of 5-9 people
+- Chapter Lead: IBM technical expert who supports multiple squads
+- Site Reliability Engineer (SRE): Ensures production stability
+
+2.4 IBM Garage Ceremonies
+---------------------------
+- Daily Standup: 15 minutes, what did you do, what will you do, blockers
+- Sprint Planning: 2 hours, plan work for next 2-week sprint
+- Sprint Review: 1 hour, demo completed work to stakeholders
+- Sprint Retrospective: 1 hour, what went well, what to improve
+- Backlog Refinement: 1 hour, groom and prioritize upcoming work
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3: IBM PROJECT RISK MANAGEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3.1 IBM Risk Categories
+------------------------
+IBM classifies project risks into 6 categories:
+
+SCOPE RISK: Requirements unclear, scope creep, changing client priorities
+SCHEDULE RISK: Unrealistic timelines, resource unavailability, dependencies
+BUDGET RISK: Cost overruns, currency fluctuation, unexpected expenses
+RESOURCE RISK: Key person dependency, skill gaps, team attrition
+TECHNICAL RISK: Technology complexity, integration challenges, performance
+STAKEHOLDER RISK: Low engagement, conflicting priorities, decision delays
+
+3.2 IBM Risk Assessment Matrix
+--------------------------------
+Probability × Impact = Risk Score
+
+         | Low Impact | Medium Impact | High Impact
+---------|------------|---------------|------------
+High Prob| AMBER      | RED           | RED
+Med Prob | GREEN      | AMBER         | RED
+Low Prob | GREEN      | GREEN         | AMBER
+
+3.3 IBM Risk Mitigation Strategies
+------------------------------------
+AVOID: Change project plan to eliminate the risk entirely
+TRANSFER: Move risk to another party (insurance, contracts, subcontractors)
+MITIGATE: Reduce probability or impact of the risk
+ACCEPT: Acknowledge risk and prepare contingency plan
+
+3.4 Common IBM Project Risks and Mitigations
+----------------------------------------------
+Risk: Client SME unavailability
+Mitigation: Identify backup SMEs, schedule sessions 2 weeks in advance,
+document decisions to reduce dependency on single person.
+
+Risk: Scope creep
+Mitigation: Formal change control process, weekly scope review,
+client sign-off on all requirement changes.
+
+Risk: Technical complexity underestimated
+Mitigation: Technical spike in Sprint 1, involve IBM technical architects,
+build proof-of-concept before committing to full implementation.
+
+Risk: Key IBM resource leaving project
+Mitigation: Knowledge transfer documentation, pair programming,
+cross-training team members on critical components.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4: IBM DELIVERY TOOLS AND PROCESSES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4.1 IBM Project Management Tools
+----------------------------------
+- IBM ELM (Engineering Lifecycle Management): Requirements and test management
+- IBM Rational DOORS: Requirements management for complex projects
+- Jira: Agile project tracking (most common in IBM Garage projects)
+- Microsoft Project: Traditional waterfall project planning
+- IBM Connections: Team collaboration and document sharing
+- Slack@IBM: Real-time team communication
+- Box@IBM: Document storage and sharing with clients
+
+4.2 IBM Time Tracking
+----------------------
+IBM consultants must track time daily using IBM's internal time tracking system.
+- Billable time: Time charged to client project code
+- Non-billable time: Internal IBM activities (training, admin, proposals)
+- Target utilization: 85-90% billable for delivery consultants
+- Time must be submitted by Friday 5pm each week
+
+4.3 IBM Expense Management
+----------------------------
+IBM uses Concur for expense management.
+- Client entertainment: Requires pre-approval for amounts >$100
+- Travel: Book through IBM's preferred travel agency (BCD Travel)
+- Meals: $75/day per diem for domestic travel, $100/day international
+- Receipts required for all expenses >$25
+- Submit expenses within 30 days of incurring
+
+4.4 IBM Statement of Work (SOW)
+---------------------------------
+An SOW is the legal contract between IBM and the client. It defines:
+- Scope of work and deliverables
+- Timeline and milestones
+- Pricing and payment terms
+- Assumptions and dependencies
+- Change control process
+- Acceptance criteria
+
+IBM SOW must be reviewed by IBM Legal before signing.
+Any scope changes require a formal Change Order (CO) to the SOW.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5: IBM CAREER DEVELOPMENT FOR CONSULTANTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5.1 IBM Career Bands
+---------------------
+IBM uses a band system for career levels:
+- Band 6: Associate/Entry-level consultant (0-2 years)
+- Band 7: Consultant (2-5 years)
+- Band 8: Senior Consultant / Manager (5-10 years)
+- Band 9: Associate Partner (10-15 years)
+- Band 10: Partner (15+ years)
+
+5.2 IBM Digital Badges for Delivery Consultants
+-------------------------------------------------
+Recommended badges for delivery consultants:
+1. IBM Garage Methodology Explorer
+2. IBM Design Thinking Practitioner
+3. IBM Agile Explorer
+4. IBM Cloud Essentials
+5. IBM watsonx.ai Technical Sales Intermediate
+6. IBM Project Management Professional
+7. IBM AI Fundamentals
+
+5.3 IBM Performance Review Process
+-------------------------------------
+IBM uses a continuous performance management approach:
+- Quarterly check-ins with manager
+- Year-end performance rating (1-5 scale)
+- Promotion decisions made annually in Q4
+- Key factors: Client feedback, delivery quality, IBM values, skills growth
+
+5.4 IBM Values
+---------------
+IBM's core values guide all work:
+1. Dedication to every client's success
+2. Innovation that matters — for our company and for the world
+3. Trust and personal responsibility in all relationships
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6: IBM INTERN PROGRAM — DELIVERY CONSULTING TRACK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+6.1 IBM Intern Expectations
+-----------------------------
+IBM interns in the delivery consulting track are expected to:
+- Contribute to real client projects from Week 1
+- Complete assigned IBM digital badges within internship period
+- Present a final project to IBM leadership at end of internship
+- Maintain 85%+ attendance in all IBM training sessions
+- Submit weekly status updates to manager
+
+6.2 IBM Intern to Full-Time Conversion
+----------------------------------------
+IBM evaluates interns for full-time offers based on:
+- Technical skills demonstrated (30%)
+- Client/project delivery quality (30%)
+- IBM values alignment (20%)
+- Manager recommendation (20%)
+
+Interns who receive full-time offers typically:
+- Completed 2+ IBM digital badges
+- Received positive client feedback
+- Demonstrated initiative beyond assigned tasks
+- Built strong relationships with IBM team members
+
+6.3 IBM Intern Final Project Requirements
+------------------------------------------
+The final project must:
+- Solve a real business problem (not a toy example)
+- Use technologies relevant to IBM's current focus areas (AI, Cloud, Data)
+- Include a working demo
+- Have clear business value articulation
+- Be presented to a panel of IBM managers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7: IBM watsonx PLATFORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+7.1 IBM watsonx Overview
+--------------------------
+IBM watsonx is IBM's AI and data platform consisting of three components:
+- watsonx.ai: AI studio for building, training, and deploying AI models
+- watsonx.data: Data store built on open lakehouse architecture
+- watsonx.governance: AI governance and risk management platform
+
+7.2 watsonx.ai Key Features
+-----------------------------
+- Foundation model library (Llama, Granite, Mistral, etc.)
+- Prompt Lab for prompt engineering
+- AutoAI for automated model building
+- Model evaluation and comparison tools
+- API access for integration with applications
+
+7.3 IBM Granite Models
+-----------------------
+IBM Granite is IBM's family of open-source foundation models:
+- Granite-3B-Code: Code generation and completion
+- Granite-7B-Instruct: General instruction following
+- Granite-13B-Chat: Conversational AI
+- Granite-34B-Code: Advanced code generation
+
+IBM Granite models are available on watsonx.ai and HuggingFace.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+END OF IBM DELIVERY KNOWLEDGE BASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

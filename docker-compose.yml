@@ -1,0 +1,165 @@
+# IBM DeliveryIQ — Docker Compose Configuration
+# ================================================
+# WHY DOCKER COMPOSE?
+#   Docker Compose lets us define and run MULTIPLE containers as one application.
+#   IBM DeliveryIQ has several services that need to work together:
+#   - The Streamlit frontend
+#   - The FastAPI backend
+#   - ChromaDB vector database
+#   - Ollama LLM server
+#
+#   Without Docker Compose, you'd need to start each service manually,
+#   configure networking between them, and manage them separately.
+#   With Docker Compose: ONE command starts everything.
+#
+#   WHY DOCKER AT ALL?
+#   "It works on my machine" is the #1 problem in software delivery.
+#   Docker packages the app + all dependencies into a container that
+#   runs identically on any machine — your Mac, IBM's servers, or the cloud.
+#   This is Week 4 DevOps in action.
+#
+# HOW TO RUN:
+#   docker-compose up --build        # Build and start all services
+#   docker-compose up -d             # Run in background (detached)
+#   docker-compose down              # Stop all services
+#   docker-compose logs -f           # View logs from all services
+
+version: '3.8'
+
+# ─────────────────────────────────────────────────────────────────
+# NETWORKS
+# WHY A CUSTOM NETWORK?
+# Services need to communicate with each other (app → chromadb, app → ollama).
+# A custom bridge network lets containers find each other by service name
+# (e.g., "chromadb" instead of an IP address).
+# ─────────────────────────────────────────────────────────────────
+networks:
+  ibm-deliveryiq-network:
+    driver: bridge
+    name: ibm-deliveryiq-network
+
+# ─────────────────────────────────────────────────────────────────
+# VOLUMES
+# WHY VOLUMES?
+# Containers are ephemeral — data is lost when they stop.
+# Volumes persist data to the host machine:
+# - ChromaDB: Keeps your IBM document embeddings between restarts
+# - Ollama: Keeps downloaded LLM models (saves re-downloading 4GB+)
+# ─────────────────────────────────────────────────────────────────
+volumes:
+  chromadb_data:
+    name: ibm-deliveryiq-chromadb
+  ollama_models:
+    name: ibm-deliveryiq-ollama
+
+services:
+
+  # ──────────────────────────────────────────────────────────────
+  # SERVICE 1: Streamlit Frontend
+  # WHY: The main UI that IBM consultants interact with
+  # ──────────────────────────────────────────────────────────────
+  ibm-deliveryiq-app:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.app
+    container_name: ibm-deliveryiq-app
+    ports:
+      - "8501:8501"    # Streamlit default port
+    environment:
+      - OLLAMA_HOST=http://ollama:11434    # Connect to Ollama container
+      - CHROMADB_HOST=chromadb             # Connect to ChromaDB container
+      - CHROMADB_PORT=8000
+      - API_HOST=http://ibm-deliveryiq-api:8000
+    volumes:
+      - .:/app                             # Mount project for live reload
+      - chromadb_data:/app/module2_knowledge_rag/vector_stores/chroma_db
+    depends_on:
+      - chromadb
+      - ollama
+    networks:
+      - ibm-deliveryiq-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ──────────────────────────────────────────────────────────────
+  # SERVICE 2: FastAPI Backend
+  # WHY: REST API layer between frontend and AI modules
+  # ──────────────────────────────────────────────────────────────
+  ibm-deliveryiq-api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.api
+    container_name: ibm-deliveryiq-api
+    ports:
+      - "8000:8000"    # FastAPI default port
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - CHROMADB_HOST=chromadb
+      - CHROMADB_PORT=8000
+    volumes:
+      - .:/app
+      - chromadb_data:/app/module2_knowledge_rag/vector_stores/chroma_db
+    depends_on:
+      - chromadb
+      - ollama
+    networks:
+      - ibm-deliveryiq-network
+    restart: unless-stopped
+
+  # ──────────────────────────────────────────────────────────────
+  # SERVICE 3: ChromaDB Vector Database
+  # WHY: Stores IBM document embeddings for RAG retrieval
+  # ChromaDB runs as a standalone server in production
+  # ──────────────────────────────────────────────────────────────
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: ibm-deliveryiq-chromadb
+    ports:
+      - "8002:8000"    # ChromaDB HTTP API
+    volumes:
+      - chromadb_data:/chroma/chroma    # Persist embeddings
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_HTTP_PORT=8000
+      - ANONYMIZED_TELEMETRY=False
+    networks:
+      - ibm-deliveryiq-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ──────────────────────────────────────────────────────────────
+  # SERVICE 4: Ollama LLM Server
+  # WHY: Runs Llama 3 / Mistral locally — no API costs, no data privacy issues
+  # All LLM inference happens inside this container
+  # ──────────────────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ibm-deliveryiq-ollama
+    ports:
+      - "11434:11434"    # Ollama API port
+    volumes:
+      - ollama_models:/root/.ollama    # Persist downloaded models
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - ibm-deliveryiq-network
+    restart: unless-stopped
+    # Pull Llama 3 model on first start
+    # Note: First run downloads ~4GB model — takes a few minutes
+    entrypoint: ["/bin/sh", "-c", "ollama serve & sleep 5 && ollama pull llama3 && wait"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 120s    # Give time for model download
+
+# Made with Bob

@@ -1,0 +1,186 @@
+# IBM DeliveryIQ — Kubernetes Deployment
+# ========================================
+# WHY KUBERNETES?
+#   Docker Compose is great for local development (one machine).
+#   Kubernetes (K8s) is for PRODUCTION — it manages containers across
+#   multiple machines and handles:
+#   - Auto-scaling: More users → more containers automatically
+#   - Self-healing: Container crashes → K8s restarts it automatically
+#   - Rolling updates: Deploy new version with zero downtime
+#   - Load balancing: Distribute traffic across multiple instances
+#
+#   For IBM DeliveryIQ, Kubernetes means:
+#   - The whole IBM GBS team can use it simultaneously
+#   - If the app crashes, it restarts automatically
+#   - We can update the model without downtime
+#
+# WHY MINIKUBE FOR LOCAL?
+#   Minikube runs a single-node Kubernetes cluster on your Mac.
+#   Perfect for learning and testing K8s without a cloud account.
+#
+# HOW TO DEPLOY:
+#   minikube start
+#   kubectl apply -f infrastructure/kubernetes/
+#   minikube service ibm-deliveryiq-service --url
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-deliveryiq
+  namespace: default
+  labels:
+    app: ibm-deliveryiq
+    version: "1.0"
+    team: ibm-delivery-consulting
+    # WHY LABELS? Labels are key-value pairs that identify resources.
+    # kubectl get pods -l app=ibm-deliveryiq
+    # Selectors use labels to find the right pods.
+
+spec:
+  # WHY REPLICAS: 2?
+  # Running 2 instances means:
+  # - If one pod crashes, the other keeps serving requests
+  # - Load is distributed between both pods
+  # - Zero downtime during rolling updates
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: ibm-deliveryiq
+
+  # WHY ROLLING UPDATE STRATEGY?
+  # When we deploy a new version:
+  # - maxSurge: 1 → Start 1 new pod before removing old ones
+  # - maxUnavailable: 0 → Never have 0 running pods (zero downtime)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  template:
+    metadata:
+      labels:
+        app: ibm-deliveryiq
+    spec:
+      containers:
+        - name: ibm-deliveryiq-app
+          image: ibm-deliveryiq:latest
+          imagePullPolicy: IfNotPresent  # Use local image (Minikube)
+
+          ports:
+            - containerPort: 8501
+              name: streamlit
+
+          # WHY ENVIRONMENT VARIABLES IN K8S?
+          # Same as Docker — configuration separate from code.
+          # In K8s, we can use ConfigMaps and Secrets for sensitive values.
+          env:
+            - name: OLLAMA_HOST
+              value: "http://ollama-service:11434"
+            - name: CHROMADB_HOST
+              value: "chromadb-service"
+            - name: CHROMADB_PORT
+              value: "8000"
+
+          # WHY RESOURCE LIMITS?
+          # Without limits, one pod could consume all cluster resources.
+          # Requests: Minimum guaranteed resources
+          # Limits: Maximum allowed resources
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"      # 250 millicores = 0.25 CPU
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"     # 1 full CPU core
+
+          # WHY LIVENESS PROBE?
+          # K8s checks if the container is alive. If it fails 3 times,
+          # K8s kills and restarts the container automatically.
+          livenessProbe:
+            httpGet:
+              path: /_stcore/health
+              port: 8501
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3
+
+          # WHY READINESS PROBE?
+          # K8s checks if the container is READY to receive traffic.
+          # Traffic only goes to pods that pass the readiness check.
+          readinessProbe:
+            httpGet:
+              path: /_stcore/health
+              port: 8501
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+---
+# ─────────────────────────────────────────────────────────────────
+# CHROMADB DEPLOYMENT
+# WHY SEPARATE DEPLOYMENT?
+# ChromaDB is a stateful service (stores data). Keeping it separate
+# from the app allows us to scale them independently.
+# ─────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chromadb
+  labels:
+    app: chromadb
+spec:
+  replicas: 1  # Only 1 replica for stateful service
+  selector:
+    matchLabels:
+      app: chromadb
+  template:
+    metadata:
+      labels:
+        app: chromadb
+    spec:
+      containers:
+        - name: chromadb
+          image: chromadb/chroma:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: CHROMA_SERVER_HOST
+              value: "0.0.0.0"
+            - name: ANONYMIZED_TELEMETRY
+              value: "False"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          volumeMounts:
+            - name: chromadb-storage
+              mountPath: /chroma/chroma
+      volumes:
+        - name: chromadb-storage
+          persistentVolumeClaim:
+            claimName: chromadb-pvc
+
+---
+# ─────────────────────────────────────────────────────────────────
+# PERSISTENT VOLUME CLAIM for ChromaDB
+# WHY PVC?
+# Pods are ephemeral — data is lost when they restart.
+# A PVC (Persistent Volume Claim) requests durable storage from K8s.
+# ChromaDB's embeddings survive pod restarts.
+# ─────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chromadb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce    # One pod can read/write at a time
+  resources:
+    requests:
+      storage: 5Gi     # 5GB for IBM document embeddings
+
+# Made with Bob
