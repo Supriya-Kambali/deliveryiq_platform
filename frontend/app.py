@@ -1281,7 +1281,6 @@ def render_risk_dashboard():
 
         with st.spinner("🤖 ML model analyzing project risk..."):
             try:
-                sys.path.insert(0, os.path.join(PROJECT_ROOT, 'module1_risk_dashboard'))
                 from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
 
                 predictor = IBMRiskPredictor()
