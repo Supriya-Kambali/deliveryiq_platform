@@ -48,8 +48,8 @@ from langchain_community.llms import Ollama
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 
-from agents.supervisor import DeliveryState, SupervisorAgent, create_routing_function
-from agents.specialist_agents import (
+from module3_agents.agents.supervisor import DeliveryState, SupervisorAgent, create_routing_function
+from module3_agents.agents.specialist_agents import (
     PlannerAgent, RiskAgent, ReportAgent,
     StakeholderAgent, GeneralAgent
 )

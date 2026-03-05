@@ -1282,7 +1282,7 @@ def render_risk_dashboard():
         with st.spinner("🤖 ML model analyzing project risk..."):
             try:
                 sys.path.insert(0, os.path.join(PROJECT_ROOT, 'module1_risk_dashboard'))
-                from models.risk_predictor import IBMRiskPredictor
+                from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
 
                 predictor = IBMRiskPredictor()
                 predictor.train()
@@ -1700,7 +1700,7 @@ def render_knowledge_base():
             with st.spinner("Loading IBM documents and building vector database..."):
                 try:
                     sys.path.insert(0, os.path.join(PROJECT_ROOT, 'module2_knowledge_rag'))
-                    from rag_pipeline.rag_chain import IBMKnowledgeRAG
+                    from module2_knowledge_rag.rag_pipeline.rag_chain import IBMKnowledgeRAG
                     rag = IBMKnowledgeRAG()
                     result = rag.initialize()
                     st.session_state.rag_engine = rag
@@ -1939,7 +1939,7 @@ def render_agents():
             with st.spinner("Building LangGraph agent network..."):
                 try:
                     sys.path.insert(0, os.path.join(PROJECT_ROOT, 'module3_agents'))
-                    from graphs.delivery_graph import IBMDeliveryGraph
+                    from module3_agents.graphs.delivery_graph import IBMDeliveryGraph
                     graph = IBMDeliveryGraph()
                     graph.initialize()
                     st.session_state.agent_graph = graph

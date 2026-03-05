@@ -42,6 +42,7 @@ unstructured>=0.10.0             # Universal document loader
 # WEEK 3: LangGraph + Multi-Agent Systems
 # ─────────────────────────────────────────────────────────────────
 langgraph>=0.0.40                # LangGraph for agent orchestration
+langgraph-checkpoint-sqlite      # SqLite Checkpoint memory for LangGraph
 langsmith>=0.1.0                 # LangSmith for agent monitoring (optional)
 
 # ─────────────────────────────────────────────────────────────────
