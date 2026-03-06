@@ -1287,8 +1287,8 @@ def render_risk_dashboard():
 
                 if hasattr(predictor, "predict_risk"):
                     result = predictor.predict_risk(project_data)
-                elif hasattr(predictor, "predict"):
-                    result = predictor.predict(project_data)
+                elif hasattr(predictor, "predict_project_risk"):
+                    result = predictor.predict_project_risk(project_data)
                 else:
                     result = {"risk_level": "Unknown", "confidence": 0.0}
 
