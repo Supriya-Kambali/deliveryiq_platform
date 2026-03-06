@@ -1285,20 +1285,13 @@ def render_risk_dashboard():
 
                 predictor = IBMRiskPredictor()
 
-                if hasattr(predictor, "predict_risk"):
-                    result = predictor.predict_risk(project_data)
-                elif hasattr(predictor, "predict_project_risk"):
-                    result = predictor.predict_project_risk(project_data)
-                else:
-                    result = {"risk_level": "Unknown", "confidence": 0.0}
+                predictor = IBMRiskPredictor()
+
+                result = predictor.predict_risk(project_data)
+                health = predictor.get_project_health_score(project_data)
 
                 risk_level = result.get("risk_level", "Unknown")
                 confidence = result.get("confidence", 0)
-
-                if hasattr(predictor, "get_project_health_score"):
-                    health = predictor.get_project_health_score(project_data)
-                else:
-                    health = {"health_score": 0, "rag_meaning": "Unknown", "breakdown": {}}
 
                 health_score = health.get("health_score", 0)
                 rag_status = health.get("rag_meaning", "Unknown")
