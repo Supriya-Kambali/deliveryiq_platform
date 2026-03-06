@@ -1284,7 +1284,6 @@ def render_risk_dashboard():
                 from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
 
                 predictor = IBMRiskPredictor()
-                predictor.train()
                 result = predictor.predict_risk(project_data)
                 health = predictor.get_project_health_score(project_data)
 
