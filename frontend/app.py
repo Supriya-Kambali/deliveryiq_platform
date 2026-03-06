@@ -30,7 +30,7 @@ import pandas as pd
 import base64
 
 # Add project root to path for module imports
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, PROJECT_ROOT)
 
 # Auth module — must come after PROJECT_ROOT is on sys.path
