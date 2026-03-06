@@ -1284,39 +1284,51 @@ def render_risk_dashboard():
                 from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
 
                 predictor = IBMRiskPredictor()
-                result = predictor.predict_risk(project_data)
-                health = predictor.get_project_health_score(project_data)
 
-                st.session_state.project_risk_level = result['risk_level']
-                st.session_state.project_health_score = health['health_score']
+                if hasattr(predictor, "predict_risk"):
+                    result = predictor.predict_risk(project_data)
+                elif hasattr(predictor, "predict"):
+                    result = predictor.predict(project_data)
+                else:
+                    result = {"risk_level": "Unknown", "confidence": 0.0}
+
+                risk_level = result.get("risk_level", "Unknown")
+                confidence = result.get("confidence", 0)
+
+                if hasattr(predictor, "get_project_health_score"):
+                    health = predictor.get_project_health_score(project_data)
+                else:
+                    health = {"health_score": 0, "rag_meaning": "Unknown", "breakdown": {}}
+
+                health_score = health.get("health_score", 0)
+                rag_status = health.get("rag_meaning", "Unknown")
+
+                st.session_state.project_risk_level = risk_level
+                st.session_state.project_health_score = health_score
 
                 # ── DIVIDER + SECTION HEADER ─────────────────────────────
                 st.markdown("<div style='height:8px;'></div>", unsafe_allow_html=True)
-
                 # ── ROW 1: FOUR KPI METRICS ──────────────────────────────
                 risk_color_map = {"High": "#DA1E28", "Medium": "#F1C21B", "Low": "#24A148"}
                 risk_bg_map   = {"High": "#FFF1F1", "Medium": "#FFF4E6", "Low": "#DEFBE6"}
-                risk_color = risk_color_map.get(result['risk_level'], "#525252")
-                risk_bg    = risk_bg_map.get(result['risk_level'], "#F4F4F4")
+                risk_color = risk_color_map.get(risk_level, "#525252")
+                risk_bg = risk_bg_map.get(risk_level, "#F4F4F4")
 
                 kc1, kc2, kc3, kc4 = st.columns(4)
                 kc1.markdown(f"""
-                <div style='background:#FFFFFF; border:1px solid #E0E0E0; border-top:3px solid {risk_color};
-                            border-radius:8px; padding:16px; text-align:center;
-                            box-shadow:0 1px 2px rgba(0,0,0,0.05);'>
-                    <div style='font-size:12px; color:#6F6F6F; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;'>Risk Level</div>
-                    <div style='display:inline-block; background:{risk_bg}; color:{risk_color};
-                                padding:4px 10px; border-radius:16px; font-size:14px; font-weight:500;'>
-                        {result['risk_level']}
-                    </div>
-                </div>
+<div style='background:#FFFFFF; border:1px solid #E0E0E0; border-top:3px solid {risk_color}; border-radius:8px; padding:16px; text-align:center; box-shadow:0 1px 2px rgba(0,0,0,0.05);'>
+    <div style='font-size:12px; color:#6F6F6F; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;'>Risk Level</div>
+    <div style='display:inline-block; background:{risk_bg}; color:{risk_color}; padding:4px 10px; border-radius:16px; font-size:14px; font-weight:500;'>
+        {risk_level}
+    </div>
+</div>
                 """, unsafe_allow_html=True)
-                kc2.metric("Health Score", f"{health['health_score']}/100")
-                kc3.metric("RAG Status",   health['rag_meaning'])
-                kc4.metric("Confidence",   f"{result['confidence']:.0%}")
+                kc2.metric("Health Score", f"{health_score}/100")
+                kc3.metric("RAG Status", rag_status)
+                kc4.metric("Confidence", f"{confidence:.0%}")
 
                 # ── EXECUTIVE INSIGHT PANEL ──────────────────────────────
-                low_scores = [k for k, v in health['breakdown'].items() if v < 65]
+                low_scores = [k for k, v in health.get('breakdown', {}).items() if v < 65]
                 if low_scores:
                     insight_text = f"Risk is elevated due to low scores in <strong>{', '.join(low_scores[:2])}</strong>. Immediate mitigation is recommended."
                 else:
@@ -1340,7 +1352,7 @@ def render_risk_dashboard():
                             border:1px solid #E0E0E0;'>
                     <span style='font-size:12px; font-weight:600; color:#0F62FE;
                                   text-transform:uppercase; letter-spacing:0.06em;'>Recommendation</span><br>
-                    <span style='color:#161616; font-size:14px;'>{result['recommendation']}</span>
+                    <span style='color:#161616; font-size:14px;'>{result.get('recommendation', 'No explicit recommendation provided.')}</span>
                 </div>
                 """, unsafe_allow_html=True)
 
