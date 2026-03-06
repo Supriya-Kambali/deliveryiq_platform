@@ -1,0 +1,91 @@
+# IBM DeliveryIQ — Python Dependencies
+# ======================================
+# WHY THIS FILE?
+#   requirements.txt is the standard Python way to declare dependencies.
+#   Anyone can reproduce your exact environment with:
+#   pip install -r requirements.txt
+#
+#   This is critical for:
+#   - Docker builds (Dockerfile copies and installs this)
+#   - Team collaboration (everyone uses same versions)
+#   - IBM deployment (reproducible environments)
+#
+# INSTALL ALL:
+#   pip install -r requirements.txt
+#
+# NOTE: Some packages (bitsandbytes) have limited Mac support.
+#   For fine-tuning on Mac M4 Pro, use the MPS-compatible version.
+
+# ─────────────────────────────────────────────────────────────────
+# WEEK 1: ML Fundamentals
+# ─────────────────────────────────────────────────────────────────
+numpy>=1.24.0                    # Array operations, linear algebra
+pandas>=2.0.0                    # DataFrames, data manipulation
+scikit-learn>=1.3.0              # ML models: RandomForest, LogisticRegression, etc.
+matplotlib>=3.7.0                # Core plotting library
+seaborn>=0.12.0                  # Statistical visualizations
+joblib>=1.3.0                    # Model serialization (save/load ML models)
+
+# ─────────────────────────────────────────────────────────────────
+# WEEK 2: LangChain + RAG + Vector Databases
+# ─────────────────────────────────────────────────────────────────
+langchain>=0.1.0                 # Core LangChain framework
+langchain-community>=0.0.20      # Community integrations (Ollama, ChromaDB, etc.)
+langchain-core>=0.1.0            # LCEL, runnables, output parsers
+chromadb>=0.4.0                  # Local vector database for RAG
+sentence-transformers>=2.2.0     # HuggingFace embeddings (all-MiniLM-L6-v2)
+pypdf>=3.0.0                     # Load PDF documents for RAG
+python-docx>=0.8.11              # Load Word documents for RAG
+unstructured>=0.10.0             # Universal document loader
+
+# ─────────────────────────────────────────────────────────────────
+# WEEK 3: LangGraph + Multi-Agent Systems
+# ─────────────────────────────────────────────────────────────────
+langgraph>=0.0.40                # LangGraph for agent orchestration
+langgraph-checkpoint-sqlite      # SqLite Checkpoint memory for LangGraph
+langsmith>=0.1.0                 # LangSmith for agent monitoring (optional)
+
+# ─────────────────────────────────────────────────────────────────
+# WEEK 4: HuggingFace + Fine-Tuning + Deployment
+# ─────────────────────────────────────────────────────────────────
+transformers>=4.36.0             # AutoTokenizer, AutoModelForCausalLM
+peft>=0.7.0                      # LoRA, QLoRA adapters (PEFT library)
+trl>=0.7.0                       # SFTTrainer for supervised fine-tuning
+datasets>=2.14.0                 # HuggingFace datasets library
+accelerate>=0.25.0               # Distributed training, device management
+huggingface-hub>=0.19.0          # Download models from HuggingFace Hub
+tokenizers>=0.15.0               # Fast tokenizers
+
+# BitsAndBytes for 4-bit quantization
+# NOTE: On Mac M4 Pro, use the MPS-compatible version
+# bitsandbytes>=0.41.0           # Uncomment for NVIDIA GPU
+# For Mac: pip install bitsandbytes --prefer-binary
+
+# ─────────────────────────────────────────────────────────────────
+# LOCAL LLM (Ollama)
+# ─────────────────────────────────────────────────────────────────
+ollama>=0.1.0                    # Python client for Ollama API
+
+# ─────────────────────────────────────────────────────────────────
+# FRONTEND (Streamlit UI)
+# ─────────────────────────────────────────────────────────────────
+streamlit>=1.28.0                # Web UI framework
+plotly>=5.17.0                   # Interactive charts (optional)
+pillow>=10.0.0                   # Image processing for charts
+
+# ─────────────────────────────────────────────────────────────────
+# BACKEND (FastAPI)
+# ─────────────────────────────────────────────────────────────────
+fastapi>=0.104.0                 # REST API framework
+uvicorn>=0.24.0                  # ASGI server for FastAPI
+pydantic>=2.0.0                  # Data validation for API models
+python-multipart>=0.0.6          # File upload support
+
+# ─────────────────────────────────────────────────────────────────
+# UTILITIES
+# ─────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0             # Load .env files for configuration
+requests>=2.31.0                 # HTTP requests
+aiohttp>=3.9.0                   # Async HTTP (for FastAPI)
+tiktoken>=0.5.0                  # Token counting for LLM context management
+torch>=2.1.0                     # PyTorch (required by transformers + sentence-transformers)

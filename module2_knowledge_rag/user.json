@@ -1,0 +1,19 @@
+{
+    "users": [
+        {
+            "username": "supriyakambali@ibm.com",
+            "password": "manager123",
+            "role": "manager"
+        },
+        {
+            "username": "rahul@ibm.com",
+            "password": "employee123",
+            "role": "employee"
+        },
+        {
+            "username": "ananya@ibm.com",
+            "password": "intern123",
+            "role": "intern"
+        }
+    ]
+}
