@@ -78,9 +78,7 @@ class IBMRiskPredictor:
         self.features_used = []
 
         # Load trained model if available
-        if os.path.exists(self.model_path):
-            self.model = joblib.load(self.model_path)
-            self.is_trained = True
+        self.load_model()
 
     def _encode_categorical(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -228,16 +226,24 @@ class IBMRiskPredictor:
 
     def load_model(self):
         """Load a previously trained model."""
-        if os.path.exists(self.model_path):
-            saved = joblib.load(self.model_path)
-            self.model = saved['model']
-            self.scaler = saved['scaler']
-            self.features_used = saved['features']
-            self.is_trained = True
-            print("✅ Model loaded from disk")
-        else:
-            print("⚠️  No saved model found. Training new model...")
-            self.train()
+        try:
+            if os.path.exists(self.model_path):
+                saved = joblib.load(self.model_path)
+                self.model = saved.get('model')
+                self.scaler = saved.get('scaler', StandardScaler())
+                self.features_used = saved.get('features', [])
+                if self.model and self.features_used:
+                    self.is_trained = True
+                    print("✅ Model loaded from disk")
+                else:
+                    self.is_trained = False
+                    print("⚠️ Model loaded but missing required components")
+            else:
+                print("⚠️  No saved model found.")
+                self.is_trained = False
+        except Exception as e:
+            print(f"⚠️  Error loading model: {e}")
+            self.is_trained = False
 
     def predict_risk(self, project_data: dict) -> dict:
         """
@@ -252,6 +258,14 @@ class IBMRiskPredictor:
         if not self.is_trained:
             self.load_model()
 
+        if not self.is_trained or not hasattr(self, 'features_used') or not self.features_used:
+            return {
+                'risk_level': 'Unknown',
+                'confidence': 0.0,
+                'top_risk_factors': [],
+                'recommendation': "Model not trained. Cannot provide recommendations."
+            }
+
         # Convert to DataFrame
         df = pd.DataFrame([project_data])
         X, _ = self.prepare_data(df)
@@ -263,10 +277,19 @@ class IBMRiskPredictor:
         X = X[self.features_used].fillna(0)
 
         # Scale and predict
-        X_scaled = self.scaler.transform(X)
-        risk_level = self.model.predict(X_scaled)[0]
-        probabilities = self.model.predict_proba(X_scaled)[0]
-        classes = self.model.classes_
+        try:
+            X_scaled = self.scaler.transform(X)
+            risk_level = self.model.predict(X_scaled)[0]
+            probabilities = self.model.predict_proba(X_scaled)[0]
+            classes = self.model.classes_
+        except Exception as e:
+            print(f"⚠️ Prediction scaling failed: {e}")
+            return {
+                'risk_level': 'Unknown',
+                'confidence': 0.0,
+                'top_risk_factors': [],
+                'recommendation': "Prediction failed due to features or scaling error."
+            }
 
         # Build probability dict
         prob_dict = {cls: float(prob) for cls, prob in zip(classes, probabilities)}
@@ -288,7 +311,6 @@ class IBMRiskPredictor:
 
         return {
             'risk_level': risk_level,
-            'probabilities': prob_dict,
             'confidence': float(max(probabilities)),
             'top_risk_factors': risk_factors,
             'recommendation': self._get_recommendation(risk_level, risk_factors)

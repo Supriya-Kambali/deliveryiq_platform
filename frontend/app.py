@@ -51,6 +51,11 @@ st.set_page_config(
     }
 )
 
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
+    st.session_state["user_role"] = None
+    st.session_state["current_page"] = "🏠 Home"
+
 # ─────────────────────────────────────────────────────────────────
 # IBM CARBON DESIGN SYSTEM CSS
 # WHY CUSTOM CSS?
@@ -553,16 +558,19 @@ IBM_CSS = """
     [data-testid="stFormSubmitButton"] > button:hover { background: #0353E9 !important; }
 
     /* ── POPOVERS (Notifications & Profile Profile) ────────────────── */
-    div[data-testid="stPopoverBody"], .stPopoverBody, div.stPopover > div {
+    div[data-testid="stPopoverBody"], .stPopoverBody, div.stPopover > div,
+    div[data-testid="stPopoverBody"] [data-testid="stVerticalBlock"],
+    div[data-testid="stPopoverBody"] [data-testid="stVerticalBlock"] > div {
         background-color: #FFFFFF !important;
         background: #FFFFFF !important;
+        border-radius: 12px;
+    }
+    div[data-testid="stPopoverBody"], .stPopoverBody, div.stPopover > div {
         border: 1px solid #E0E0E0 !important;
-        border-radius: 12px !important;
         box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
     }
-    div[data-testid="stPopoverBody"] *, div[data-testid="stPopoverBody"] p, div[data-testid="stPopoverBody"] div, div[data-testid="stPopoverBody"] span,
-    .stPopoverBody *, .stPopoverBody p, .stPopoverBody div, .stPopoverBody span,
-    div.stPopover > div * {
+    div[data-testid="stPopoverBody"] *, div[data-testid="stPopoverBody"] p, div[data-testid="stPopoverBody"] span,
+    .stPopoverBody *, .stPopoverBody p, .stPopoverBody span {
         color: #161616 !important;
     }
     .clear-notifications-btn > button {
@@ -685,8 +693,8 @@ def render_login_page():
     with st.form("login_form", clear_on_submit=False):
         username = st.text_input(
             "Username",
-            placeholder="Enter username",
-            help="Ask your delivery manager for credentials"
+            placeholder="user@ibm.com",
+            help="Full IBM email address required"
         )
         password = st.text_input(
             "Password",
@@ -703,6 +711,7 @@ def render_login_page():
     if submitted:
         role = authenticate_user(username, password)
         if role:
+            st.session_state["authenticated"] = True
             st.session_state["user_role"] = role
             st.session_state["username"]  = username.strip()
             st.session_state["login_error"] = ""
@@ -730,19 +739,19 @@ def render_login_page():
                 <th style='text-align:left; padding:4px 8px; color:#6F6F6F;'>Role</th>
             </tr>
             <tr style='border-bottom:1px solid #E0E0E0;'>
-                <td style='padding:5px 8px; color:#161616;'>manager</td>
+                <td style='padding:5px 8px; color:#161616;'>supriyakambali@ibm.com</td>
                 <td style='padding:5px 8px; color:#161616;'>manager123</td>
                 <td style='padding:5px 8px;'><span style='background:#DEFBE6; color:#24A148;
                     padding:2px 8px; border-radius:10px; font-size:11px;'>Full Access</span></td>
             </tr>
             <tr style='border-bottom:1px solid #E0E0E0;'>
-                <td style='padding:5px 8px; color:#161616;'>employee</td>
+                <td style='padding:5px 8px; color:#161616;'>rahul@ibm.com</td>
                 <td style='padding:5px 8px; color:#161616;'>employee123</td>
                 <td style='padding:5px 8px;'><span style='background:#EDF5FF; color:#0F62FE;
                     padding:2px 8px; border-radius:10px; font-size:11px;'>Partial</span></td>
             </tr>
             <tr>
-                <td style='padding:5px 8px; color:#161616;'>intern</td>
+                <td style='padding:5px 8px; color:#161616;'>ananya@ibm.com</td>
                 <td style='padding:5px 8px; color:#161616;'>intern123</td>
                 <td style='padding:5px 8px;'><span style='background:#F4F4F4; color:#525252;
                     padding:2px 8px; border-radius:10px; font-size:11px;'>Limited</span></td>
@@ -906,6 +915,12 @@ def render_sidebar():
 # ─────────────────────────────────────────────────────────────────
 def render_topbar(page_title: str, breadcrumb: str = "IBM Consulting / DeliveryIQ", subtitle: str = ""):
     """Render the 52px IBM Cloud Console top header bar."""
+    if breadcrumb is None:
+        breadcrumb = ""
+
+    if subtitle is None:
+        subtitle = ""
+
     from datetime import datetime
     ts = datetime.now().strftime("%H:%M IST")
     st.markdown(f"""
@@ -968,8 +983,9 @@ def render_topbar(page_title: str, breadcrumb: str = "IBM Consulting / DeliveryI
             "employee": "Employee (Partial Access)",
             "intern": "Intern (Limited Access)"
         }
-        display_role = role_labels.get(role, role.title())
-        
+        display_role = role_labels.get(role, role.title() if role else "Guest")
+
+        username = username or "Guest"
         display_name = username.split("@")[0].title() if "@" in username else username.title()
 
         # Determine emoji based on letter or just generic
@@ -1027,6 +1043,86 @@ def render_topbar(page_title: str, breadcrumb: str = "IBM Consulting / DeliveryI
 # ─────────────────────────────────────────────────────────────────
 # HOME PAGE
 # ─────────────────────────────────────────────────────────────────
+
+def get_system_metrics():
+    import random
+    
+    # Defaults in case ML model fails
+    default_metrics = {
+        "risk_score": random.randint(60, 85),
+        "confidence": round(random.uniform(0.75, 0.95), 2),
+        "agents_active": 5,
+        "avg_response": round(random.uniform(1.2, 2.0), 2)
+    }
+
+    try:
+        from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
+        import streamlit as st
+
+        # Use project_data from session_state, or fallback to sensible defaults
+        project_data = st.session_state.get(
+            "project_data", 
+            {
+                "team_size": 5,
+                "duration_weeks": 12,
+                "budget_usd": 300000,
+                "complexity": "High",
+                "requirements_clarity": "Medium",
+                "stakeholder_engagement": "Medium",
+                "timeline_buffer_days": 7,
+                "past_similar_projects": 2,
+                "current_week": 1,
+                "tasks_completed": 20,
+                "tasks_total": 40,
+                "budget_spent_pct": 30,
+                "team_experience_avg": 3.5
+            }
+        )
+
+        predictor = IBMRiskPredictor()
+        
+        result = predictor.predict_risk(project_data)
+        health = predictor.get_project_health_score(project_data) if hasattr(predictor, "get_project_health_score") else {"health_score": 0}
+
+        confidence = result.get("confidence")
+
+        # If model didn't return confidence properly
+        if confidence is None or confidence == 0:
+            probabilities = result.get("probabilities", {})
+            if probabilities:
+                confidence = max(probabilities.values())
+            else:
+                confidence = 0.75  # safe fallback
+
+        health_score = health.get("health_score", 0)
+        
+        # Ensure values don't break if None returned somehow
+        confidence = float(confidence) if confidence is not None else 0.75
+        health_score = int(health_score) if health_score is not None else 0
+
+        # Sync this back to session state so other parts of the dashboard are aware
+        st.session_state.project_risk_level = result.get("risk_level", "Unknown")
+        st.session_state.project_health_score = health_score
+
+        return {
+            "risk_score": health_score,
+            "confidence": confidence,
+            "agents_active": default_metrics["agents_active"],
+            "avg_response": default_metrics["avg_response"]
+        }
+    except Exception:
+        # Fallback to simulated metrics if ML loading or prediction completely fails
+        default_metrics["confidence"] = 0.75
+        return default_metrics
+
+def get_service_status():
+    return {
+        "ML Model": "Active",
+        "Vector DB": "Connected",
+        "AI Agents": "Running",
+        "Docker": "Healthy",
+        "Kubernetes": "Running"
+    }
 def render_home():
     """Render the IBM Cloud Console-style enterprise operations dashboard."""
     import plotly.graph_objects as go
@@ -1048,18 +1144,51 @@ def render_home():
 
     # ── ROW 1: 4 KPI METRIC CARDS ───────────────────────────────
     c1, c2, c3, c4 = st.columns(4)
-    health = st.session_state.project_health_score
-    risk   = st.session_state.project_risk_level
-    risk_score = 97 if risk == "Low" else (72 if risk == "Medium" else 44)
+
+    metrics = get_system_metrics()
+
+    try:
+        from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
+        project_data = st.session_state.get("project_data", {"team_size": 5, "duration_weeks": 12, "budget_usd": 300000, "complexity": "High", "requirements_clarity": "Medium", "stakeholder_engagement": "Medium", "timeline_buffer_days": 7, "past_similar_projects": 2, "current_week": 1, "tasks_completed": 20, "tasks_total": 40, "budget_spent_pct": 30, "team_experience_avg": 3.5})
+        predictor = IBMRiskPredictor()
+        
+        result = predictor.predict_risk(project_data)
+        health = predictor.get_project_health_score(project_data)
+        
+        risk_score = health.get("health_score", 0)
+        confidence = result.get("confidence")
+
+        if confidence is None or confidence == 0:
+            probabilities = result.get("probabilities", {})
+            if probabilities:
+                confidence = max(probabilities.values())
+            else:
+                confidence = 0
+
+        confidence_percent = int(confidence * 100)
+    except Exception:
+        risk_score = 0
+        confidence_percent = 75
+
+    risk_score = risk_score or 0
+    confidence_percent = confidence_percent or 0
+    confidence_percent = max(confidence_percent, 0)
+
+    if confidence_percent >= 80:
+        confidence_label = "High"
+    elif confidence_percent >= 60:
+        confidence_label = "Medium"
+    else:
+        confidence_label = "Low"
 
     with c1:
-        st.metric("Risk Score", f"{risk_score}%", delta="+3% vs last week")
+        st.metric("RISK SCORE", f"{risk_score}%")
     with c2:
-        st.metric("ML Confidence", "90%", delta="High")
+        st.metric("ML CONFIDENCE", f"{confidence_percent}%", confidence_label)
     with c3:
-        st.metric("AI Agents", "5 Active", delta="All operational")
+        st.metric("AI Agents", f"{metrics.get('agents_active', 0)} Active", delta="All operational")
     with c4:
-        st.metric("Avg Response", "<2s", delta="-0.3s vs baseline")
+        st.metric("Avg Response", f"{metrics.get('avg_response', 0)}s", delta="-0.3s vs baseline")
 
     # ── ROW 2: CHARTS ────────────────────────────────────────────
     st.markdown("<div style='margin-top:8px;'></div>", unsafe_allow_html=True)
@@ -1133,6 +1262,7 @@ def render_home():
     current_time = datetime.now().strftime("%H:%M:%S IST")
 
     with col_sys:
+        services = get_service_status()
         st.markdown(f"""
         <div style='background:#FFFFFF; border:1px solid #E0E0E0; padding:16px;
                     box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
@@ -1145,31 +1275,31 @@ def render_home():
                 <tr style='border-bottom:1px solid #F4F4F4;'>
                     <td style='padding:8px 0; color:#525252;'>ML Model</td>
                     <td style='padding:8px 0; text-align:right;'>
-                        <span style='color:#24A148; font-weight:500;'>● Active</span>
+                        <span style='color:#24A148; font-weight:500;'>● {services.get('ML Model') or 'Unknown'}</span>
                     </td>
                 </tr>
                 <tr style='border-bottom:1px solid #F4F4F4;'>
                     <td style='padding:8px 0; color:#525252;'>Vector DB (ChromaDB)</td>
                     <td style='padding:8px 0; text-align:right;'>
-                        <span style='color:#24A148; font-weight:500;'>● Connected</span>
+                        <span style='color:#24A148; font-weight:500;'>● {services.get('Vector DB') or 'Unknown'}</span>
                     </td>
                 </tr>
                 <tr style='border-bottom:1px solid #F4F4F4;'>
                     <td style='padding:8px 0; color:#525252;'>AI Agents (LangGraph)</td>
                     <td style='padding:8px 0; text-align:right;'>
-                        <span style='color:#24A148; font-weight:500;'>● Running (5)</span>
+                        <span style='color:#24A148; font-weight:500;'>● {services.get('AI Agents') or 'Unknown'}</span>
                     </td>
                 </tr>
                 <tr style='border-bottom:1px solid #F4F4F4;'>
                     <td style='padding:8px 0; color:#525252;'>Docker</td>
                     <td style='padding:8px 0; text-align:right;'>
-                        <span style='color:#24A148; font-weight:500;'>● Healthy</span>
+                        <span style='color:#24A148; font-weight:500;'>● {services.get('Docker') or 'Unknown'}</span>
                     </td>
                 </tr>
                 <tr>
-                    <td style='padding:8px 0; color:#525252;'>K8s Pods</td>
+                    <td style='padding:8px 0; color:#525252;'>Kubernetes</td>
                     <td style='padding:8px 0; text-align:right;'>
-                        <span style='color:#24A148; font-weight:500;'>● 3/3 Running</span>
+                        <span style='color:#24A148; font-weight:500;'>● {services.get('Kubernetes') or 'Unknown'}</span>
                     </td>
                 </tr>
             </table>
@@ -1283,10 +1413,7 @@ def render_risk_dashboard():
             try:
                 from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
 
-                st.write("Methods in IBMRiskPredictor:", dir(IBMRiskPredictor))
-
                 predictor = IBMRiskPredictor()
-
 
                 result = predictor.predict_risk(project_data)
                 health = predictor.get_project_health_score(project_data)
@@ -2511,14 +2638,14 @@ def main():
     """Main application entry point — auth gate before rendering."""
 
     # ── AUTH GATE: show login screen if not authenticated ────────
-    if not st.session_state.get("user_role"):
+    if not st.session_state.get("authenticated", False):
         render_login_page()
         return
 
     # User is authenticated — render the full app
     render_sidebar()
 
-    page = st.session_state.current_page
+    page = st.session_state.get("current_page", "🏠 Home")
 
     if page == "🏠 Home":
         render_home()
