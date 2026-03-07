@@ -75,6 +75,7 @@ class IBMRiskPredictor:
         self.feature_importance = None
         self.model_path = os.path.join(os.path.dirname(__file__), 'risk_model.pkl')
         self.is_trained = False
+        self.features_used = []
 
         # Load trained model if available
         if os.path.exists(self.model_path):
