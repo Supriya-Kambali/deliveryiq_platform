@@ -68,18 +68,18 @@ class IBMRiskPredictor:
     - Ensemble method = more reliable than single decision tree
     """
 
-def __init__(self):
-    self.model = None
-    self.scaler = StandardScaler()
-    self.label_encoders = {}
-    self.feature_importance = None
-    self.model_path = os.path.join(os.path.dirname(__file__), 'risk_model.pkl')
-    self.is_trained = False
+    def __init__(self):
+        self.model = None
+        self.scaler = StandardScaler()
+        self.label_encoders = {}
+        self.feature_importance = None
+        self.model_path = os.path.join(os.path.dirname(__file__), 'risk_model.pkl')
+        self.is_trained = False
 
-    # Load trained model if available
-    if os.path.exists(self.model_path):
-        self.model = joblib.load(self.model_path)
-        self.is_trained = True
+        # Load trained model if available
+        if os.path.exists(self.model_path):
+            self.model = joblib.load(self.model_path)
+            self.is_trained = True
 
     def _encode_categorical(self, df: pd.DataFrame) -> pd.DataFrame:
         """
