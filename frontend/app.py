@@ -1283,6 +1283,8 @@ def render_risk_dashboard():
             try:
                 from module1_risk_dashboard.models.risk_predictor import IBMRiskPredictor
 
+                st.write("Methods in IBMRiskPredictor:", dir(IBMRiskPredictor))
+
                 predictor = IBMRiskPredictor()
 
 
