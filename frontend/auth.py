@@ -22,9 +22,9 @@ _USER_DB_PATH = os.path.join(
 
 # Role → allowed pages mapping
 ROLE_PAGES: dict[str, list[str]] = {
-    "manager":  ["🏠 Home", "📊 Risk Dashboard", "📚 Knowledge Base", "🤖 AI Agents", "🚀 MLOps & Deploy"],
-    "employee": ["🏠 Home", "📊 Risk Dashboard", "📚 Knowledge Base", "🤖 AI Agents"],
-    "intern":   ["🏠 Home", "📊 Risk Dashboard"],
+    "manager":  ["🏠 Home", "📅 Weekly Check-In", "📊 Risk Dashboard", "📚 Knowledge Base", "🤖 AI Agents", "🚀 MLOps & Deploy"],
+    "employee": ["🏠 Home", "📅 Weekly Check-In", "📊 Risk Dashboard", "📚 Knowledge Base", "🤖 AI Agents"],
+    "intern":   ["🏠 Home", "📅 Weekly Check-In", "📊 Risk Dashboard"],
 }
 
 ROLE_LABELS: dict[str, str] = {

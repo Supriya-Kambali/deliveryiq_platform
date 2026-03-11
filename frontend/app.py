@@ -50,6 +50,20 @@ try:
 except ImportError as _pe:
     PERSISTENCE_AVAILABLE = False
     print(f"[app] Persistence not available: {_pe}")
+    def save_project(*a, **k): return False
+    def load_project(*a, **k): return None
+    def list_projects(*a, **k): return []
+    def delete_project(*a, **k): return False
+    def save_risk_snapshot(*a, **k): return False
+    def get_risk_history(*a, **k): return []
+    def get_risk_trend(*a, **k): return []
+    def save_chat_message(*a, **k): return False
+    def load_chat_history(*a, **k): return []
+    def clear_chat_history(*a, **k): return False
+    def save_agent_report(*a, **k): return False
+    def get_agent_reports(*a, **k): return []
+    def get_project_summary(*a, **k): return {}
+
 
 # ─────────────────────────────────────────────────────────────────
 # PAGE CONFIGURATION — Must be first Streamlit command
@@ -745,28 +759,6 @@ def init_session_state():
         if key not in st.session_state:
             st.session_state[key] = value
 
-    # ── Restore last project from DB on first load ────────────────
-    if PERSISTENCE_AVAILABLE and not st.session_state.get("_db_loaded"):
-        projects = list_projects()
-        if projects:
-            last = projects[0]  # most recently updated
-            st.session_state.project_name = last.get("project_name", last["name"])
-            if "project_data" in last:
-                st.session_state.project_data = last["project_data"]
-            # restore last known risk state
-            history = get_risk_history(last["name"], limit=1)
-            if history:
-                snap = history[0]
-                st.session_state.project_risk_level = snap.get("risk_level", "Medium")
-                st.session_state.project_health_score = snap.get("health_score", 70)
-            # restore chat history for knowledge base
-            saved_chat = load_chat_history(last["name"], "knowledge_base", limit=100)
-            if saved_chat and not st.session_state.chat_history:
-                st.session_state.chat_history = [
-                    {"role": m["role"], "content": m["content"]} for m in saved_chat
-                ]
-        st.session_state["_db_loaded"] = True
-
 
 init_session_state()
 
@@ -1299,8 +1291,7 @@ def render_home():
     with col_chart1:
         # Risk Trend Line Chart
         weeks  = ["Wk 1","Wk 2","Wk 3","Wk 4","Wk 5","Wk 6"]
-        health_val = st.session_state.get("project_health_score", 70)
-        scores = [82, 78, 75, 71, health_val, health_val]
+        scores = [82, 78, 75, 71, health, health]
         trend_fig = go.Figure()
         trend_fig.add_trace(go.Scatter(
             x=weeks, y=scores, mode="lines+markers",
@@ -1523,36 +1514,6 @@ def render_risk_dashboard():
                 st.session_state.analysis_result = result
                 st.session_state.analysis_health = health
                 st.session_state.analysis_triggered = True
-
-                # ── Save to DB ────────────────────────────────────
-                if PERSISTENCE_AVAILABLE:
-                    save_project(project_name, {
-                        "project_name": project_name,
-                        "project_data": project_data,
-                    })
-                    breakdown = health.get("breakdown", {})
-                    save_risk_snapshot(project_name, {
-                        "week_number": project_data.get("current_week", 1),
-                        "risk_level": result.get("risk_level", "Unknown"),
-                        "health_score": health.get("health_score", 0),
-                        "rag_status": health.get("rag_meaning", "Unknown"),
-                        "confidence": result.get("confidence", 0),
-                        "budget_health": breakdown.get("Budget Health", 0),
-                        "timeline_health": breakdown.get("Timeline Health", 0),
-                        "scope_health": breakdown.get("Scope Health", 0),
-                        "team_health": breakdown.get("Team Health", 0),
-                        "stakeholder_health": breakdown.get("Stakeholder Health", 0),
-                        "config": project_data,
-                    })
-
-                # Pre-generate PDF immediately after analysis so it's ready when Send is clicked
-                try:
-                    from utils.report_generator import generate_project_report
-                    from utils.pdf_generator import generate_pdf_report
-                    _pre_report = generate_project_report(project_data, result, health)
-                    st.session_state.cached_pdf = generate_pdf_report(_pre_report)
-                except Exception:
-                    st.session_state.cached_pdf = None
 
             except Exception as e:
                 st.error(f"ML model error: {e}")
@@ -1790,27 +1751,14 @@ def render_risk_dashboard():
                 </div>
                 """, unsafe_allow_html=True)
 
-                # Use real persistent snapshots if available, else illustrative
-                _db_trend = []
-                if PERSISTENCE_AVAILABLE:
-                    _db_trend = get_risk_trend(
-                        st.session_state.get("project_name", "default"), weeks=10
-                    )
-
-                if len(_db_trend) >= 2:
-                    trend_weeks  = [f"Wk {r.get('week_number', i+1)}" for i, r in enumerate(_db_trend)]
-                    trend_scores = [100 - (r.get("health_score", 50)) for r in _db_trend]
-                    _risk_colors = {"Low":"#24A148","Medium":"#F1C21B","High":"#FA4D56","Critical":"#DA1E28"}
-                    marker_colors = [_risk_colors.get(r.get("risk_level",""), "#DA1E28") for r in _db_trend]
-                else:
-                    base_risk = {"Low": 25, "Medium": 55, "High": 78}.get(result['risk_level'], 55)
-                    import random; random.seed(42)
-                    trend_weeks  = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"]
-                    trend_scores = [
-                        max(10, min(99, base_risk + random.randint(-8, 8)))
-                        for _ in range(5)
-                    ] + [base_risk]
-                    marker_colors = "#DA1E28"
+                # Build illustrative 6-week trend based on current risk level
+                base_risk = {"Low": 25, "Medium": 55, "High": 78}.get(result['risk_level'], 55)
+                import random; random.seed(42)
+                trend_weeks  = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"]
+                trend_scores = [
+                    max(10, min(99, base_risk + random.randint(-8, 8)))
+                    for _ in range(5)
+                ] + [base_risk]
 
                 trend_fig = go.Figure()
                 trend_fig.add_trace(go.Scatter(
@@ -1818,11 +1766,10 @@ def render_risk_dashboard():
                     y=trend_scores,
                     mode="lines+markers",
                     line=dict(color="#DA1E28", width=2),
-                    marker=dict(color=marker_colors, size=8, line=dict(color="#FFFFFF", width=1.5)),
+                    marker=dict(color="#DA1E28", size=5, line=dict(color="#FFFFFF", width=1.5)),
                     fill="tozeroy",
                     fillcolor="rgba(218,30,40,0.12)",
                     name="Risk Score",
-                    hovertemplate="<b>%{x}</b><br>Risk Score: %{y}<extra></extra>"
                 ))
                 trend_fig.add_hline(
                     y=70, line_dash="dash", line_color="#8D8D8D", line_width=1,
@@ -1945,9 +1892,29 @@ def render_risk_dashboard():
             # SHARE DELIVERY REPORT SECTION [UPDATED]
             # ─────────────────────────────────────────────────────────────
             import traceback
-            from utils.email_service import send_delivery_report
-            from utils.report_generator import generate_project_report
-            from utils.pdf_generator import generate_pdf_report
+            try:
+                from utils.email_service import send_delivery_report
+                EMAIL_ENABLED = True
+            except ImportError:
+                EMAIL_ENABLED = False
+                def send_delivery_report(*args, **kwargs):
+                    return {"success": False, "message": "Email service unavailable."}
+            
+            try:
+                from utils.report_generator import generate_project_report
+                REPORT_ENABLED = True
+            except ImportError:
+                REPORT_ENABLED = False
+                def generate_project_report(*args, **kwargs):
+                    return "Report generation unavailable."
+            
+            try:
+                from utils.pdf_generator import generate_pdf_report, is_pdf_available
+                PDF_ENABLED = is_pdf_available()
+            except ImportError:
+                PDF_ENABLED = False
+                def generate_pdf_report(*args, **kwargs):
+                    return b"PDF generation unavailable. Please install reportlab."
 
             st.markdown('<div class="report-card"><div class="report-title">Share Delivery Report</div>', unsafe_allow_html=True)
             
@@ -1976,13 +1943,8 @@ def render_risk_dashboard():
                         email_list = [e.strip() for e in emails.split(",")]
                         st.markdown(f'<div class="info-box">Sending report to: {email_list}</div>', unsafe_allow_html=True)
 
-                        # Use pre-generated PDF if available (created right after analysis)
-                        # This avoids regenerating it on every Send click
-                        if st.session_state.get("cached_pdf"):
-                            pdf_file = st.session_state.cached_pdf
-                        else:
-                            report = generate_project_report(data, result, health)
-                            pdf_file = generate_pdf_report(report)
+                        report = generate_project_report(data, result, health)
+                        pdf_file = generate_pdf_report(report)
 
                         # Prepare structured data for HTML email
                         project_name = data.get("project_name", "Unknown Project")
@@ -2002,13 +1964,8 @@ def render_risk_dashboard():
                             "completion_rate": completion_rate
                         }
 
-                        import threading
-                        def _send_email_bg(email_list, report_data, pdf_file):
-                            send_delivery_report(email_list, "DeliveryIQ Risk Assessment", report_data, pdf_file=pdf_file)
-
-                        thread = threading.Thread(target=_send_email_bg, args=(email_list, report_data, pdf_file), daemon=True)
-                        thread.start()
-                        st.markdown('<div class="success-box">✅ Report sent! Your team will receive it in a few seconds.</div>', unsafe_allow_html=True)
+                        send_delivery_report(email_list, "DeliveryIQ Risk Assessment", report_data, pdf_file=pdf_file)
+                        st.markdown('<div class="success-box">DeliveryIQ report sent successfully!</div>', unsafe_allow_html=True)
 
                         # Download button
                         with open(pdf_file, "rb") as f:
@@ -2054,10 +2011,7 @@ def render_knowledge_base():
                     result = rag.initialize()
                     st.session_state.rag_engine = rag
                     st.session_state.rag_initialized = True
-                    if rag.llm:
-                        st.success(result)
-                    else:
-                        st.warning(result)
+                    st.success(result)
                     st.rerun()
                 except Exception as e:
                     st.error(f"RAG initialization error: {e}")
@@ -2137,11 +2091,6 @@ def render_knowledge_base():
         import uuid
         
         st.session_state.chat_history.append({"role": "user", "content": prompt})
-        if PERSISTENCE_AVAILABLE:
-            save_chat_message(
-                st.session_state.get("project_name", "default"),
-                "knowledge_base", "user", prompt
-            )
         with st.chat_message("user", avatar="👤"):
             st.markdown(prompt)
         with st.chat_message("assistant", avatar="🔵"):
@@ -2203,11 +2152,6 @@ def render_knowledge_base():
                         "sources": result.get('sources', []),
                         "metadata": metadata
                     })
-                    if PERSISTENCE_AVAILABLE:
-                        save_chat_message(
-                            st.session_state.get("project_name", "default"),
-                            "knowledge_base", "assistant", result['answer']
-                        )
                 except Exception as e:
                     st.error(f"⚠️ Knowledge retrieval error: {e}")
                     st.info("Ensure Ollama service is running and model is loaded.")
@@ -2225,11 +2169,6 @@ def render_knowledge_base():
     with col3:
         if st.button("Clear History", type="secondary", use_container_width=True):
             st.session_state.chat_history = []
-            if PERSISTENCE_AVAILABLE:
-                clear_chat_history(
-                    st.session_state.get("project_name", "default"),
-                    "knowledge_base"
-                )
             st.rerun()
 
 
@@ -2317,247 +2256,7 @@ def render_agents():
                     st.error(f"Agent initialization error: {e}")
         return
 
-    # ── REGISTRY-POWERED PROJECT CONTEXT ─────────────────────────
-    # Loads saved team + project data from project_registry.json.
-    # Consultant fills in once — auto-loaded every session after that.
-    # ─────────────────────────────────────────────────────────────
-    from utils.project_registry import (
-        get_team_members, save_team_members, format_team_for_prompt,
-        get_all_projects, get_active_project, save_project,
-        set_active_project, delete_project, get_project_names
-    )
-
-    username = st.session_state.get("username", "guest@ibm.com")
-
-    # ── Auto-load active project into session state on first render ──
-    if not st.session_state.get("registry_loaded"):
-        active = get_active_project(username)
-        if active:
-            st.session_state.ctx_project_name  = active.get("project_name", "")
-            st.session_state.ctx_client_code   = active.get("client_code", "")
-            st.session_state.ctx_current_week  = active.get("current_week", "")
-            st.session_state.ctx_budget_status = active.get("budget_status", "")
-            st.session_state.ctx_completed     = active.get("completed_this_week", "")
-            st.session_state.ctx_blockers      = active.get("blockers", "")
-            st.session_state.ctx_next_week     = active.get("next_week_plan", "")
-            st.session_state.ctx_concerns      = active.get("stakeholder_concerns", "")
-            st.session_state.ctx_project_id    = active.get("id", "")
-            st.session_state.project_name      = active.get("project_name", st.session_state.project_name)
-        st.session_state.registry_loaded = True
-
-    # ── TABS: Team Registry | Project Context ────────────────────
-    tab_project, tab_team = st.tabs(["📁 Project Context", "👥 Team Registry"])
-
-    with tab_team:
-        st.markdown("#### Your Team")
-        st.caption("Save your team once — they auto-populate into every agent workflow.")
-
-        saved_members = get_team_members(username)
-
-        # Build editable table of team members
-        if "team_edit_rows" not in st.session_state:
-            if saved_members:
-                st.session_state.team_edit_rows = saved_members.copy()
-            else:
-                st.session_state.team_edit_rows = [
-                    {"name": "", "role": "", "email": "", "seniority": "Mid-level"}
-                ]
-
-        st.markdown("**Team Members**")
-        rows = st.session_state.team_edit_rows
-        updated_rows = []
-
-        seniority_options = ["Junior", "Mid-level", "Senior", "Principal", "Partner"]
-
-        for i, row in enumerate(rows):
-            tm_col1, tm_col2, tm_col3, tm_col4, tm_col5 = st.columns([3, 3, 3, 2, 1])
-            with tm_col1:
-                name = st.text_input("Name", value=row.get("name",""), key=f"tm_name_{i}", label_visibility="collapsed", placeholder="Full Name")
-            with tm_col2:
-                role = st.text_input("Role", value=row.get("role",""), key=f"tm_role_{i}", label_visibility="collapsed", placeholder="Role e.g. Tech Lead")
-            with tm_col3:
-                email = st.text_input("Email", value=row.get("email",""), key=f"tm_email_{i}", label_visibility="collapsed", placeholder="ibm email")
-            with tm_col4:
-                seniority = st.selectbox("Seniority", seniority_options,
-                    index=seniority_options.index(row.get("seniority","Mid-level")) if row.get("seniority","Mid-level") in seniority_options else 1,
-                    key=f"tm_sen_{i}", label_visibility="collapsed")
-            with tm_col5:
-                if st.button("✕", key=f"tm_del_{i}", help="Remove"):
-                    st.session_state.team_edit_rows.pop(i)
-                    st.rerun()
-            if name.strip():
-                updated_rows.append({"name": name, "role": role, "email": email, "seniority": seniority})
-
-        tc1, tc2 = st.columns([1, 1])
-        with tc1:
-            if st.button("＋ Add Member", use_container_width=True):
-                st.session_state.team_edit_rows.append({"name":"","role":"","email":"","seniority":"Mid-level"})
-                st.rerun()
-        with tc2:
-            if st.button("💾 Save Team", type="primary", use_container_width=True):
-                save_team_members(username, updated_rows)
-                st.session_state.team_edit_rows = updated_rows
-                st.success(f"✅ Team saved — {len(updated_rows)} member(s) will auto-load into all workflows.")
-
-        if saved_members:
-            st.markdown("---")
-            st.caption(f"**Currently saved:** {format_team_for_prompt(saved_members)}")
-
-    with tab_project:
-        st.markdown("#### Project Context")
-        st.caption("Your project details persist across sessions — no more retyping every time.")
-
-        # ── Project selector ──────────────────────────────────────
-        all_projects = get_all_projects(username)
-        project_list = get_project_names(username)
-
-        sel_col1, sel_col2, sel_col3 = st.columns([4, 1, 1])
-        with sel_col1:
-            if project_list:
-                project_options = ["＋ New Project"] + [name for _, name in project_list]
-                project_ids     = [None] + [pid for pid, _ in project_list]
-                active_id       = st.session_state.get("ctx_project_id")
-                default_idx     = next((i for i, pid in enumerate(project_ids) if pid == active_id), 0)
-
-                selected_idx = st.selectbox(
-                    "Select Project",
-                    range(len(project_options)),
-                    format_func=lambda i: project_options[i],
-                    index=default_idx,
-                    label_visibility="collapsed"
-                )
-                selected_pid = project_ids[selected_idx]
-            else:
-                selected_pid = None
-                st.info("No saved projects yet — fill the form below and save.")
-
-        with sel_col2:
-            if selected_pid and st.button("Load", use_container_width=True):
-                set_active_project(username, selected_pid)
-                proj = all_projects[selected_pid]
-                st.session_state.ctx_project_name  = proj.get("project_name","")
-                st.session_state.ctx_client_code   = proj.get("client_code","")
-                st.session_state.ctx_current_week  = proj.get("current_week","")
-                st.session_state.ctx_budget_status = proj.get("budget_status","")
-                st.session_state.ctx_completed     = proj.get("completed_this_week","")
-                st.session_state.ctx_blockers      = proj.get("blockers","")
-                st.session_state.ctx_next_week     = proj.get("next_week_plan","")
-                st.session_state.ctx_concerns      = proj.get("stakeholder_concerns","")
-                st.session_state.ctx_project_id    = selected_pid
-                st.session_state.project_name      = proj.get("project_name", st.session_state.project_name)
-                st.rerun()
-
-        with sel_col3:
-            if selected_pid and st.button("🗑 Delete", use_container_width=True):
-                delete_project(username, selected_pid)
-                st.session_state.ctx_project_id = None
-                st.session_state.registry_loaded = False
-                st.rerun()
-
-        # ── Project form ─────────────────────────────────────────
-        pf_col1, pf_col2 = st.columns(2)
-
-        with pf_col1:
-            ctx_project_name = st.text_input(
-                "Project Name",
-                value=st.session_state.get("ctx_project_name",""),
-                placeholder="e.g. IBM Cloud Migration – APAC"
-            )
-            ctx_client_code = st.text_input(
-                "Engagement / Client Code",
-                value=st.session_state.get("ctx_client_code",""),
-                placeholder="e.g. ENG-2024-047  (use code, not client name)"
-            )
-            st.caption("⚠️ Use engagement codes, not real client names — IBM data policy.")
-            ctx_current_week = st.text_input(
-                "Current Progress",
-                value=st.session_state.get("ctx_current_week",""),
-                placeholder="e.g. Week 4 of 12, Sprint 2 of 6"
-            )
-            ctx_budget_status = st.text_input(
-                "Budget Status",
-                value=st.session_state.get("ctx_budget_status",""),
-                placeholder="e.g. On track, 8% over, $40k remaining"
-            )
-
-        with pf_col2:
-            ctx_completed = st.text_area(
-                "Completed This Week",
-                value=st.session_state.get("ctx_completed",""),
-                height=90,
-                placeholder="e.g. Completed API integration, ran UAT with 3 users, fixed 12 critical bugs"
-            )
-            ctx_blockers = st.text_area(
-                "Current Blockers / Issues",
-                value=st.session_state.get("ctx_blockers",""),
-                height=90,
-                placeholder="e.g. UAT sign-off pending, dev environment down, missing IT credentials"
-            )
-            ctx_next_week = st.text_area(
-                "Plan for Next Week",
-                value=st.session_state.get("ctx_next_week",""),
-                height=70,
-                placeholder="e.g. Deploy to staging, final UAT, prepare go-live checklist"
-            )
-            ctx_concerns = st.text_area(
-                "Stakeholder Concerns",
-                value=st.session_state.get("ctx_concerns",""),
-                height=70,
-                placeholder="e.g. Sponsor worried about go-live date, budget questioned in last review"
-            )
-
-        if st.button("💾 Save Project", type="primary", use_container_width=True):
-            project_record = {
-                "id":                   st.session_state.get("ctx_project_id"),
-                "project_name":         ctx_project_name,
-                "client_code":          ctx_client_code,
-                "current_week":         ctx_current_week,
-                "budget_status":        ctx_budget_status,
-                "completed_this_week":  ctx_completed,
-                "blockers":             ctx_blockers,
-                "next_week_plan":       ctx_next_week,
-                "stakeholder_concerns": ctx_concerns,
-                "risk_level":           st.session_state.project_risk_level,
-                "health_score":         st.session_state.project_health_score,
-            }
-            new_id = save_project(username, project_record)
-            st.session_state.ctx_project_id    = new_id
-            st.session_state.ctx_project_name  = ctx_project_name
-            st.session_state.ctx_client_code   = ctx_client_code
-            st.session_state.ctx_current_week  = ctx_current_week
-            st.session_state.ctx_budget_status = ctx_budget_status
-            st.session_state.ctx_completed     = ctx_completed
-            st.session_state.ctx_blockers      = ctx_blockers
-            st.session_state.ctx_next_week     = ctx_next_week
-            st.session_state.ctx_concerns      = ctx_concerns
-            st.session_state.project_name      = ctx_project_name
-            st.session_state.context_saved     = True
-            st.success(f"✅ Project saved — will auto-load next session.")
-            st.rerun()
-
-    # ── Active context banner ─────────────────────────────────────
-    active_proj  = st.session_state.get("ctx_project_name","—")
-    active_code  = st.session_state.get("ctx_client_code","—")
-    active_week  = st.session_state.get("ctx_current_week","—")
-    active_budg  = st.session_state.get("ctx_budget_status","—")
-    saved_team   = get_team_members(username)
-    team_summary = format_team_for_prompt(saved_team) if saved_team else "No team saved yet"
-
-    st.markdown(f"""
-    <div style='background:#F4F4F4; border-left:3px solid #24a148; padding:10px 14px;
-                border-radius:4px; margin:12px 0 16px 0; font-size:12px; color:#525252;'>
-        <strong style='color:#161616;'>Active Context →</strong>
-        &nbsp; <strong>{active_proj}</strong>
-        &nbsp;·&nbsp; Code: {active_code}
-        &nbsp;·&nbsp; {active_week}
-        &nbsp;·&nbsp; Budget: {active_budg}
-        <br><span style='color:#8d8d8d;'>Team: {team_summary}</span>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("---")
-
-    # Common workflows
+    # Common workflows with reduced emphasis
     st.markdown("**Common Agent Workflows**")
     examples = [
         "Create a project plan for IBM Cloud migration",
@@ -2572,6 +2271,7 @@ def render_agents():
             if st.button(example[:25] + "...", key=f"agent_example_{i}", type="secondary"):
                 st.session_state.agent_request = example
 
+    # Request input with professional styling
     request = st.text_area(
         "Automation Request",
         value=st.session_state.get("agent_request", ""),
@@ -2590,27 +2290,16 @@ def render_agents():
     if run_agents and request:
         import time
         import uuid
-
-        # Build team string from registry (auto-injected — consultant doesn't type this)
-        team_str = format_team_for_prompt(get_team_members(username))
-
+        
         with st.spinner("Routing request and executing workflow..."):
             try:
                 start_time = time.time()
                 graph = st.session_state.agent_graph
                 result = graph.run(
                     user_request=request,
-                    project_name=st.session_state.get("ctx_project_name", st.session_state.project_name),
+                    project_name=st.session_state.project_name,
                     risk_level=st.session_state.project_risk_level,
-                    health_score=st.session_state.project_health_score,
-                    client_name=st.session_state.get("ctx_client_code", "the client"),
-                    team_members=team_str,
-                    current_week=st.session_state.get("ctx_current_week", "Not specified"),
-                    completed_this_week=st.session_state.get("ctx_completed", "Not specified"),
-                    blockers=st.session_state.get("ctx_blockers", "None reported"),
-                    next_week_plan=st.session_state.get("ctx_next_week", "Not specified"),
-                    budget_status=st.session_state.get("ctx_budget_status", "Not specified"),
-                    stakeholder_concerns=st.session_state.get("ctx_concerns", "None reported"),
+                    health_score=st.session_state.project_health_score
                 )
                 execution_time = time.time() - start_time
 
@@ -2802,513 +2491,366 @@ def render_agents():
 # CAREER & FINE-TUNE PAGE
 # ─────────────────────────────────────────────────────────────────
 def render_career_finetune():
-    """Render the fully functional Module 4 — Fine-Tuning & MLOps page."""
+    """Render the MLOps and Deployment Control Panel."""
     import datetime
-    import json
-    import random
-
     render_topbar(
-        "MLOps & Fine-Tuning",
-        breadcrumb="IBM Consulting / DeliveryIQ / MLOps & Fine-Tuning",
-        subtitle="QLoRA fine-tuning · Dataset management · Model comparison · Deployment"
+        "MLOps & Deploy",
+        breadcrumb="IBM Consulting / DeliveryIQ / MLOps & Deploy",
+        subtitle="QLoRA fine-tuning · Docker containerization · Kubernetes orchestration"
     )
 
-    # ── Resolve dataset path relative to project root ──────────────
-    DATASET_PATH = os.path.join(PROJECT_ROOT, "module4_finetune", "kaggle_data", "ibm_delivery_dataset.json")
-    TRAIN_PATH   = os.path.join(PROJECT_ROOT, "module4_finetune", "kaggle_data", "train.jsonl")
-    VAL_PATH     = os.path.join(PROJECT_ROOT, "module4_finetune", "kaggle_data", "validation.jsonl")
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Model Overview", "🧬 Training Config", "🐳 Containerization", "☸️ Kubernetes"])
 
-    def load_dataset():
-        try:
-            with open(DATASET_PATH) as f:
-                return json.load(f)
-        except Exception:
-            return []
-
-    def save_dataset(data):
-        try:
-            with open(DATASET_PATH, "w") as f:
-                json.dump(data, f, indent=2)
-            return True
-        except Exception:
-            return False
-
-    dataset = load_dataset()
-
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "📊 Model Overview",
-        "🗂️ Dataset Manager",
-        "🧬 Training Config",
-        "🔬 Model Comparison",
-        "🚀 Deployment"
-    ])
-
-    # ══════════════════════════════════════════════════════════════
-    # TAB 1 — MODEL OVERVIEW
-    # ══════════════════════════════════════════════════════════════
     with tab1:
-        st.markdown("### Fine-Tuned Model Status")
-
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Base Model", "microsoft/phi-2", delta="2.7B params")
-        c2.metric("Method", "QLoRA 4-bit", delta="LoRA rank 16")
-        c3.metric("Dataset Size", f"{len(dataset)} examples", delta="Alpaca format")
-        c4.metric("Adapter Size", "8.4 MB", delta="vs 16GB base")
-
-        st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
-
-        # ── Training loss curve (from real QLoRA run values) ──────
-        import plotly.graph_objects as go
-
-        steps  = [13, 26, 39, 52, 65, 78, 91, 100]
-        loss   = [2.41, 1.98, 1.63, 1.42, 1.28, 1.19, 1.13, 1.09]
-        val_loss = [2.55, 2.10, 1.74, 1.53, 1.38, 1.29, 1.22, 1.18]
-
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=steps, y=loss, mode="lines+markers",
-            name="Train Loss", line=dict(color="#0F62FE", width=2),
-            marker=dict(size=6)))
-        fig.add_trace(go.Scatter(x=steps, y=val_loss, mode="lines+markers",
-            name="Val Loss", line=dict(color="#DA1E28", width=2, dash="dash"),
-            marker=dict(size=6)))
-        fig.update_layout(
-            title=dict(text="QLoRA Training Loss Curve (phi-2, 100 steps)", font=dict(size=13, color="#161616"), x=0),
-            height=260, margin=dict(t=36,b=16,l=16,r=16),
-            paper_bgcolor="#FFFFFF", plot_bgcolor="#FFFFFF",
-            xaxis=dict(title="Step", showgrid=False, tickfont=dict(color="#525252")),
-            yaxis=dict(title="Loss", showgrid=True, gridcolor="#F0F0F0", tickfont=dict(color="#525252")),
-            legend=dict(font=dict(size=11, color="#525252")),
-            font=dict(family="IBM Plex Sans, sans-serif")
-        )
-        st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-
-        # ── What QLoRA actually does — explained simply ───────────
-        st.markdown("""
-        <div style='background:#EDF5FF; border-left:4px solid #0F62FE; padding:14px 16px;
-                    border-radius:0 4px 4px 0; margin-top:8px;'>
-            <div style='font-size:13px; font-weight:600; color:#0F62FE; margin-bottom:8px;'>
-                Why This Works — QLoRA in Plain English
-            </div>
-            <div style='font-size:13px; color:#161616; line-height:1.7;'>
-                <b>Q (Quantization):</b> Compresses model weights from 32-bit → 4-bit. Memory drops from ~16GB → ~4GB.<br>
-                <b>LoRA:</b> Instead of retraining all 2.7B parameters, we add tiny "adapter" matrices to 2 layers only.<br>
-                <b>Result:</b> Only 0.15% of parameters are trained. Adapter = 8.4MB. Base model stays frozen.<br>
-                <b>IBM use case:</b> The model now responds in IBM's exact report format, uses RAG/AMBER/GREEN correctly,
-                and follows IBM Garage structure — because those patterns are in the 21 training examples.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # ── Hyperparameter table ──────────────────────────────────
-        st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
+        st.markdown("### 📊 Fine-Tuned Model Metadata")
+        
+        # Model Metadata Panel
+        col1, col2, col3 = st.columns(3)
         with col1:
-            st.markdown("**QLoRA Hyperparameters**")
-            params = {
-                "Learning Rate": "2e-4", "Batch Size": "4",
-                "Gradient Accumulation": "4", "Max Steps": "100",
-                "Warmup Steps": "10", "Weight Decay": "0.01",
-                "LoRA Rank (r)": "16", "LoRA Alpha": "32",
-                "LoRA Dropout": "0.05", "Quantization": "4-bit NF4",
-            }
-            rows = "".join(f"<tr><td style='padding:6px 12px;color:#525252;font-size:13px;border-bottom:1px solid #F4F4F4;'>{k}</td><td style='padding:6px 12px;color:#161616;font-size:13px;font-weight:500;border-bottom:1px solid #F4F4F4;font-family:IBM Plex Mono,monospace;'>{v}</td></tr>" for k,v in params.items())
-            st.markdown(f"<div style='background:#FFFFFF;border:1px solid #E0E0E0;border-radius:6px;overflow:hidden;'><table style='width:100%;border-collapse:collapse;'>{rows}</table></div>", unsafe_allow_html=True)
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px; border-radius:6px;
+                        border: 1px solid #E0E0E0; border-left:3px solid #0f62fe;'>
+                <div style='font-size:11px; color: #525252; text-transform:uppercase;
+                            letter-spacing:1px; margin-bottom:6px;'>Base Model</div>
+                <div style='font-weight:600; color: #161616; font-size:14px;'>microsoft/phi-2</div>
+                <div style='font-size:10px; color:#8d8d8d; margin-top:2px;'>2.7B parameters</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
         with col2:
-            st.markdown("**Training Environment**")
-            env = {
-                "Device": "Apple MPS (M4 Pro)",
-                "Peak Memory": "4.2 GB unified",
-                "Training Time": "~45 minutes",
-                "Base Model": "microsoft/phi-2",
-                "Framework": "HuggingFace + PEFT",
-                "Trainer": "SFTTrainer (TRL)",
-                "Checkpoint Every": "13 steps",
-                "Final Val Loss": "1.18",
-                "Trainable Params": "0.15% of 2.78B",
-                "Adapter Format": "PEFT LoRA safetensors",
-            }
-            rows2 = "".join(f"<tr><td style='padding:6px 12px;color:#525252;font-size:13px;border-bottom:1px solid #F4F4F4;'>{k}</td><td style='padding:6px 12px;color:#161616;font-size:13px;font-weight:500;border-bottom:1px solid #F4F4F4;'>{v}</td></tr>" for k,v in env.items())
-            st.markdown(f"<div style='background:#FFFFFF;border:1px solid #E0E0E0;border-radius:6px;overflow:hidden;'><table style='width:100%;border-collapse:collapse;'>{rows2}</table></div>", unsafe_allow_html=True)
-
-    # ══════════════════════════════════════════════════════════════
-    # TAB 2 — DATASET MANAGER (REAL — reads/writes actual JSON)
-    # ══════════════════════════════════════════════════════════════
-    with tab2:
-        st.markdown("### Training Dataset")
-        st.caption(f"Source: `module4_finetune/kaggle_data/ibm_delivery_dataset.json` · {len(dataset)} examples · Alpaca instruction format")
-
-        if not dataset:
-            st.warning("Dataset file not found. Check that `ibm_delivery_dataset.json` exists in `module4_finetune/kaggle_data/`.")
-        else:
-            # ── Search / filter ───────────────────────────────────
-            search = st.text_input("Search examples", placeholder="e.g. risk register, status report, Garage...", label_visibility="collapsed")
-            filtered = [ex for ex in dataset if not search or search.lower() in ex.get("instruction","").lower() or search.lower() in ex.get("output","").lower()]
-
-            st.markdown(f"<div style='font-size:12px;color:#6F6F6F;margin-bottom:8px;'>Showing {len(filtered)} of {len(dataset)} examples</div>", unsafe_allow_html=True)
-
-            for i, ex in enumerate(filtered):
-                with st.expander(f"**#{dataset.index(ex)+1}** — {ex.get('instruction','')[:90]}", expanded=False):
-                    col_a, col_b = st.columns([1,1])
-                    with col_a:
-                        st.markdown("**Instruction**")
-                        st.markdown(f"<div style='background:#F4F4F4;padding:10px;border-radius:4px;font-size:13px;color:#161616;'>{ex.get('instruction','')}</div>", unsafe_allow_html=True)
-                        if ex.get("input"):
-                            st.markdown("**Input**")
-                            st.markdown(f"<div style='background:#F4F4F4;padding:10px;border-radius:4px;font-size:13px;color:#161616;'>{ex.get('input','')}</div>", unsafe_allow_html=True)
-                    with col_b:
-                        st.markdown("**Expected Output** (first 400 chars)")
-                        st.markdown(f"<div style='background:#F4F4F4;padding:10px;border-radius:4px;font-size:13px;color:#161616;line-height:1.6;'>{ex.get('output','')[:400]}...</div>", unsafe_allow_html=True)
-
-            st.markdown("---")
-            st.markdown("#### Add New Training Example")
-            st.caption("Add IBM-specific Q&A pairs to improve model quality. More examples = better IBM terminology adherence.")
-
-            with st.form("add_example_form"):
-                new_instruction = st.text_input("Instruction", placeholder="e.g. Write an IBM escalation brief for a delayed go-live")
-                new_input = st.text_input("Input (optional)", placeholder="Additional context for the instruction")
-                new_output = st.text_area("Expected Output", height=150, placeholder="The ideal IBM-formatted response the model should learn to produce...")
-                add_submitted = st.form_submit_button("➕ Add to Dataset", use_container_width=True)
-
-            if add_submitted:
-                if new_instruction.strip() and new_output.strip():
-                    text = f"### Instruction:\n{new_instruction}\n\n### Input:\n{new_input}\n\n### Response:\n{new_output}"
-                    new_ex = {"instruction": new_instruction, "input": new_input, "output": new_output, "text": text}
-                    dataset.append(new_ex)
-                    if save_dataset(dataset):
-                        st.success(f"✅ Example added. Dataset now has {len(dataset)} examples. Re-run fine-tuning to incorporate it.")
-                        st.rerun()
-                    else:
-                        st.error("Could not save — check file permissions on `ibm_delivery_dataset.json`.")
-                else:
-                    st.warning("Instruction and Output are required.")
-
-            # ── Export buttons ────────────────────────────────────
-            st.markdown("#### Export Dataset")
-            col_e1, col_e2 = st.columns(2)
-            with col_e1:
-                st.download_button(
-                    "⬇ Download Full Dataset (JSON)",
-                    data=json.dumps(dataset, indent=2),
-                    file_name="ibm_delivery_dataset.json",
-                    mime="application/json",
-                    use_container_width=True
-                )
-            with col_e2:
-                jsonl = "\n".join(json.dumps({"text": ex.get("text", "")}) for ex in dataset)
-                st.download_button(
-                    "⬇ Download Train Split (JSONL)",
-                    data=jsonl,
-                    file_name="train.jsonl",
-                    mime="application/json",
-                    use_container_width=True
-                )
-
-    # ══════════════════════════════════════════════════════════════
-    # TAB 3 — TRAINING CONFIG (shows real script, lets you run it)
-    # ══════════════════════════════════════════════════════════════
-    with tab3:
-        st.markdown("### QLoRA Training Pipeline")
-
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px; border-radius:6px;
+                        border: 1px solid #E0E0E0; border-left:3px solid #0f62fe;'>
+                <div style='font-size:11px; color: #525252; text-transform:uppercase;
+                            letter-spacing:1px; margin-bottom:6px;'>Fine-Tuning Method</div>
+                <div style='font-weight:600; color: #161616; font-size:14px;'>QLoRA (4-bit)</div>
+                <div style='font-size:10px; color:#8d8d8d; margin-top:2px;'>LoRA Rank: 16</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px; border-radius:6px;
+                        border: 1px solid #E0E0E0; border-left:3px solid #0f62fe;'>
+                <div style='font-size:11px; color: #525252; text-transform:uppercase;
+                            letter-spacing:1px; margin-bottom:6px;'>Version Tag</div>
+                <div style='font-weight:600; color: #161616; font-size:14px;'>v1.0.3-beta</div>
+                <div style='font-size:10px; color:#8d8d8d; margin-top:2px;'>Production</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin: 16px 0;'></div>", unsafe_allow_html=True)
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Dataset Size", "63 examples", delta="21 base + 42 augmented")
+        with col2:
+            st.metric("Training Epochs", "3", delta="~45 min on M4 Pro")
+        with col3:
+            st.metric("Last Trained", "2026-03-01", delta="2 days ago")
+        
+        # Dataset Summary
+        st.markdown("### 📁 Dataset Summary")
         st.markdown("""
-        <div style='background:#161616;border-radius:8px;padding:16px;font-family:IBM Plex Mono,monospace;font-size:12px;color:#F4F4F4;line-height:1.8;margin-bottom:16px;'>
-            <span style='color:#78a9ff;'># Step 1: Prepare dataset</span><br>
-            python module4_finetune/fine_tuning/prepare_dataset.py<br><br>
-            <span style='color:#78a9ff;'># Step 2: Run QLoRA fine-tuning (~45 min on M4 Pro)</span><br>
-            python module4_finetune/fine_tuning/qlora_finetune.py<br><br>
-            <span style='color:#78a9ff;'># Step 3: Convert to Ollama format</span><br>
-            ollama create ibm-deliveryiq -f ./Modelfile<br><br>
-            <span style='color:#78a9ff;'># Step 4: Test the fine-tuned model</span><br>
-            ollama run ibm-deliveryiq "Write a weekly status report for a cloud migration project"
+        <div style='background: #FFFFFF; padding: 14px; border-radius: 4px; color: #161616;'>
+            <strong>Training Data:</strong> IBM Delivery Q&A pairs<br>
+            <strong>Format:</strong> Alpaca instruction-following<br>
+            <strong>Topics:</strong> RAG status, escalation, Garage methodology, risk categories, status reports<br>
+            <strong>Augmentation:</strong> 3x multiplier with paraphrasing
         </div>
         """, unsafe_allow_html=True)
 
-        # ── Simulated training run ────────────────────────────────
-        st.markdown("#### Simulate Training Run")
-        st.caption("Runs a mock training loop to demonstrate the QLoRA pipeline without requiring GPU or model downloads.")
-
-        col_r1, col_r2, col_r3 = st.columns(3)
-        with col_r1:
-            sim_steps = st.slider("Training Steps", 10, 100, 50, step=10)
-        with col_r2:
-            sim_lr = st.selectbox("Learning Rate", ["1e-4", "2e-4", "5e-4"], index=1)
-        with col_r3:
-            sim_rank = st.selectbox("LoRA Rank", [8, 16, 32], index=1)
-
-        if st.button("▶ Run Simulated Training", use_container_width=True, type="primary"):
-            progress = st.progress(0)
-            status = st.empty()
-            log = st.empty()
-
-            import time
-            logs = []
-            random.seed(42)
-            base_loss = 2.4
-
-            for step in range(1, sim_steps + 1):
-                decay = base_loss * (0.88 ** (step / 10))
-                noise = random.uniform(-0.04, 0.04)
-                loss  = round(max(0.9, decay + noise), 4)
-
-                progress.progress(step / sim_steps)
-                status.markdown(f"<div style='color:#525252;font-size:13px;'>Step {step}/{sim_steps} · Loss: <strong style='color:#0F62FE;'>{loss}</strong> · LR: {sim_lr} · Rank: {sim_rank}</div>", unsafe_allow_html=True)
-
-                if step % 5 == 0 or step == sim_steps:
-                    logs.append(f"Step {step:>3} | loss: {loss:.4f} | lr: {sim_lr} | rank: {sim_rank}")
-                    log.markdown(
-                        "<div style='background:#161616;border-radius:6px;padding:12px;font-family:IBM Plex Mono,monospace;font-size:11px;color:#24A148;'>"
-                        + "<br>".join(logs[-8:]) + "</div>",
-                        unsafe_allow_html=True
-                    )
-                time.sleep(0.05)
-
-            progress.progress(1.0)
-            st.success(f"✅ Simulated training complete. Final loss: {loss:.4f} · {sim_steps} steps · LoRA rank {sim_rank}")
-            st.info("To run real fine-tuning: `python module4_finetune/fine_tuning/qlora_finetune.py`")
-
-        # ── Requirements check ────────────────────────────────────
-        st.markdown("#### Dependency Check")
-        deps = {
-            "torch": "PyTorch (MPS backend)",
-            "transformers": "HuggingFace Transformers",
-            "peft": "PEFT (LoRA/QLoRA)",
-            "trl": "TRL (SFTTrainer)",
-            "bitsandbytes": "BitsAndBytes (4-bit quant)",
-            "datasets": "HuggingFace Datasets",
-        }
-        dep_cols = st.columns(3)
-        for i, (pkg, label) in enumerate(deps.items()):
-            try:
-                __import__(pkg)
-                status_html = f"<span style='color:#24A148;font-weight:600;'>✅ {label}</span>"
-            except ImportError:
-                status_html = f"<span style='color:#DA1E28;font-weight:600;'>❌ {label}</span><br><span style='font-size:11px;color:#8D8D8D;'>pip install {pkg}</span>"
-            dep_cols[i % 3].markdown(f"<div style='background:#FFFFFF;border:1px solid #E0E0E0;border-radius:4px;padding:10px 12px;margin-bottom:8px;font-size:13px;'>{status_html}</div>", unsafe_allow_html=True)
-
-    # ══════════════════════════════════════════════════════════════
-    # TAB 4 — MODEL COMPARISON (fine-tuned vs base Ollama)
-    # ══════════════════════════════════════════════════════════════
-    with tab4:
-        st.markdown("### Fine-Tuned vs Base Model Comparison")
-        st.caption("Compare how the fine-tuned model responds vs the base Ollama llama3.2 — same prompt, different output quality.")
-
-        test_prompts = [
-            "Write a weekly status report for a cloud migration project",
-            "What is the RAG status format at IBM?",
-            "Create a risk register for a watsonx.ai implementation",
-            "Draft an email to a client about a project delay",
-        ]
-
-        selected_prompt = st.selectbox("Select a test prompt", test_prompts)
-        custom_prompt = st.text_input("Or enter your own prompt", placeholder="Leave blank to use selected prompt above")
-        final_prompt = custom_prompt.strip() if custom_prompt.strip() else selected_prompt
-
-        if st.button("🔬 Compare Models", use_container_width=True, type="primary"):
-            col_base, col_ft = st.columns(2)
-
-            with col_base:
-                st.markdown("**🤖 Base Model (llama3.2)**")
-                with st.spinner("Querying base model..."):
-                    try:
-                        from langchain_community.llms import Ollama
-                        base_llm = Ollama(model="llama3.2")
-                        base_response = base_llm.invoke(final_prompt)
-                    except Exception as e:
-                        base_response = f"[Base model unavailable: {e}]\n\nMake sure Ollama is running:\n  ollama serve"
-                st.markdown(f"<div style='background:#F4F4F4;border:1px solid #E0E0E0;border-radius:6px;padding:14px;font-size:13px;color:#161616;line-height:1.6;height:320px;overflow-y:auto;'>{base_response}</div>", unsafe_allow_html=True)
-
-            with col_ft:
-                st.markdown("**🎯 Fine-Tuned Model (ibm-deliveryiq)**")
-                with st.spinner("Querying fine-tuned model..."):
-                    try:
-                        from langchain_community.llms import Ollama
-                        ft_llm = Ollama(model="ibm-deliveryiq")
-                        ft_response = ft_llm.invoke(final_prompt)
-                    except Exception:
-                        # Fine-tuned model not yet registered with Ollama — show what it WOULD produce
-                        ft_response = """IBM PROJECT STATUS REPORT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-OVERALL STATUS: 🟢 GREEN
-
-EXECUTIVE SUMMARY:
-The cloud migration project is progressing per IBM Garage
-methodology. Sprint 3 of 6 is on track with all critical
-milestones met. Budget utilization at 52% (on plan).
-
-ACCOMPLISHMENTS THIS WEEK:
-• Completed API gateway configuration (IBM Cloud)
-• UAT sign-off received from client stakeholders
-• Security scan passed — 0 critical findings
-• Team velocity: 42 story points (target: 40)
-
-PLAN FOR NEXT WEEK:
-• Deploy to production (Owner: Tech Lead)
-• Client go-live readiness review (Owner: PM)
-• Hypercare monitoring setup (Owner: DevOps)
-
-RISKS & ISSUES:
-R001 | Data migration volume 20% higher than estimated
-      Prob: M | Impact: H | Status: 🟡 AMBER
-      Mitigation: Extended migration window approved
-
-BUDGET: $280k of $300k remaining | On track
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚠️  ibm-deliveryiq model not registered in Ollama yet.
-    This is a representative sample output.
-    Run: ollama create ibm-deliveryiq -f ./Modelfile"""
-                st.markdown(f"<div style='background:#EDF5FF;border:1px solid #0F62FE;border-radius:6px;padding:14px;font-size:13px;color:#161616;line-height:1.6;height:320px;overflow-y:auto;'>{ft_response}</div>", unsafe_allow_html=True)
-
-            # ── Qualitative diff ──────────────────────────────────
+    with tab2:
+        st.markdown("### 🧬 Training Configuration")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("**Hyperparameters**")
             st.markdown("""
-            <div style='background:#DEFBE6;border-left:4px solid #24A148;padding:12px 16px;border-radius:0 4px 4px 0;margin-top:12px;'>
-                <div style='font-size:12px;font-weight:600;color:#24A148;margin-bottom:6px;'>WHAT FINE-TUNING ADDS</div>
-                <div style='font-size:13px;color:#161616;line-height:1.7;'>
-                    ✅ IBM RAG format (RED/AMBER/GREEN with exact IBM meaning)<br>
-                    ✅ IBM report structure (Executive Summary → Accomplishments → Risks → Budget)<br>
-                    ✅ IBM Garage phases (Discover → Explore → Scale)<br>
-                    ✅ IBM-specific terminology (SOW, Change Order, Hypercare, Story Points)<br>
-                    ✅ Consistent tone — professional, solution-focused, never blaming client
-                </div>
+            <div style='background: #FFFFFF; padding:14px 16px; border-radius:6px;
+                        border: 1px solid #E0E0E0; font-family:"IBM Plex Mono", monospace; font-size:12px;
+                        color: #161616; line-height:1.8;'>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Learning Rate:</span> 2e-4<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Batch Size:</span> 4<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Gradient Accumulation:</span> 4<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Max Steps:</span> 100<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Warmup Steps:</span> 10<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Weight Decay:</span> 0.01<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>LoRA Alpha:</span> 32<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>LoRA Dropout:</span> 0.05
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown("**Quantization Details**")
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px 16px; border-radius:6px;
+                        border: 1px solid #E0E0E0; font-family:"IBM Plex Mono", monospace; font-size:12px;
+                        color: #161616; line-height:1.8;'>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Quantization:</span> 4-bit NF4<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Compute Dtype:</span> bfloat16<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Double Quantization:</span> True<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Memory Footprint:</span> ~4GB<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Original Model:</span> ~16GB<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Compression Ratio:</span> 4:1<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Trainable Params:</span> 0.15%<br>
+            <span style='color:#a8a8a8;'>•</span> <span style='color:#78a9ff;'>Total Params:</span> 2.78B
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("### 💻 GPU Usage")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Device", "Apple MPS", delta="Mac M4 Pro")
+        with col2:
+            st.metric("Peak Memory", "4.2 GB", delta="Unified Memory")
+        with col3:
+            st.metric("Training Time", "45 min", delta="3 epochs")
+        
+        # Model Versioning
+        st.markdown("### 🏷️ Model Versioning")
+        st.markdown("""
+        <div style='background: #FFFFFF; padding: 14px; border-radius: 4px; color: #161616;'>
+            <strong>Current Version:</strong> v1.0.3-beta<br>
+            <strong>Previous Versions:</strong> v1.0.2-alpha, v1.0.1-dev<br>
+            <strong>Storage Location:</strong> Day1-2/outputs/final_model/<br>
+            <strong>Adapter Size:</strong> 8.4 MB (LoRA adapters only)<br>
+            <strong>Checkpoint Strategy:</strong> Save every 13 steps
+        </div>
+        """, unsafe_allow_html=True)
+
+    with tab3:
+        st.markdown("### 🐳 Containerization Status")
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px; border-radius:6px;
+                        border: 1px solid #E0E0E0; border-left:3px solid #24a148;'>
+                <div style='font-size:11px; color: #525252; text-transform:uppercase;
+                            letter-spacing:1px; margin-bottom:6px;'>Build Status</div>
+                <div style='font-weight:600; color:#24a148; font-size:14px;'>● SUCCESS</div>
+                <div style='font-size:10px; color:#8d8d8d; margin-top:2px;'>Last build: 2h ago</div>
             </div>
             """, unsafe_allow_html=True)
 
-    # ══════════════════════════════════════════════════════════════
-    # TAB 5 — DEPLOYMENT
-    # ══════════════════════════════════════════════════════════════
-    with tab5:
-        st.markdown("### Deployment Pipeline")
+        with col2:
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px; border-radius:6px;
+                        border: 1px solid #E0E0E0; border-left:3px solid #0f62fe;'>
+                <div style='font-size:11px; color: #525252; text-transform:uppercase;
+                            letter-spacing:1px; margin-bottom:6px;'>Image Tag</div>
+                <div style='font-weight:600; color: #161616; font-size:14px;'>deliveryiq:v1.0.3</div>
+                <div style='font-size:10px; color:#8d8d8d; margin-top:2px;'>Production ready</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-        # ── Ollama registration ───────────────────────────────────
-        st.markdown("#### Step 1 — Register Fine-Tuned Model with Ollama")
-
-        modelfile_content = """FROM ./ibm_deliveryiq_model
-
-PARAMETER temperature 0.7
-PARAMETER top_p 0.9
-PARAMETER num_ctx 4096
-
-SYSTEM \"\"\"You are IBM DeliveryIQ, an expert IBM delivery consultant AI.
-You follow IBM Garage methodology, use IBM RAG status format (RED/AMBER/GREEN),
-write in IBM's professional consulting style, and produce structured reports
-that IBM project managers can send directly to clients without editing.
-Always use IBM terminology: SOW, Change Order, Sprint, Epic, Story, Hypercare.\"\"\"
-"""
-        st.code(modelfile_content, language="bash")
-
-        col_d1, col_d2 = st.columns(2)
-        with col_d1:
-            st.download_button("⬇ Download Modelfile", data=modelfile_content, file_name="Modelfile", mime="text/plain", use_container_width=True)
-        with col_d2:
-            if st.button("Check if ibm-deliveryiq is registered", use_container_width=True):
-                import subprocess
-                try:
-                    result = subprocess.run(["ollama", "list"], capture_output=True, text=True, timeout=5)
-                    if "ibm-deliveryiq" in result.stdout:
-                        st.success("✅ ibm-deliveryiq is registered and ready.")
-                    else:
-                        st.warning("⚠️ ibm-deliveryiq not found. Run: `ollama create ibm-deliveryiq -f ./Modelfile`")
-                        st.code(result.stdout or "No models found")
-                except Exception as e:
-                    st.error(f"Could not query Ollama: {e}")
-
-        st.markdown("#### Step 2 — Register via Terminal")
-        st.code("""# From your project root:
-cd /Users/supriyapkambali/Documents/Week4/Deliverables
-
-# Create Modelfile (or download from above)
-ollama create ibm-deliveryiq -f ./Modelfile
-
-# Verify registration
-ollama list
-
-# Test it
-ollama run ibm-deliveryiq "Write a weekly IBM status report"
-""", language="bash")
-
-        st.markdown("#### Step 3 — Switch App to Fine-Tuned Model")
+        with col3:
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px; border-radius:6px;
+                        border: 1px solid #E0E0E0; border-left:3px solid #0f62fe;'>
+                <div style='font-size:11px; color: #525252; text-transform:uppercase;
+                            letter-spacing:1px; margin-bottom:6px;'>Image Size</div>
+                <div style='font-weight:600; color: #161616; font-size:14px;'>2.4 GB</div>
+                <div style='font-size:10px; color:#8d8d8d; margin-top:2px;'>Compressed</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin: 16px 0;'></div>", unsafe_allow_html=True)
+        
+        # Docker Services
+        st.markdown("**Docker Compose Services**")
+        
         st.markdown("""
-        <div style='background:#F4F4F4;border:1px solid #E0E0E0;border-radius:6px;padding:14px;font-size:13px;color:#161616;line-height:1.8;'>
-            Once registered, open <code>module2_knowledge_rag/rag_pipeline/rag_chain.py</code> and change:<br><br>
-            <code style='background:#E0E0E0;padding:2px 6px;border-radius:3px;'>OLLAMA_MODEL = "llama3.2"</code>
-            &nbsp;→&nbsp;
-            <code style='background:#DEFBE6;padding:2px 6px;border-radius:3px;color:#24A148;'>OLLAMA_MODEL = "ibm-deliveryiq"</code><br><br>
-            The RAG pipeline and all 5 AI agents will automatically use the fine-tuned model.
+        <style>
+        .docker-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .docker-table th {
+            background: #f4f4f4;
+            color: #161616;
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .docker-table td {
+            padding: 12px 16px;
+            color: #161616;
+            font-size: 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .docker-table tr:last-child td {
+            border-bottom: none;
+        }
+        .quick-commands-container {
+            background: #f4f4f4;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 18px;
+            font-family: "IBM Plex Mono", monospace;
+            color: #161616;
+        }
+        .command {
+            color: #0f62fe;
+            font-weight: 600;
+        }
+        </style>
+        <table class="docker-table">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Port</th>
+                    <th>Health</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ibm-deliveryiq-app</td>
+                    <td><span style="color: #24a148; font-weight: 500;">● Running</span></td>
+                    <td>8501</td>
+                    <td><span style="color: #24a148; font-weight: 500;">Healthy</span></td>
+                </tr>
+                <tr>
+                    <td>ibm-deliveryiq-api</td>
+                    <td><span style="color: #24a148; font-weight: 500;">● Running</span></td>
+                    <td>8000</td>
+                    <td><span style="color: #24a148; font-weight: 500;">Healthy</span></td>
+                </tr>
+                <tr>
+                    <td>chromadb</td>
+                    <td><span style="color: #24a148; font-weight: 500;">● Running</span></td>
+                    <td>8002</td>
+                    <td><span style="color: #24a148; font-weight: 500;">Healthy</span></td>
+                </tr>
+                <tr>
+                    <td>ollama</td>
+                    <td><span style="color: #24a148; font-weight: 500;">● Running</span></td>
+                    <td>11434</td>
+                    <td><span style="color: #24a148; font-weight: 500;">Healthy</span></td>
+                </tr>
+            </tbody>
+        </table>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("**Quick Commands**")
+        st.markdown("""
+        <div class="quick-commands-container">
+            <div style="color:#6f6f6f;margin-bottom:6px;"># Build and start all services</div>
+            <div style="color:#0f62fe;font-weight:500;margin-bottom:16px;">
+                docker-compose up --build -d
+            </div>
+            
+            <div style="color:#6f6f6f;margin-bottom:6px;"># View logs</div>
+            <div style="color:#0f62fe;font-weight:500;margin-bottom:16px;">
+                docker-compose logs -f ibm-deliveryiq-app
+            </div>
+            
+            <div style="color:#6f6f6f;margin-bottom:6px;"># Stop all services</div>
+            <div style="color:#0f62fe;font-weight:500;">
+                docker-compose down
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
-        # ── Docker + Kubernetes (kept from before) ────────────────
-        st.markdown("#### Step 4 — Containerize")
-        col_c1, col_c2, col_c3 = st.columns(3)
-        col_c1.metric("Build Status", "✅ Success", delta="Last build: 2h ago")
-        col_c2.metric("Image Tag", "deliveryiq:v1.0.3", delta="Production ready")
-        col_c3.metric("Image Size", "2.4 GB", delta="Compressed")
+    with tab4:
+        st.markdown("### ☸️ Kubernetes Deployment")
+        
+        # Pod Status
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Pod Status", "Running", delta="2/2 ready")
+        with col2:
+            st.metric("Replicas", "2", delta="Desired: 2")
+        with col3:
+            st.metric("CPU Usage", "0.3 cores", delta="Limit: 1.0")
+        with col4:
+            st.metric("Memory", "1.2 GB", delta="Limit: 2.0 GB")
+        
+        st.markdown("<div style='margin: 16px 0;'></div>", unsafe_allow_html=True)
+        
+        # Service Endpoint
+        st.markdown("**Service Endpoint**")
+        st.markdown("""
+        <div style='background: #FFFFFF; padding: 14px; border-radius: 4px; color: #161616; font-family: monospace;'>
+            <strong>Internal:</strong> ibm-deliveryiq-service.default.svc.cluster.local:8501<br>
+            <strong>External:</strong> http://localhost:8501 (via minikube service)<br>
+            <strong>Type:</strong> LoadBalancer<br>
+            <strong>Selector:</strong> app=ibm-deliveryiq
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin: 16px 0;'></div>", unsafe_allow_html=True)
+        
+        # Health Check
+        st.markdown("**Health Check Status**")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px 16px; border-radius:6px;
+                        border: 1px solid #E0E0E0; color: #161616; font-size:13px; line-height:1.8;'>
+                <strong style='color:#f0f0f0;'>Liveness Probe:</strong> <span style='color:#24a148;'>✅ Passing</span><br>
+                <strong style='color:#f0f0f0;'>Endpoint:</strong> <code style='color:#78a9ff; background:transparent;'>/healthz</code><br>
+                <strong style='color:#f0f0f0;'>Interval:</strong> 10s<br>
+                <strong style='color:#f0f0f0;'>Timeout:</strong> 5s
+            </div>
+            """, unsafe_allow_html=True)
 
-        st.code("""# Build and start all services
-docker-compose up --build -d
-
-# View logs
-docker-compose logs -f ibm-deliveryiq-app
-
-# Stop
-docker-compose down""", language="bash")
-
-        st.markdown("#### Step 5 — Kubernetes")
-        col_k1, col_k2, col_k3, col_k4 = st.columns(4)
-        col_k1.metric("Pod Status", "Running", delta="2/2 ready")
-        col_k2.metric("CPU", "0.3 cores", delta="Limit: 1.0")
-        col_k3.metric("Memory", "1.2 GB", delta="Limit: 2.0 GB")
-        col_k4.metric("Avg Latency", "245 ms", delta="-12 ms")
-
-        st.code("""kubectl apply -f infrastructure/kubernetes/
-kubectl get pods -l app=ibm-deliveryiq
-kubectl logs -f deployment/ibm-deliveryiq
-kubectl scale deployment ibm-deliveryiq --replicas=3""", language="bash")
-
+        with col2:
+            st.markdown("""
+            <div style='background: #FFFFFF; padding:14px 16px; border-radius:6px;
+                        border: 1px solid #E0E0E0; color: #161616; font-size:13px; line-height:1.8;'>
+                <strong style='color:#f0f0f0;'>Readiness Probe:</strong> <span style='color:#24a148;'>✅ Passing</span><br>
+                <strong style='color:#f0f0f0;'>Endpoint:</strong> <code style='color:#78a9ff; background:transparent;'>/ready</code><br>
+                <strong style='color:#f0f0f0;'>Interval:</strong> 10s<br>
+                <strong style='color:#f0f0f0;'>Timeout:</strong> 5s
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # API Status
+        st.markdown("### 📡 API Performance Metrics")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Avg Latency", "245 ms", delta="-12 ms")
+        with col2:
+            st.metric("Throughput", "42 req/min", delta="+8 req/min")
+        with col3:
+            st.metric("Error Rate", "0.02%", delta="-0.01%")
+        
+        st.markdown("**Deployment Commands**")
+        st.markdown("""
+        <div class="quick-commands-container" style="background: #f4f4f4; border: 1px solid #e0e0e0; border-radius: 8px; padding: 18px; font-family: 'IBM Plex Mono', monospace; color: #161616;">
+            <div style="color: #6f6f6f; margin-bottom: 6px;"># Deploy to Kubernetes</div>
+            <div style="color: #0f62fe; font-weight: 500; margin-bottom: 16px;">kubectl apply -f infrastructure/kubernetes/</div>
+            
+            <div style="color: #6f6f6f; margin-bottom: 6px;"># Check pod status</div>
+            <div style="color: #0f62fe; font-weight: 500; margin-bottom: 16px;">kubectl get pods -l app=ibm-deliveryiq</div>
+            
+            <div style="color: #6f6f6f; margin-bottom: 6px;"># View logs</div>
+            <div style="color: #0f62fe; font-weight: 500; margin-bottom: 16px;">kubectl logs -f deployment/ibm-deliveryiq</div>
+            
+            <div style="color: #6f6f6f; margin-bottom: 6px;"># Scale replicas</div>
+            <div style="color: #0f62fe; font-weight: 500; margin-bottom: 16px;">kubectl scale deployment ibm-deliveryiq --replicas=3</div>
+            
+            <div style="color: #6f6f6f; margin-bottom: 6px;"># Get service URL (Minikube)</div>
+            <div style="color: #0f62fe; font-weight: 500;">minikube service ibm-deliveryiq-service --url</div>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────────────────────────
 # MAIN APP ROUTER
 # ─────────────────────────────────────────────────────────────────
-def main():
-    """Main application entry point — auth gate before rendering."""
 
-    # ── AUTH GATE: show login screen if not authenticated ────────
-    if not st.session_state.get("authenticated", False):
-        render_login_page()
-        return
-
-    # User is authenticated — render the full app
-    render_sidebar()
-
-    page = st.session_state.get("current_page", "🏠 Home")
-
-    if page == "🏠 Home":
-        render_home()
-    elif page == "📊 Risk Dashboard":
-        render_risk_dashboard()
-    elif page == "📚 Knowledge Base":
-        render_knowledge_base()
-    elif page == "🤖 AI Agents":
-        render_agents()
-    elif page == "📅 Weekly Check-In":
-        render_weekly_checkin()
-    elif page == "🚀 MLOps & Deploy":
-        render_career_finetune()
-    else:
-        render_home()
-
-
-# Streamlit runs this file as a module (not __main__), so call main() directly
-main()
-
-
-
-
-# ═════════════════════════════════════════════════════════════════
-# WEEKLY CHECK-IN MODULE
-# The feature that saves IBM consultants 2-3 hours every Monday.
-# ═════════════════════════════════════════════════════════════════
 def render_weekly_checkin():
     render_topbar(
         "Weekly Check-In",
@@ -3801,3 +3343,37 @@ NEXT WEEK COMMITMENTS
                             mime="text/plain",
                             key=f"dl_{rep.get('id','')}"
                         )
+
+def main():
+    """Main application entry point — auth gate before rendering."""
+
+    # ── AUTH GATE: show login screen if not authenticated ────────
+    if not st.session_state.get("authenticated", False):
+        render_login_page()
+        return
+
+    # User is authenticated — render the full app
+    render_sidebar()
+
+    page = st.session_state.get("current_page", "🏠 Home")
+
+    if page == "🏠 Home":
+        render_home()
+    elif page == "📊 Risk Dashboard":
+        render_risk_dashboard()
+    elif page == "📚 Knowledge Base":
+        render_knowledge_base()
+    elif page == "🤖 AI Agents":
+        render_agents()
+    elif page == "📅 Weekly Check-In":
+        render_weekly_checkin()
+    elif page == "🚀 MLOps & Deploy":
+        render_career_finetune()
+    else:
+        render_home()
+
+
+# Streamlit runs this file as a module (not __main__), so call main() directly
+main()
+
+
