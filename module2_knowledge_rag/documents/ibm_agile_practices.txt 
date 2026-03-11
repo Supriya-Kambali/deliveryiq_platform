@@ -1,0 +1,244 @@
+IBM AGILE PRACTICES — DELIVERY CONSULTANT REFERENCE
+====================================================
+Source: ibm.com, IBM Garage practices, IBM Think/Blog public content
+Content verified from IBM public sources
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AGILE AT IBM — THE FOUNDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM's approach to Agile is grounded in the Agile Manifesto's four values:
+1. Individuals and interactions over processes and tools
+2. Working software over comprehensive documentation
+3. Customer collaboration over contract negotiation
+4. Responding to change over following a plan
+
+IBM applies Agile not just to software development but to consulting delivery,
+business transformation, and operational improvement. Agile is a philosophy
+with broad principles — IBM uses several specific frameworks.
+
+The Agile Manifesto principle IBM most emphasizes in Garage engagements:
+Customer satisfaction is the goal, not adherence to planning.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCRUM — IBM'S PRIMARY DELIVERY FRAMEWORK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Scrum is IBM's most-used Agile framework for Garage delivery. It relies on
+fixed-length iterative sprints, typically 1-4 weeks.
+
+SCRUM TEAM ROLES:
+- PRODUCT OWNER: Owns the product backlog. Prioritizes work based on business
+  value. Uses Funnel approach to gather requirements; uses Firewall to protect
+  the team during sprints.
+- SCRUM MASTER: Coach, not leader. Keeps the team adhering to Agile practices.
+  Removes impediments. Facilitates ceremonies.
+- DEVELOPMENT TEAM: Self-organizing, cross-functional team of 3-9 members.
+  Includes developers, designers, QA, and other SMEs.
+
+SCRUM CEREMONIES (also called Agile ceremonies):
+
+1. SPRINT PLANNING
+   When: Beginning of each sprint
+   Who: Full scrum team
+   Duration: Typically 2-4 hours for a 2-week sprint
+   Purpose: Team decides which product backlog items to tackle and HOW they
+   will deliver them. The team commits to a Sprint Goal.
+   IBM practice: PM presents prioritized backlog. Team estimates and selects
+   stories that fit within the sprint capacity.
+
+2. DAILY STANDUP (Daily Scrum)
+   When: Every day of the sprint
+   Who: Development team (Scrum Master facilitates)
+   Duration: Maximum 15 minutes — strictly timebox
+   Format: Each team member answers 3 questions:
+   - What did I complete yesterday?
+   - What will I complete today?
+   - What is blocking me?
+   IBM practice: Keep this focused. Blockers are raised here; solutions are
+   discussed AFTER the standup with only the relevant people.
+
+3. SPRINT REVIEW (Sprint Demo)
+   When: End of each sprint
+   Who: Full team + stakeholders + Sponsor Users
+   Duration: 1-2 hours for a 2-week sprint
+   Purpose: Team demonstrates DONE work to stakeholders. Stakeholders provide
+   feedback. IBM's Funnel/Firewall PM practice: this is the feedback loop.
+   IBM practice: Only DONE (potentially shippable) work is demonstrated.
+   Incomplete work is not shown. This maintains trust with the client.
+
+4. SPRINT RETROSPECTIVE
+   When: After Sprint Review, before next Sprint Planning
+   Who: Scrum team (no external stakeholders)
+   Duration: 1-2 hours
+   Purpose: Team reflects on HOW they worked, not WHAT they built.
+   Three questions: What went well? What could improve? What will we commit
+   to doing differently next sprint?
+   IBM practice: Blameless retrospectives. Focus on systems and processes,
+   not individuals.
+
+5. BACKLOG REFINEMENT (Grooming)
+   When: Mid-sprint, typically once per sprint
+   Who: Product Owner + Development Team
+   Duration: 1-2 hours
+   Purpose: Review, estimate, and clarify upcoming backlog items so Sprint
+   Planning runs smoothly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IBM AGILE SQUAD STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM Garage operates through squads — small, cross-functional, self-organizing
+teams typically of 5-9 people.
+
+IBM Squad structure for a typical consulting engagement:
+- Squad Leader / Scrum Master (IBM consultant, EDT-certified)
+- Product Owner (IBM consultant, sometimes client-side co-PO)
+- Architect (IBM consultant)
+- Developers (2-4, mix of IBM and client)
+- QA / Test (1-2)
+- Designer / UX (1, often shared across squads)
+- Client SME (1-2, embedded from client side)
+
+WORK STREAMS in IBM squads:
+IBM Agile squads work on two consecutive work streams simultaneously:
+1. CLIENT OPERATIONS STREAM: Delivering the sprint's committed work
+2. PROCESS IMPROVEMENT STREAM: Analyzing how to do the client work better
+
+Squad members explore potential improvements, create an execution strategy,
+and deliver it in a two-week sprint. Process improvement is continuous, not
+just at retrospectives.
+
+THE T-SHAPED SKILLS MODEL:
+Each squad member has:
+- DEPTH: Deep expertise in their primary area (developer, QA, designer, etc.)
+- BREADTH: Enough breadth to help teammates and understand the whole system
+
+IBM does not silo people by role — a developer can help with testing, a QA
+can help with documentation, etc. This prevents bottlenecks.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BACKLOG MANAGEMENT — IBM PRACTICES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BACKLOG HIERARCHY (from strategic to tactical):
+- THEMES: Broad strategic focus areas aligned to business objectives
+- EPICS: Large bodies of work, broken down into stories. Not completable in
+  a single sprint.
+- FEATURES: Specific functions that deliver value to users.
+- USER STORIES: "As a [user], I want to [action] so that [outcome]"
+  Format ensures the team understands WHO benefits and WHY.
+- TASKS: Technical subtasks within a user story (hours, not days)
+- BUGS / DEFECTS: Issues found in testing or production
+
+IBM PM FUNNEL AND FIREWALL PRACTICE:
+- FUNNEL: PM runs stakeholder workshops to gather requirements. Inputs:
+  KPIs, Unique Selling Points (USPs), value propositions, high-level estimates,
+  timelines. Output: prioritized backlog of features.
+  Then: backlog refinement discussions with the development team to slice epics
+  into actionable stories.
+- FIREWALL: PM shields the team during sprints. No new requirements mid-sprint.
+  All requests go through the PM's backlog process. This ensures the team
+  achieves sprint goals and maintains predictable velocity.
+
+OUTCOME-BASED ROADMAPS (OBRs):
+IBM product managers use OBRs to connect product vision and business objectives
+with high-level features. OBRs prevent teams from losing sight of overall
+objectives when working through detailed sprint tasks.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCALING AGILE — SAFe AND IBM APPROACHES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SAFe (Scaled Agile Framework):
+- Designed for organizations implementing Agile at enterprise scale
+- Multiple agile teams form an Agile Release Train (ART)
+- ART collaborates cross-functionally to deliver incremental solutions regularly
+- Every two weeks, ART meets for a demo with feedback for the next sprint
+- IBM uses SAFe on large multi-squad programs
+
+IBM SCALING FACTORS (from IBM's Agile Scaling Model):
+IBM recognizes that team size is only one of several scaling challenges:
+1. Team size (more than 9 people)
+2. Physical distribution (geographically dispersed teams)
+3. Organizational distribution (multiple IBM and client orgs)
+4. Regulatory compliance requirements
+5. Cultural or organizational complexity
+6. Technical complexity
+7. Enterprise disciplines (architecture, strategic reuse, portfolio management)
+
+Each scaling factor requires tailoring the Agile approach. IBM consultants
+assess which factors apply and adjust the methodology accordingly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AGILE METRICS IBM USES TO TRACK DELIVERY HEALTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VELOCITY: Story points completed per sprint. Used for forecasting, not
+measuring team performance. A team's velocity is internal — never compare
+velocity between teams.
+
+SPRINT BURNDOWN: Tracks remaining work in a sprint day by day.
+Healthy burndown: gradual, steady decrease.
+Red flags: flat burndown (team stuck), sudden drop (scope reduced), spike up
+(scope added mid-sprint).
+
+RELEASE BURNUP: Tracks total work completed over time against total scope.
+Used for release forecasting and stakeholder communication.
+
+CYCLE TIME: Time from when work starts to when it is done.
+Used to identify bottlenecks in the delivery pipeline.
+
+LEAD TIME: Time from when work is requested to when it is delivered.
+Includes waiting time in the backlog.
+
+DEFECT ESCAPE RATE: Percentage of defects that reach production vs. caught
+in testing. A rising escape rate signals quality process issues.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COLOCATION AND REMOTE AGILE — IBM GUIDANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Colocation enhances team dynamics but is not a requirement. IBM squads may be
+fully remote, hybrid, or colocated. Some teams colocate for a week and work
+remotely for a week. Others only gather for key Agile ceremonies.
+
+What matters: the squad works out a time and cadence that builds and reinforces
+team chemistry. Regular meetups (even virtual) streamline communication and
+fuel squad success.
+
+IBM virtual practices: always-on web cameras, virtual retrospective boards
+(MURAL, Miro), digital standup tools, and virtual happy hours.
+
+Sourcing talent from different locations reduces costs — some squad members
+may reside across dispersed geographic locations. IBM has designed its practices
+to work well in this model.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONSULTANT QUICK REFERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q: Client team is unfamiliar with Agile. How do we onboard them quickly?
+A: IBM recommends a "Garage experience" kickoff: run the first sprint as a
+learning sprint. Lower velocity expectations. Invest time in ceremonies.
+Pair IBM consultants with client counterparts (pair programming model applied
+to ALL roles, not just developers).
+
+Q: Sprint velocity is dropping week over week. What's happening?
+A: Check five things: (1) Are there unresolved blockers from standups?
+(2) Is scope being added mid-sprint? (3) Is the team attending too many
+external meetings? (4) Are stories properly estimated and sized? (5) Is there
+technical debt accumulation slowing new work?
+
+Q: How do we handle a client who wants detailed status reports but Agile
+doesn't produce traditional reports?
+A: Use the Sprint Review demo as the status report. Stakeholders see working
+software, not slide decks. Supplement with a one-page sprint summary: sprint
+goal, stories completed, velocity, key decisions, blockers, next sprint goal.
+This satisfies governance without creating documentation overhead.
+
+Q: What's the right sprint length for a client engagement?
+A: IBM defaults to 2-week sprints for most engagements. 1-week sprints when
+velocity and feedback loops need to be very fast (early discovery phases).
+3-4 week sprints only when the domain requires more protracted work cycles
+(e.g., hardware integration, regulated environments with long testing cycles).

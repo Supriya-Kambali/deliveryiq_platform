@@ -1,0 +1,181 @@
+IBM GARAGE METHODOLOGY — COMPREHENSIVE REFERENCE
+=================================================
+Source: ibm.com/garage, IBM public documentation, IBM Blog
+Content verified from ibm.com public sources
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT IS IBM GARAGE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM Garage is IBM Consulting's collaborative, value-obsessed engagement model.
+It integrates technologies, methods, practices, and human expertise to identify,
+track, and realize business value at each stage of enterprise change — rapidly
+turning ideas into measurable, meaningful outcomes.
+
+Core philosophy: "startup speed at enterprise scale."
+
+IBM Garage helps de-risk transformation while quickly scaling impact. It aligns
+work to the biggest drivers of value, transparently tracks that value as it is
+realized in each stage, and scales new ways of working by bringing together:
+- Enterprise Design Thinking
+- Agile development
+- DevSecOps practices
+- Generative AI tools from IBM and partners
+
+IBM Garage originated as IBM Cloud Garage in San Francisco in 2014. It now
+operates in startup communities globally, with IBM consultants working
+side-by-side with client teams in cross-disciplinary squads.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE THREE LIFECYCLE PHASES: THINK, TRANSFORM, THRIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For each lifecycle phase, IBM Garage uses practices from: Enterprise Design
+Thinking, Lean Startup, Agile, DevOps, Site Reliability Engineering (SRE),
+and organizational change management.
+
+PHASE 1: THINK (Co-Create / Discover)
+Purpose: Go from a business challenge to a validated idea.
+Duration: Typically 2-4 weeks.
+
+A combined team of diverse subject matter experts (SMEs) is immersed in
+intensive design thinking and research to expose the true nature of the
+client's opportunity. Activities include:
+- Stakeholder interviews and contextual user research
+- Enterprise Design Thinking workshops (Hills, Playbacks, Sponsor Users)
+- Pain point identification and opportunity mapping
+- Hypothesis formation: "We believe that [solution] will result in [outcome]
+  for [user], measured by [metric]"
+- Definition of a Minimum Viable Product (MVP)
+- Initial risk and dependency identification
+
+Key deliverables: Defined Hills, validated MVP scope, Go/No-Go decision.
+
+PHASE 2: TRANSFORM (Co-Execute / Build)
+Purpose: Build, test, and validate the MVP with Agile and DevOps practices.
+Duration: Typically 4-12 weeks per MVP cycle.
+
+A solution development cycle using Agile and DevOps to quickly launch and test
+an MVP, capitalizing on IBM's hybrid cloud and AI expertise. IBM uses Build
+practices from Extreme Programming, DevOps, and lean design:
+- Automated continuous integration (CI)
+- Refactoring and pair programming
+- Iterative software design
+- Reference architectures
+- Aligning development and ops for success
+- Validating designs with Sponsor Users
+- Automating application monitoring
+
+IBM pilots MVPs to prove hypotheses using business analytics. The core
+question: "What aspects of this idea need testing to determine whether
+continued investment is warranted?" This is the fail fast, learn fast principle.
+
+For a single MVP: one squad, one MVP, dual objectives:
+1. Developing the MVP
+2. Trying out the Garage Method as a new way of working
+
+PHASE 3: THRIVE (Co-Operate / Scale)
+Purpose: Harden and scale the solution and the new culture of innovation.
+
+Activities:
+- Hardening the MVP for production readiness
+- Scaling from squad to enterprise-wide adoption
+- Site Reliability Engineering (SRE) practices
+- Establishing sustainable DevSecOps pipelines
+- Organizational change: shifting from silos to squads, waterfall to agile
+- Embedding new ways of working as permanent culture
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE IBM GARAGE METHOD FIELD GUIDE — SEVEN PHASES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The IBM Cloud Garage Method Field Guide documents IBM's approach to enable
+business, development, and operations to continuously design, deliver, and
+validate new function. Seven phases:
+
+1. CULTURE — Agile mindset, psychological safety, squad structure, T-shaped
+   skills, pair programming culture.
+
+2. THINK — Design Thinking, user research, Hills, Playbacks, Sponsor Users,
+   hypothesis formation, MVP definition.
+
+3. CODE — Test-Driven Development (TDD), pair programming, continuous integration,
+   automated testing, refactoring, reference architectures.
+
+4. DELIVER — CI/CD pipelines, DevSecOps, automated deployment, blue/green
+   deployments, feature flags, release management.
+
+5. RUN — Site Reliability Engineering (SRE), monitoring, alerting, incident
+   response, chaos engineering, capacity planning.
+
+6. MANAGE — Outcome-based roadmaps, backlog management, risk registers,
+   stakeholder communication, metrics and KPIs.
+
+7. LEARN — Sprint retrospectives, metrics analysis, user feedback loops,
+   blameless post-mortems, methodology refinement.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE SQUAD MODEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM Garage works in cross-disciplinary squads with clients working side-by-side
+with IBMers. Through this immersive co-creation, IBM enables clients to work
+in new ways permanently.
+
+SQUAD LEADER (Change Agent):
+- Experienced in lean startup, lean UX, Enterprise Design Thinking, Agile, DevOps
+- Ideally a certified Enterprise Design Thinking coach
+- Facilitates complex workshops; ensures agile is foundational culture
+
+ARCHITECT:
+- Helps the squad focus on sprint goals
+- Prevents teams getting lost in details
+- Ensures architectural consistency and reference architecture usage
+
+T-SHAPED SKILLS MODEL:
+Each squad member should have:
+- Depth: Deep expertise in one area (their SME specialty)
+- Breadth: Wide enough skills to help others and follow team progress
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY PRACTICES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FAIL FAST, LEARN FAST:
+Always focus on which aspects of an idea need testing to determine whether
+continued investment is warranted. Occasionally MVPs don't require a technical
+solution — the hypothesis is the target, not the software.
+
+FUNNEL AND FIREWALL (Product Management practice):
+- FUNNEL: PM gathers requirements from stakeholders through workshops.
+  Output: prioritized backlog with KPIs, USPs, value propositions, estimates.
+- FIREWALL: PM shields delivery team from interruptions to maintain sprint focus.
+  Regular demos to stakeholders enable fast feedback loops.
+
+OUTCOME-BASED ROADMAPS (OBRs):
+Connects product vision and business objective with high-level features.
+Prevents losing sight of overall objectives in day-to-day execution.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMMON CONSULTANT QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q: When should we use Garage vs traditional delivery?
+A: Garage is ideal for innovation and transformation where the solution is not
+fully known upfront. Traditional waterfall suits highly predictable, compliance-
+driven work with fixed requirements. Many IBM projects use hybrid approaches.
+
+Q: How long does a typical Garage engagement last?
+A: Think phase: 2-4 weeks. Transform (MVP): 4-12 weeks. Full Thrive/scale
+programs: 6-18 months. IBM shows measurable value early (often within 4 weeks)
+before committing to larger investment.
+
+Q: What is the difference between a Hill and a user story?
+A: A Hill is a high-level strategic outcome statement from the user's perspective
+— not a feature list. A user story is a specific task-level description. Hills
+guide program direction; user stories guide the sprint backlog.
+
+Q: How does IBM measure Garage success?
+A: IBM measures user outcome metrics — usability, usefulness, desirability —
+not just features shipped or budget consumed. Value is tracked at each stage
+tied to business KPIs defined in the Think phase.

@@ -1,0 +1,256 @@
+IBM DELIVERY MANAGEMENT — TEAM REGISTRY, ROLES & PM TEMPLATES
+==============================================================
+Source: IBM public documentation, IBM Garage practices, IBM Consulting guides
+Content verified from IBM public sources
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IBM DELIVERY TEAM ROLES — WHO DOES WHAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DELIVERY MANAGER (DM)
+Seniority: Typically Senior or Principal
+Owns: Overall program delivery, client relationship, budget, risk escalation
+Responsibilities:
+- Accountable for delivery quality, timelines, and client satisfaction
+- Manages the overall risk register; escalates to partner level when needed
+- Owns the statement of work (SOW) and change request process
+- Conducts weekly/bi-weekly steering committee meetings with client sponsors
+- Reviews and approves weekly status reports before they go to clients
+- Manages resource allocation across squads on multi-squad programs
+IBM tool: IBM Garage Experience platform for value tracking
+
+ENGAGEMENT LEAD / PROGRAM LEAD
+Seniority: Mid-level to Senior
+Owns: Day-to-day delivery coordination, squad coordination
+Responsibilities:
+- Facilitates cross-squad dependency management
+- Owns the integrated delivery plan and milestone tracking
+- Escalation point for squad-level blockers that cannot be resolved internally
+- Prepares the weekly status summary for Delivery Manager review
+- Coordinates with client project managers on schedules
+
+SQUAD LEAD / SCRUM MASTER
+Seniority: Mid-level
+Owns: Sprint delivery, agile ceremonies, team impediments
+Responsibilities:
+- Facilitates all Scrum ceremonies (planning, standup, review, retro)
+- Removes blockers identified in daily standups
+- Tracks sprint velocity and burndown
+- Escalates blockers to Engagement Lead if unresolved after 48 hours
+- Coaches client team members on Agile practices
+IBM certification: Enterprise Design Thinking Practitioner recommended
+
+PRODUCT OWNER (PO)
+Seniority: Senior
+Owns: Product backlog, requirements priority, stakeholder alignment
+Responsibilities:
+- Runs the Funnel process: stakeholder workshops → prioritized backlog
+- Enforces the Firewall: no scope changes mid-sprint without PO approval
+- Writes and refines user stories with acceptance criteria
+- Runs backlog refinement sessions
+- Prioritizes bugs vs. features based on business value
+- Owns the product roadmap (Outcome-Based Roadmap format)
+
+ARCHITECT / TECHNICAL LEAD
+Seniority: Senior to Principal
+Owns: Technical decisions, architecture quality, non-functional requirements
+Responsibilities:
+- Defines and enforces the reference architecture
+- Reviews all design decisions; raises architecture risks
+- Ensures non-functional requirements (performance, security, scalability) are
+  addressed in sprint planning
+- Pairs with developers on complex technical stories
+- Presents architecture to client technical stakeholders
+
+DEVELOPER (Mid-level / Senior)
+Owns: Story implementation, code quality, unit testing
+Responsibilities:
+- Estimates and implements user stories
+- Writes unit tests for all new code
+- Participates in pair programming sessions
+- Raises technical blockers in daily standup
+- Reviews peers' code in pull requests
+- Contributes to backlog refinement with effort estimates
+
+QA / TEST ENGINEER
+Seniority: Junior to Mid-level
+Owns: Test coverage, defect management, quality gates
+Responsibilities:
+- Writes test plans and test cases for each user story
+- Executes regression testing before Sprint Review
+- Manages defect backlog: prioritizes with PO
+- Tracks defect escape rate
+- Validates acceptance criteria before marking stories Done
+
+DESIGNER / UX RESEARCHER
+Seniority: Mid-level
+Owns: User experience, design system, Sponsor User engagement
+Responsibilities:
+- Conducts user research (contextual inquiry, interviews) in the Think phase
+- Creates wireframes and prototypes for developer handoff
+- Facilitates Design Thinking workshops (Hills, Playbacks)
+- Manages Sponsor User relationships and research sessions
+- Ensures designs meet accessibility standards
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OWNERSHIP MATRIX — WHO OWNS WHAT ON AN IBM PROJECT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Deliverable                     | Owner           | Reviewer
+--------------------------------|-----------------|------------------
+Weekly Status Report            | Engagement Lead | Delivery Manager
+Risk Register                   | Delivery Manager| Partner/Client Sponsor
+Sprint Plan                     | Scrum Master    | Product Owner
+Product Backlog                 | Product Owner   | Delivery Manager
+Architecture Decision Record    | Architect       | Technical Lead
+Test Plan                       | QA Lead         | Architect
+Go-Live Checklist               | Scrum Master    | Delivery Manager
+Client Escalation               | Delivery Manager| Partner
+Budget Tracking                 | Delivery Manager| Finance/Partner
+Change Request                  | Product Owner   | Delivery Manager
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WEEKLY STATUS REPORT — IBM FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM standard weekly status report sections:
+
+1. OVERALL STATUS
+   - RAG (Red/Amber/Green) overall
+   - One-sentence summary of the week
+
+2. MILESTONES
+   - Key milestones this reporting period and their status
+   - Upcoming milestones next period
+
+3. ACCOMPLISHMENTS THIS WEEK
+   - Completed user stories or deliverables
+   - Key decisions made
+   - Metrics achieved
+
+4. ISSUES AND RISKS (RAID Log extract)
+   Risks:
+   ID | Description | Likelihood | Impact | Owner | Mitigation | Due Date
+   Issues:
+   ID | Description | Impact | Owner | Resolution Plan | Due Date
+
+5. DECISIONS REQUIRED
+   - What needs to be decided by the client
+   - Owner and deadline for each decision
+
+6. PLAN FOR NEXT WEEK
+   - Sprint goal (if applicable)
+   - Key activities planned
+   - Dependencies expected from client
+
+7. FINANCIAL SUMMARY (for Delivery Manager version)
+   - Budget consumed to date vs. plan
+   - Forecast to complete
+   - Variance explanation if off-track
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RISK MANAGEMENT — IBM DELIVERY FRAMEWORK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM uses a RAID log for delivery risk management:
+R = Risks (things that might happen)
+A = Assumptions (things we're treating as true without confirmation)
+I = Issues (problems that have already occurred)
+D = Dependencies (things we need from other parties to proceed)
+
+RISK CLASSIFICATION:
+Likelihood: High (>70% likely) / Medium (30-70%) / Low (<30%)
+Impact: High (project-threatening) / Medium (delivery delay) / Low (manageable)
+
+RISK SCORING:
+High Likelihood + High Impact = Critical — escalate immediately to DM
+High Likelihood + Medium Impact = High — mitigation plan required this sprint
+Medium + Medium = Medium — monitor weekly
+Low + Any = Low — log and review monthly
+
+RISK RESPONSE TYPES:
+- MITIGATE: Take action to reduce likelihood or impact
+- ACCEPT: Acknowledge risk and monitor; no action taken
+- TRANSFER: Shift risk ownership to another party (client, vendor)
+- AVOID: Change the plan to eliminate the risk
+
+IBM escalation rule: Any Critical risk must be verbally communicated to the
+Delivery Manager within 24 hours of identification, before it appears in the
+written status report.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STAKEHOLDER COMMUNICATION TEMPLATES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DELAY NOTIFICATION EMAIL — IBM FORMAT
+Subject: [PROJECT NAME] — Schedule Update: [SPECIFIC MILESTONE]
+Structure:
+1. What is delayed and by how long (be specific — don't hedge)
+2. Root cause (factual, no blame)
+3. Impact on downstream milestones or go-live
+4. Mitigation actions already taken
+5. What is needed from the client (if anything)
+6. Next update timing
+
+IBM rule: Never send a delay notification without also providing the
+mitigation plan. "We are delayed" without "here's what we're doing about it"
+is never acceptable in IBM client communication.
+
+ESCALATION EMAIL — IBM FORMAT
+Subject: [PROJECT NAME] — Escalation Required: [TOPIC]
+Structure:
+1. Issue summary in 2 sentences maximum
+2. Business impact of the issue
+3. Decision or action needed — from whom, by when
+4. What happens if no decision is made by the deadline
+5. IBM recommendation
+
+IBM rule: Escalations should go through the correct channel.
+Consultant → Engagement Lead → Delivery Manager → Partner → Client Sponsor.
+Bypassing levels creates relationship damage. Only skip levels in genuine
+emergencies.
+
+SCOPE CHANGE REQUEST — IBM FORMAT
+When a client requests work outside the SOW:
+1. Acknowledge the request positively
+2. Confirm it falls outside current scope (cite specific SOW section)
+3. Estimate impact on timeline and budget
+4. Submit formal Change Request document for approval
+5. Do not begin out-of-scope work until CR is signed
+
+IBM rule: Never agree to scope changes verbally or over email without a
+signed Change Request. This protects both IBM and the client.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROJECT HEALTH SCORING — HOW IBM DELIVERY IQ CALCULATES RISK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM DeliveryIQ uses a machine learning model to calculate project health
+scores (0-100) and risk levels (Low/Medium/High) based on:
+
+HIGH RISK indicators (major weight in model):
+- Schedule variance > 15%
+- Budget variance > 10%
+- Unresolved critical risks or issues > 2
+- Stakeholder engagement score < 50
+- Team size < 3 or > 15
+- Sprint velocity declining 3+ sprints in a row
+
+MEDIUM RISK indicators:
+- Team experience score (< 3 years average)
+- Requirements completeness < 70%
+- Test coverage < 60%
+- Client availability score (sponsor not engaged)
+
+LOW RISK indicators (protective factors):
+- Clear executive sponsor with weekly engagement
+- Defined go-live criteria agreed with client
+- Automated CI/CD pipeline in place
+- Dedicated QA resources (not shared with dev)
+- Formal risk review cadence (weekly)
+
+Health score interpretation:
+80-100: Green — on track, routine monitoring
+60-79: Amber — attention needed, escalate blockers
+40-59: Red — intervention required, DM must be informed
+0-39: Critical — emergency escalation, partner involvement likely needed

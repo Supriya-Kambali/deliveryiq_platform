@@ -57,41 +57,35 @@ import operator
 # team members — each one adds their contribution.
 # ─────────────────────────────────────────────────────────────────
 class DeliveryState(TypedDict):
-    """
-    The shared state that flows through all IBM DeliveryIQ agents.
-
-    WHY TYPEDDICT?
-    TypedDict gives us type safety — we know exactly what fields
-    exist in the state at every point in the graph.
-    """
-    # User's original request
+    # User request
     user_request: str
-
-    # Which agent should handle this (set by Supervisor)
     assigned_agent: str
 
-    # Project context (filled in from Module 1 data)
+    # Core project identity
     project_name: str
     project_risk_level: str
     project_health_score: int
 
-    # Agent outputs — each agent writes to its own field
+    # Real project context filled by consultant
+    client_name: str
+    team_members: str
+    current_week: str
+    completed_this_week: str
+    blockers: str
+    next_week_plan: str
+    budget_status: str
+    stakeholder_concerns: str
+
+    # Agent outputs
     planner_output: str
     risk_output: str
     report_output: str
     stakeholder_output: str
-
-    # Final compiled response
     final_response: str
 
-    # Conversation history
     messages: Annotated[List, operator.add]
-
-    # Human approval needed?
     needs_approval: bool
     approved: bool
-
-    # Error handling
     error: str
 
 
@@ -165,7 +159,10 @@ class SupervisorAgent:
 
             # Extract just the agent name (LLM might add extra text)
             agent = "general"
-            for agent_type in AgentType:
+            
+            # Prioritize exact match or check stakeholder before report
+            # as report might falsely trigger on words like "draft"
+            for agent_type in [AgentType.STAKEHOLDER, AgentType.PLANNER, AgentType.RISK, AgentType.REPORT, AgentType.GENERAL]:
                 if agent_type.value in response:
                     agent = agent_type.value
                     break
@@ -188,21 +185,21 @@ class SupervisorAgent:
         """Fallback keyword-based routing when LLM is unavailable."""
         request_lower = request.lower()
 
-        if any(word in request_lower for word in
-               ['plan', 'timeline', 'milestone', 'sprint', 'wbs', 'schedule', 'task']):
+        # Email / client communication
+        if any(word in request_lower for word in ['email','mail','client','stakeholder','communicate','message','escalate']):
+            return AgentType.STAKEHOLDER.value
+
+        # Project planning
+        elif any(word in request_lower for word in ['plan','timeline','milestone','sprint','wbs','schedule','task']):
             return AgentType.PLANNER.value
 
-        elif any(word in request_lower for word in
-                 ['risk', 'issue', 'problem', 'blocker', 'concern', 'threat', 'mitigation']):
+        # Risk analysis
+        elif any(word in request_lower for word in ['risk','issue','problem','blocker','concern','threat','mitigation']):
             return AgentType.RISK.value
 
-        elif any(word in request_lower for word in
-                 ['report', 'status', 'update', 'summary', 'write', 'draft', 'document']):
+        # Reporting
+        elif any(word in request_lower for word in ['report','status','update','summary','write','document']):
             return AgentType.REPORT.value
-
-        elif any(word in request_lower for word in
-                 ['email', 'client', 'stakeholder', 'communicate', 'message', 'escalate']):
-            return AgentType.STAKEHOLDER.value
 
         return AgentType.GENERAL.value
 

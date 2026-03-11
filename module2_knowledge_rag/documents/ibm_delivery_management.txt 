@@ -1,0 +1,273 @@
+IBM DELIVERY MANAGEMENT — STATUS REPORTING, RAG, AND ESCALATION
+================================================================
+Source: IBM public delivery frameworks, project management best practices
+Last updated: 2026
+
+IBM RAG STATUS REPORTING
+--------------------------
+RAG stands for Red, Amber, Green. It is the standard IBM project health reporting system
+used across all IBM consulting engagements. Every IBM project status report includes
+RAG indicators for each key delivery dimension.
+
+RAG STATUS DEFINITIONS (IBM STANDARD):
+
+GREEN — On track
+- Project is meeting budget targets within approved tolerance (typically ±5%)
+- All milestones on schedule or ahead
+- No unresolved risks or issues that threaten delivery
+- Stakeholder satisfaction is positive
+- Team velocity is stable
+Action: Monitor and maintain. Continue weekly reporting.
+
+AMBER — At risk, corrective action required
+- One or more dimensions showing slippage but recoverable
+- Schedule variance 6-15% behind plan
+- Budget trending 6-15% over baseline
+- One or more blockers active but being managed within the team
+- Risk probability increasing but not yet impacting outcomes
+Action: Identify root cause, assign owner, set resolution deadline within 3 business days.
+PM must communicate the "route to green" plan in the weekly status report.
+
+RED — Off plan, immediate escalation required
+- Serious deviation from plan that cannot be self-resolved by the squad
+- Schedule variance >15% behind plan OR milestone missed with no recovery path
+- Budget overrun >15% of baseline OR requires additional IBM/client investment
+- Critical blocker that requires external intervention (IBM leadership or client executive)
+- Stakeholder relationship at risk
+Action: Escalate to IBM Delivery Manager within 24 hours.
+Executive intervention required. Recovery plan must be approved before work continues.
+
+IBM SUB-RAG DIMENSIONS:
+Each IBM status report rates the following dimensions separately:
+- TIMELINE — Are we delivering on schedule?
+- BUDGET — Are we within financial tolerance?
+- SCOPE — Is the agreed scope being delivered?
+- QUALITY — Are we meeting quality standards (defect rates, test coverage)?
+- RISK — Are known risks under control?
+- STAKEHOLDER — Is the client relationship healthy?
+- RESOURCES — Do we have the people and tools we need?
+
+OVERALL RAG RULE: The overall project RAG is the worst of any single dimension.
+If timeline is GREEN but budget is RED, the overall status is RED.
+
+IBM WEEKLY STATUS REPORT FORMAT
+---------------------------------
+Every IBM consulting engagement produces a weekly status report. Standard format:
+
+HEADER:
+- Project name and engagement code
+- Reporting week (e.g., Week 4 of 12)
+- Report date
+- Prepared by (Delivery Manager name)
+- Overall RAG status
+
+SECTION 1 — EXECUTIVE SUMMARY (2-3 sentences)
+State: overall health, key achievement this week, top concern.
+Must be written for an executive who has 30 seconds to read it.
+Never bury bad news in section 4. Lead with the most important thing.
+
+SECTION 2 — RAG STATUS DASHBOARD
+| Dimension   | Status | Trend | Comment                        |
+|-------------|--------|-------|--------------------------------|
+| Timeline    | GREEN  |  →    | Sprint 2 on track              |
+| Budget      | AMBER  |  ↑    | 8% over due to env downtime    |
+| Scope       | GREEN  |  →    | No change orders this week     |
+| Quality     | GREEN  |  ↑    | 0 critical bugs in production  |
+| Risk        | AMBER  |  →    | UAT sign-off still pending     |
+| Stakeholder | GREEN  |  →    | Client engaged and positive    |
+
+SECTION 3 — ACCOMPLISHMENTS THIS WEEK
+Bullet list of what was actually completed.
+Be specific — state the deliverable and its impact.
+Bad: "Worked on API integration"
+Good: "Completed IBM Cloud Object Storage API integration — unblocks staging deployment"
+
+SECTION 4 — PLAN FOR NEXT WEEK
+Bullet list with: task, owner name, target date.
+Format: [Task description] | Owner: [Name] | Due: [Date]
+
+SECTION 5 — RISKS AND ISSUES (RAID LOG EXTRACT)
+Active risks and issues only (not closed ones).
+Format: [ID] | [Description] | [Probability H/M/L] | [Impact H/H/L] | [RAG] | [Owner] | [Mitigation]
+
+SECTION 6 — DECISIONS REQUIRED
+Anything that needs client or IBM leadership decision to proceed.
+Format: [Decision] | Needed by: [Date] | Owner: [Name] | Consequence if delayed: [Impact]
+
+SECTION 7 — BUDGET STATUS
+Planned spend to date vs actual spend to date.
+Variance amount and percentage.
+Forecast to completion vs original baseline.
+
+IBM RAID LOG
+-------------
+RAID stands for Risks, Assumptions, Issues, Dependencies.
+Every IBM engagement maintains a RAID log updated weekly.
+
+RISK: Something that might happen and would negatively impact delivery.
+- Probability (H/M/L), Impact (H/M/L), Score (H×H=Critical, H×M=High, etc.)
+- Owner responsible for mitigation
+- Mitigation action and timeline
+- Contingency plan if risk materializes
+
+ASSUMPTION: Something believed to be true but not confirmed.
+- If an assumption is violated, it becomes a risk or issue
+- Owner responsible for validating the assumption
+- Validation deadline
+
+ISSUE: Something that HAS happened and is impacting delivery now.
+- Severity (Critical/High/Medium/Low)
+- Date raised
+- Owner responsible for resolution
+- Resolution plan and target date
+
+DEPENDENCY: Something the project needs from outside the squad.
+- Internal dependency (another IBM workstream)
+- External dependency (client team, third-party vendor, IBM IT)
+- Required by date
+- Risk if dependency is late
+
+IBM ESCALATION PROCESS
+------------------------
+
+WHEN TO ESCALATE:
+- A blocker is not resolved within 2 standups (48 hours)
+- A risk materializes and becomes a critical issue
+- Budget or timeline breach beyond approved tolerance
+- Client relationship showing signs of distress
+- Scope change requested that impacts agreed deliverables
+- Key team member departure or unavailability
+
+ESCALATION PATH:
+
+LEVEL 1 — Squad Self-Resolution (0-48 hours)
+The squad owns the problem. Technical Lead or QA Lead drives resolution.
+Format: Flagged in daily standup. Owner assigned. Resolution target set.
+
+LEVEL 2 — Delivery Manager Engagement (48 hours - 5 days)
+If squad cannot resolve alone. Delivery Manager joins the conversation.
+Delivery Manager may: unblock resources, re-prioritize sprint backlog,
+engage client point of contact, adjust scope.
+Format: Issue brief to Delivery Manager — problem statement, impact, options, recommendation.
+
+LEVEL 3 — IBM Account Partner + Client Sponsor (within 24 hours of Level 2)
+If issue requires client decision, additional budget, or scope change.
+IBM Account Partner leads the conversation with the client executive/sponsor.
+Deliverable: Formal issue escalation document + recovery options.
+Client executive must respond within 48 hours.
+
+LEVEL 4 — IBM Leadership + Client C-Suite (critical escalations only)
+Project at serious risk of failure. Executive intervention required.
+Requires: Formal escalation package — situation, root cause, financial impact,
+recovery plan with 3 options, recommendation, decision needed.
+IBM Practice Lead and IBM GBS leadership involved.
+
+IBM CHANGE CONTROL PROCESS
+----------------------------
+Any change to scope, timeline, or budget requires a Change Order (CO).
+
+CHANGE ORDER TRIGGER:
+- Client requests new feature not in original SOW
+- External dependency causes timeline slip beyond tolerance
+- Budget adjustment needed
+- Team composition change affecting delivery capacity
+
+CHANGE ORDER PROCESS:
+1. Change Request raised (by PM or client)
+2. Impact assessment completed within 5 business days
+   (scope impact, timeline impact, budget impact, risk impact)
+3. Options presented to client: accept change (with CO), descope something else,
+   or accept reduced quality
+4. Client signs Change Order
+5. Project plan updated, RAID log updated, status report updated
+
+IBM WEEKLY STATUS MEETING AGENDA
+----------------------------------
+Recommended agenda for weekly client status meeting (30-45 minutes):
+
+1. Opening — recap of last week's commitments (5 min)
+2. RAG status walk-through — each dimension, trend, and key comment (10 min)
+3. Accomplishments this week — team presents completed work (5 min)
+4. Next week plan — commitments for the coming week (5 min)
+5. Risks and issues — active RAID items needing client awareness (5 min)
+6. Decisions needed — explicit asks from the client (5 min)
+7. AOB / client questions (5 min)
+
+GOLDEN RULES FOR IBM STATUS COMMUNICATION:
+- Never surprise the client with bad news in a formal meeting
+  — pre-brief the sponsor before the meeting if there is RED news
+- Always bring a "route to green" plan when reporting AMBER or RED
+- Be honest about status — a GREEN that is actually AMBER destroys trust faster than an AMBER
+- Separate facts from opinion in reports
+- Document all verbal agreements in email within 24 hours
+
+IBM PROJECT HEALTH SCORING
+----------------------------
+IBM Delivery IQ uses a health score from 0-100. Mapping to RAG:
+
+90-100: GREEN PLUS — Exceptional delivery, ahead of plan
+70-89:  GREEN — On track, within tolerance
+50-69:  AMBER — At risk, corrective action underway
+30-49:  RED — Significant issues, escalation required
+0-29:   CRITICAL RED — Project in serious jeopardy, executive intervention required
+
+Health score inputs (weighted):
+- Schedule adherence (25%)
+- Budget adherence (20%)
+- Scope delivery rate (20%)
+- Quality metrics (15%)
+- Risk score (10%)
+- Stakeholder satisfaction (10%)
+
+IBM STATEMENT OF WORK (SOW) BASICS
+-------------------------------------
+The SOW is the contractual document that governs every IBM consulting engagement.
+
+Key SOW sections:
+- Scope of Work — what IBM will deliver
+- Deliverables — specific outputs with acceptance criteria
+- Timeline — milestones and target dates
+- Assumptions — what IBM assumes to be true
+- Client responsibilities — what the client must provide
+- Exclusions — what is explicitly NOT in scope
+- Pricing — fixed fee, T&M, or outcome-based
+- Change control process — how scope changes are handled
+- Governance — reporting cadence and escalation path
+
+IBM DELIVERY MANAGER RESPONSIBILITIES
+---------------------------------------
+The IBM Delivery Manager is accountable for the overall success of the engagement.
+
+Weekly responsibilities:
+- Produce and distribute weekly status report (RAG)
+- Chair weekly status meeting with client
+- Update RAID log
+- Monitor budget burn rate
+- Review sprint progress with Technical Lead
+
+Ongoing responsibilities:
+- Manage client relationship at sponsor level
+- Own escalation decisions
+- Approve Change Orders
+- Ensure team has what they need to deliver
+- Report to IBM Account Partner on engagement health
+
+CLIENT RELATIONSHIP HEALTH INDICATORS
+---------------------------------------
+Signs of healthy client relationship:
+- Client sponsor attends Sprint Playbacks
+- Sponsor Users actively engaged (not just available when chased)
+- Client provides timely decisions (within agreed SLAs)
+- Positive tone in meetings — collaborative, not adversarial
+- Client team learning Garage methods and taking ownership
+
+Early warning signs of relationship risk:
+- Client sponsor stops attending key meetings
+- Decisions delayed beyond agreed timelines
+- Client starting to question agreed scope
+- Negative tone in emails or calls
+- Client escalating directly to IBM leadership without prior notice to PM
+- Sponsor User feedback becoming increasingly negative
+
+IBM escalation rule: If three consecutive early warning signs appear,
+the Delivery Manager must brief the IBM Account Partner within 48 hours.

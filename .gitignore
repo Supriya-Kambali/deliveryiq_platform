@@ -64,3 +64,9 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# DeliveryIQ
+*.pkl
+*.pyc
+.deliveryiq/
+deliveryiq_report.pdf

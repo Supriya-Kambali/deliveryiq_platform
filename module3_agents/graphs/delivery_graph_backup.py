@@ -223,15 +223,7 @@ class IBMDeliveryGraph:
         project_name: str = "IBM Project",
         risk_level: str = "Medium",
         health_score: int = 70,
-        thread_id: str = "default",
-        client_name: str = "the client",
-        team_members: str = "Not specified",
-        current_week: str = "Not specified",
-        completed_this_week: str = "Not specified",
-        blockers: str = "None reported",
-        next_week_plan: str = "Not specified",
-        budget_status: str = "Not specified",
-        stakeholder_concerns: str = "None reported",
+        thread_id: str = "default"
     ) -> dict:
         """
         Run the agent graph for a user request.
@@ -249,21 +241,13 @@ class IBMDeliveryGraph:
         if not self.is_built:
             self.initialize()
 
-        # Build initial state with full real project context
+        # Build initial state
         initial_state: DeliveryState = {
             "user_request": user_request,
             "assigned_agent": "",
             "project_name": project_name,
             "project_risk_level": risk_level,
             "project_health_score": health_score,
-            "client_name": client_name,
-            "team_members": team_members,
-            "current_week": current_week,
-            "completed_this_week": completed_this_week,
-            "blockers": blockers,
-            "next_week_plan": next_week_plan,
-            "budget_status": budget_status,
-            "stakeholder_concerns": stakeholder_concerns,
             "planner_output": "",
             "risk_output": "",
             "report_output": "",
@@ -386,4 +370,4 @@ if __name__ == "__main__":
         print(f"\n📄 Response:\n{result['response'][:500]}...")
         print(f"\n✅ Success: {result['success']}")
 
-
+# Made with Bob

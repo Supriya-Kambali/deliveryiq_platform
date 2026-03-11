@@ -1,21 +1,501 @@
 project_id,project_name,client_industry,team_size,duration_weeks,budget_usd,complexity,requirements_clarity,stakeholder_engagement,timeline_buffer_days,past_similar_projects,current_week,tasks_completed,tasks_total,budget_spent_pct,team_experience_avg,risk_level,on_time_delivery
-P001,IBM Cloud Migration,Banking,8,12,500000,High,Low,Medium,5,2,6,28,45,55,3.2,High,0
-P002,watsonx.ai POC,Retail,4,8,150000,Medium,High,High,10,5,4,18,24,40,4.1,Low,1
-P003,ERP Integration,Manufacturing,12,20,1200000,Very High,Low,Low,2,1,10,35,80,70,2.8,Critical,0
-P004,Data Analytics Platform,Healthcare,6,16,800000,High,Medium,High,7,3,8,40,60,50,3.8,Medium,1
-P005,CRM Implementation,Insurance,5,10,300000,Medium,High,Medium,8,4,5,22,30,45,4.2,Low,1
-P006,AI Chatbot Development,Telecom,3,6,100000,Low,High,High,14,6,3,15,18,35,4.5,Low,1
-P007,Legacy System Modernization,Government,15,24,2000000,Very High,Low,Low,1,0,12,40,100,65,2.5,Critical,0
-P008,Supply Chain Optimization,Logistics,7,14,600000,High,Medium,Medium,6,2,7,32,50,58,3.5,High,0
-P009,Digital Transformation,Energy,10,18,1500000,Very High,Medium,High,4,1,9,45,72,60,3.3,High,0
-P010,Mobile App Development,Fintech,4,8,200000,Medium,High,High,12,5,4,20,24,42,4.3,Low,1
-P011,Data Warehouse Migration,Banking,9,16,900000,High,Medium,Medium,5,3,8,38,56,62,3.6,Medium,0
-P012,IoT Platform Setup,Manufacturing,6,12,450000,High,Low,Medium,3,1,6,22,40,68,3.1,High,0
-P013,HR System Upgrade,Retail,5,10,250000,Medium,High,High,10,4,5,25,30,48,4.0,Low,1
-P014,Cybersecurity Assessment,Banking,4,6,180000,Medium,High,High,15,6,3,18,18,38,4.4,Low,1
-P015,Cloud Cost Optimization,Technology,3,8,120000,Low,High,High,20,7,4,22,24,30,4.6,Low,1
-P016,Blockchain POC,Finance,5,10,350000,High,Low,Medium,4,1,5,18,35,72,3.0,High,0
-P017,API Gateway Implementation,Telecom,6,12,400000,Medium,Medium,Medium,8,3,6,28,40,55,3.7,Medium,1
-P018,Data Governance Framework,Healthcare,8,14,700000,High,Medium,Low,3,2,7,30,50,65,3.2,High,0
-P019,Microservices Migration,Technology,10,20,1100000,Very High,Medium,Medium,5,2,10,42,70,60,3.4,High,0
-P020,Customer Analytics,Retail,5,8,220000,Medium,High,High,12,5,4,22,24,40,4.2,Low,1
+P001,Cloud Migration — Healthcare,Banking,8,8,421260,High,High,Low,1,1,4,11,32,60,4.0,Critical,0
+P002,watsonx.ai POC — Healthcare,Retail,4,5,118377,Medium,Medium,Low,10,3,5,24,24,96,3.3,Low,1
+P003,ERP Integration — Insurance,Manufacturing,16,18,857906,Very High,Low,High,7,5,4,16,80,36,3.8,Medium,0
+P004,Data Analytics Platform — Insurance,Healthcare,7,17,1002555,High,Low,Medium,3,1,7,10,56,68,2.1,High,0
+P005,CRM Implementation — Healthcare,Insurance,4,12,229157,Medium,High,High,19,4,6,8,16,48,4.1,Low,1
+P006,AI Chatbot Development — Healthcare,Telecom,2,5,134266,Low,Low,Low,9,5,5,8,8,95,4.5,Low,1
+P007,Legacy Modernization — Energy,Government,19,24,2305079,Very High,High,Medium,16,7,7,48,152,26,3.2,Low,1
+P008,Supply Chain Optim. — Manufacturing,Logistics,5,14,767085,High,Low,High,4,3,7,12,25,50,5.0,Medium,0
+P009,Digital Transformation — Insurance,Energy,12,17,1041704,Very High,High,Low,4,7,13,47,84,95,3.6,High,0
+P010,Mobile App Dev — Insurance,Fintech,4,7,171090,Medium,High,Medium,4,0,2,5,24,36,4.9,Medium,1
+P011,Data Warehouse Migr. — Healthcare,Banking,11,16,710313,High,Medium,Low,2,0,12,22,44,95,3.8,High,0
+P012,IoT Platform Setup — Insurance,Manufacturing,3,14,590789,High,High,Low,10,7,2,5,24,20,4.4,Low,1
+P013,HR System Upgrade — Healthcare,Retail,5,10,331263,Medium,Medium,High,7,3,9,34,40,85,4.1,Medium,0
+P014,Cybersecurity Assess. — Insurance,Banking,2,4,186794,Medium,Low,Low,4,1,2,2,6,62,4.1,Medium,1
+P015,Cloud Cost Optim. — Government,Technology,3,6,89114,Low,Medium,Medium,13,7,5,17,21,76,2.7,Low,1
+P016,Blockchain POC — Manufacturing,Finance,4,12,240771,High,High,Medium,7,1,11,28,32,85,2.2,Medium,0
+P017,API Gateway Impl. — Logistics,Telecom,4,10,518514,Medium,High,Low,5,1,8,19,28,85,2.2,Medium,1
+P018,Data Governance — Logistics,Healthcare,6,13,483731,High,Medium,Medium,10,6,7,8,18,64,2.8,Medium,1
+P019,Microservices Migr. — Energy,Technology,7,17,1460906,Very High,High,Medium,0,5,2,5,56,32,2.2,High,0
+P020,Customer Analytics — Fintech,Retail,3,6,234635,Medium,High,Low,7,6,6,11,12,85,2.4,Medium,1
+P021,OpenShift Migration — Banking,Banking,9,17,594736,High,High,High,9,4,11,24,36,55,3.2,Low,1
+P022,watsonx Governance — Energy,Insurance,5,15,646688,High,Low,Medium,5,3,2,7,35,18,3.5,Medium,1
+P023,SAP S/4HANA Upgrade — Retail,Manufacturing,16,27,2413913,Very High,High,Medium,2,0,21,79,112,95,4.0,Critical,0
+P024,IBM Cloud Pak Deploy — Banking,Government,10,18,644991,High,Low,High,2,3,10,23,70,75,4.2,High,0
+P025,Sterling B2B Integr. — Banking,Logistics,4,13,523079,High,Medium,Low,4,2,1,2,20,31,3.9,Critical,0
+P026,Maximo Asset Mgmt — Banking,Energy,4,15,453485,Medium,High,High,13,0,3,6,28,20,4.5,Low,1
+P027,TRIRIGA Facilities — Manufacturing,Real Estate,6,8,247401,Medium,High,Low,20,6,2,10,30,20,4.9,Low,1
+P028,Cognos Analytics — Healthcare,Retail,5,5,209807,Low,High,Low,11,3,3,20,30,51,2.8,Low,1
+P029,QRadar SIEM Setup — Telecom,Banking,6,9,302271,High,Medium,Medium,2,0,4,5,24,73,4.0,High,0
+P030,z/OS Modernization — Fintech,Finance,13,20,2138887,Very High,Medium,Low,0,0,18,42,65,95,2.3,Critical,0
+P031,Cloud Migration — Energy,Banking,7,13,434787,High,High,Low,4,1,10,34,49,95,3.2,High,0
+P032,watsonx.ai POC — Energy,Retail,4,10,174888,Medium,High,Medium,9,6,4,7,20,52,2.2,Medium,1
+P033,ERP Integration — Insurance,Manufacturing,10,18,1118016,Very High,High,Medium,4,2,10,24,70,69,2.6,Critical,0
+P034,Data Analytics Platform — Manufacturing,Healthcare,5,19,690169,High,Medium,High,20,5,7,12,30,28,3.4,Low,1
+P035,CRM Implementation — Retail,Insurance,5,8,334409,Medium,Low,Low,7,3,6,11,15,78,4.0,Medium,1
+P036,AI Chatbot Development — Government,Telecom,2,7,105296,Low,Low,Low,0,6,6,10,16,95,3.5,High,0
+P037,Legacy Modernization — Logistics,Government,11,28,2274276,Very High,Low,Medium,8,3,15,15,33,63,4.8,Medium,1
+P038,Supply Chain Optim. — Insurance,Logistics,7,15,602006,High,High,Medium,18,7,14,47,49,90,4.7,Low,1
+P039,Digital Transformation — Manufacturing,Energy,12,18,1633085,Very High,Low,Medium,1,1,9,27,72,70,4.1,Critical,0
+P040,Mobile App Dev — Fintech,Fintech,3,8,228898,Medium,Medium,Medium,20,6,2,4,18,20,3.0,Low,1
+P041,Data Warehouse Migr. — Energy,Banking,12,11,1139813,High,Medium,Medium,7,7,10,59,72,85,2.0,Medium,1
+P042,IoT Platform Setup — Manufacturing,Manufacturing,7,14,446292,High,Medium,High,3,7,5,6,42,60,2.1,High,0
+P043,HR System Upgrade — Healthcare,Retail,6,10,321212,Medium,Medium,Low,2,0,10,38,42,95,2.3,Critical,0
+P044,Cybersecurity Assess. — Retail,Banking,3,5,227834,Medium,Medium,Low,6,4,3,9,18,74,4.5,Medium,0
+P045,Cloud Cost Optim. — Logistics,Technology,3,8,141355,Low,Low,Low,1,0,4,3,12,71,3.9,Critical,0
+P046,Blockchain POC — Government,Finance,5,11,268608,High,Low,Medium,8,1,10,34,40,85,4.3,Medium,1
+P047,API Gateway Impl. — Banking,Telecom,5,13,281279,Medium,Medium,High,4,3,12,28,40,95,2.3,High,0
+P048,Data Governance — Manufacturing,Healthcare,7,13,636579,High,Medium,Medium,10,5,9,36,56,74,2.0,Medium,1
+P049,Microservices Migr. — Insurance,Technology,9,22,1458414,Very High,High,High,9,7,9,27,63,38,3.4,Low,1
+P050,Customer Analytics — Telecom,Retail,6,6,214565,Medium,Medium,Medium,12,6,5,42,48,79,3.0,Low,1
+P051,OpenShift Migration — Logistics,Banking,7,14,949556,High,High,Medium,3,3,9,10,21,79,2.3,High,0
+P052,watsonx Governance — Energy,Insurance,5,8,410863,High,High,Medium,19,3,7,37,40,84,2.9,Low,1
+P053,SAP S/4HANA Upgrade — Healthcare,Manufacturing,12,29,1511354,Very High,Medium,Low,1,1,9,7,48,56,4.2,Critical,0
+P054,IBM Cloud Pak Deploy — Energy,Government,6,15,983628,High,Low,Medium,19,4,13,37,42,83,4.9,Low,1
+P055,Sterling B2B Integr. — Telecom,Logistics,4,10,426664,High,Medium,Low,3,2,5,10,32,69,3.9,High,0
+P056,Maximo Asset Mgmt — Insurance,Energy,4,8,523497,Medium,Low,High,4,1,8,9,12,95,3.2,High,0
+P057,TRIRIGA Facilities — Insurance,Real Estate,3,8,312195,Medium,Medium,Medium,14,3,7,18,21,81,4.3,Low,1
+P058,Cognos Analytics — Fintech,Retail,4,5,237973,Low,Low,Low,4,3,1,3,16,21,2.8,Medium,1
+P059,QRadar SIEM Setup — Government,Banking,4,7,298085,High,Low,Medium,1,7,3,8,32,68,2.2,Critical,0
+P060,z/OS Modernization — Retail,Finance,8,18,1206868,Very High,Medium,High,3,1,9,9,32,78,2.2,Critical,0
+P061,Cloud Migration — Fintech,Banking,7,10,465877,High,High,Low,4,7,5,20,49,59,3.3,Medium,0
+P062,watsonx.ai POC — Fintech,Retail,4,5,177799,Medium,Low,Medium,1,0,3,11,28,88,4.3,High,0
+P063,ERP Integration — Government,Manufacturing,11,23,1594006,Very High,High,Low,12,6,16,40,55,62,3.0,Low,1
+P064,Data Analytics Platform — Banking,Healthcare,7,16,774702,High,Medium,High,14,5,11,26,35,63,2.3,Low,1
+P065,CRM Implementation — Fintech,Insurance,3,9,353853,Medium,Low,Medium,4,3,8,7,9,85,2.8,Medium,1
+P066,AI Chatbot Development — Insurance,Telecom,3,6,86752,Low,Low,Medium,19,6,1,4,21,20,2.3,Low,1
+P067,Legacy Modernization — Insurance,Government,15,20,2468613,Very High,Medium,Low,0,7,16,38,60,95,3.7,Critical,0
+P068,Supply Chain Optim. — Telecom,Logistics,8,16,532747,High,High,High,8,4,9,12,24,58,4.2,Medium,1
+P069,Digital Transformation — Government,Energy,10,18,1453111,Very High,Low,Medium,3,3,11,19,40,80,3.7,High,0
+P070,Mobile App Dev — Logistics,Fintech,5,9,221282,Medium,High,Medium,16,0,3,12,30,28,2.4,Low,1
+P071,Data Warehouse Migr. — Energy,Banking,5,12,1133687,High,Medium,Medium,10,7,3,3,15,34,4.3,Medium,0
+P072,IoT Platform Setup — Retail,Manufacturing,5,10,518895,High,Low,High,5,0,8,19,35,95,3.9,Critical,0
+P073,HR System Upgrade — Telecom,Retail,4,7,273405,Medium,Medium,Low,13,7,7,12,12,99,2.5,Low,1
+P074,Cybersecurity Assess. — Insurance,Banking,3,5,168918,Medium,Medium,High,5,2,2,4,12,53,2.2,Medium,0
+P075,Cloud Cost Optim. — Logistics,Technology,2,8,153508,Low,Medium,High,12,2,8,10,10,95,2.2,Low,1
+P076,Blockchain POC — Insurance,Finance,6,8,321749,High,Medium,High,10,3,8,16,18,85,3.1,Medium,1
+P077,API Gateway Impl. — Manufacturing,Telecom,3,14,477927,Medium,Medium,Low,5,7,1,4,21,10,4.5,Medium,1
+P078,Data Governance — Manufacturing,Healthcare,8,17,771706,High,High,Low,7,0,10,23,48,63,3.7,Medium,0
+P079,Microservices Migr. — Retail,Technology,12,24,996710,Very High,Medium,Medium,3,2,17,29,60,95,2.8,Critical,0
+P080,Customer Analytics — Insurance,Retail,3,10,275461,Medium,Medium,Low,9,5,7,13,21,76,2.3,Medium,1
+P081,OpenShift Migration — Logistics,Banking,9,16,981153,High,High,High,9,3,4,24,72,22,3.4,Low,1
+P082,watsonx Governance — Logistics,Insurance,7,10,449187,High,Medium,Low,3,0,3,4,21,50,2.9,High,0
+P083,SAP S/4HANA Upgrade — Telecom,Manufacturing,12,33,2047569,Very High,High,Low,6,2,27,63,84,85,4.7,Medium,0
+P084,IBM Cloud Pak Deploy — Logistics,Government,6,15,692987,High,High,Medium,9,5,6,7,18,38,3.6,Low,1
+P085,Sterling B2B Integr. — Fintech,Logistics,4,11,680539,High,Low,High,11,5,1,1,12,20,2.7,Low,1
+P086,Maximo Asset Mgmt — Banking,Energy,4,14,351996,Medium,Low,Low,5,0,3,3,28,34,2.8,Critical,0
+P087,TRIRIGA Facilities — Logistics,Real Estate,3,9,360570,Medium,Low,High,15,2,6,6,9,59,2.8,Low,1
+P088,Cognos Analytics — Logistics,Retail,4,8,130740,Low,High,High,8,0,4,15,28,40,4.2,Low,1
+P089,QRadar SIEM Setup — Telecom,Banking,6,9,253950,High,Low,Low,4,1,8,14,18,95,3.0,High,0
+P090,z/OS Modernization — Healthcare,Finance,10,23,1370285,Very High,High,Low,5,6,17,39,70,95,2.3,High,0
+P091,Cloud Migration — Logistics,Banking,7,14,469834,High,Low,Medium,1,6,14,37,42,95,3.2,High,0
+P092,watsonx.ai POC — Telecom,Retail,2,9,107289,Medium,High,Low,9,5,2,3,16,30,4.4,Medium,0
+P093,ERP Integration — Healthcare,Manufacturing,15,25,1135266,Very High,Medium,Low,3,4,24,36,45,95,3.8,Critical,0
+P094,Data Analytics Platform — Insurance,Healthcare,7,14,831508,High,High,High,8,3,2,7,35,22,4.4,Medium,1
+P095,CRM Implementation — Banking,Insurance,3,8,355105,Medium,Low,High,5,0,6,9,15,87,2.5,Critical,0
+P096,AI Chatbot Development — Fintech,Telecom,2,6,91333,Low,High,Medium,5,2,4,6,10,79,3.1,Medium,0
+P097,Legacy Modernization — Fintech,Government,9,17,1920358,Very High,Low,High,18,7,14,46,54,81,3.2,Low,1
+P098,Supply Chain Optim. — Banking,Logistics,6,15,409075,High,Medium,Low,0,0,7,11,42,62,2.0,High,0
+P099,Digital Transformation — Government,Energy,9,17,1110644,Very High,High,Low,10,5,8,29,63,60,2.2,Medium,0
+P100,Mobile App Dev — Government,Fintech,4,9,188477,Medium,Low,High,9,0,2,7,24,20,4.9,Low,1
+P101,Data Warehouse Migr. — Retail,Banking,11,13,955988,High,High,Medium,16,6,9,23,33,67,4.6,Low,1
+P102,IoT Platform Setup — Retail,Manufacturing,6,9,537011,High,Low,Medium,5,2,6,27,48,79,2.7,High,0
+P103,HR System Upgrade — Logistics,Retail,3,11,248970,Medium,High,High,9,7,10,17,21,85,4.0,Medium,0
+P104,Cybersecurity Assess. — Retail,Banking,2,5,155155,Medium,Low,Medium,2,0,3,6,14,71,3.1,High,0
+P105,Cloud Cost Optim. — Healthcare,Technology,3,10,85584,Low,High,High,18,6,10,21,21,91,3.4,Low,1
+P106,Blockchain POC — Logistics,Finance,4,9,264460,High,Medium,High,11,1,1,3,24,20,4.4,Low,1
+P107,API Gateway Impl. — Retail,Telecom,8,12,430745,Medium,Medium,High,6,4,6,19,40,59,3.2,Medium,0
+P108,Data Governance — Government,Healthcare,8,13,578477,High,High,High,18,2,11,52,56,81,3.0,Low,1
+P109,Microservices Migr. — Government,Technology,7,22,780233,Very High,High,High,4,5,18,30,42,85,4.4,Medium,1
+P110,Customer Analytics — Energy,Retail,5,5,190565,Medium,Low,Low,8,7,2,9,25,51,2.6,Medium,1
+P111,OpenShift Migration — Banking,Banking,5,12,889811,High,Low,High,3,6,3,3,35,38,2.5,High,0
+P112,watsonx Governance — Healthcare,Insurance,5,13,391810,High,Medium,Low,10,4,8,20,35,76,4.3,Medium,1
+P113,SAP S/4HANA Upgrade — Logistics,Manufacturing,12,32,2410394,Very High,Medium,Low,6,6,30,51,60,85,3.5,Medium,0
+P114,IBM Cloud Pak Deploy — Logistics,Government,10,16,613540,High,Medium,Medium,1,1,4,8,50,43,4.3,High,0
+P115,Sterling B2B Integr. — Telecom,Logistics,9,17,583065,High,Low,Medium,10,5,13,47,63,85,2.7,Medium,1
+P116,Maximo Asset Mgmt — Manufacturing,Energy,7,9,340326,Medium,Medium,Medium,6,2,8,49,56,85,4.3,Medium,0
+P117,TRIRIGA Facilities — Retail,Real Estate,5,11,305832,Medium,Low,Low,0,3,2,2,25,40,2.9,High,0
+P118,Cognos Analytics — Manufacturing,Retail,5,7,184542,Low,Medium,Medium,14,3,6,32,35,83,4.2,Low,1
+P119,QRadar SIEM Setup — Banking,Banking,5,7,466290,High,Medium,Low,5,0,1,3,35,31,3.2,Critical,0
+P120,z/OS Modernization — Logistics,Finance,10,16,1310061,Very High,Medium,High,10,5,4,14,70,27,2.4,Medium,1
+P121,Cloud Migration — Energy,Banking,8,14,347085,High,Low,Low,3,0,13,39,48,95,2.9,High,0
+P122,watsonx.ai POC — Logistics,Retail,3,5,165424,Medium,Medium,Medium,14,0,3,10,15,55,4.6,Low,1
+P123,ERP Integration — Manufacturing,Manufacturing,15,18,1597927,Very High,High,Medium,17,7,16,115,120,88,3.1,Low,1
+P124,Data Analytics Platform — Telecom,Healthcare,6,14,564838,High,High,Medium,8,4,11,25,30,75,3.3,Low,1
+P125,CRM Implementation — Logistics,Insurance,5,9,329288,Medium,High,High,17,6,1,3,15,20,3.1,Low,1
+P126,AI Chatbot Development — Logistics,Telecom,1,4,119496,Low,Low,High,13,6,3,4,5,65,4.8,Low,1
+P127,Legacy Modernization — Retail,Government,18,25,2041243,Very High,Low,Low,4,4,13,38,90,72,2.7,Critical,0
+P128,Supply Chain Optim. — Telecom,Logistics,5,11,577434,High,Low,Low,0,7,10,20,25,95,2.6,High,0
+P129,Digital Transformation — Healthcare,Energy,11,20,1552497,Very High,High,High,9,2,10,31,55,44,4.1,Low,1
+P130,Mobile App Dev — Logistics,Fintech,4,6,199163,Medium,High,Low,7,5,3,11,28,50,3.4,Medium,1
+P131,Data Warehouse Migr. — Fintech,Banking,9,18,1103703,High,Medium,Medium,10,5,3,7,36,18,3.9,Medium,1
+P132,IoT Platform Setup — Energy,Manufacturing,4,15,428774,High,Medium,Low,2,1,15,10,12,95,3.6,High,0
+P133,HR System Upgrade — Manufacturing,Retail,6,12,206355,Medium,Medium,High,8,4,11,38,42,85,2.4,Medium,1
+P134,Cybersecurity Assess. — Fintech,Banking,2,6,230652,Medium,Low,Low,6,0,3,5,14,61,4.5,Medium,1
+P135,Cloud Cost Optim. — Logistics,Technology,2,8,119835,Low,High,Medium,10,4,5,10,16,55,3.4,Low,1
+P136,Blockchain POC — Telecom,Finance,4,9,310847,High,Medium,Medium,9,5,3,8,20,28,4.2,Low,1
+P137,API Gateway Impl. — Fintech,Telecom,4,9,385886,Medium,Medium,High,5,0,3,3,12,46,2.9,Medium,1
+P138,Data Governance — Healthcare,Healthcare,9,11,533077,High,Medium,Low,11,7,9,49,54,76,4.6,Low,1
+P139,Microservices Migr. — Government,Technology,10,14,931644,Very High,Low,Low,2,7,10,50,80,86,2.9,High,0
+P140,Customer Analytics — Manufacturing,Retail,4,7,230823,Medium,High,Medium,9,4,2,5,20,43,2.2,Medium,1
+P141,OpenShift Migration — Telecom,Banking,12,13,904821,High,Low,High,4,5,6,35,84,46,4.3,Medium,0
+P142,watsonx Governance — Fintech,Insurance,7,12,362044,High,Medium,Low,12,5,9,23,28,67,4.8,Low,1
+P143,SAP S/4HANA Upgrade — Insurance,Manufacturing,12,31,1840748,Very High,Low,Medium,4,4,23,46,84,95,3.4,High,0
+P144,IBM Cloud Pak Deploy — Fintech,Government,9,18,961885,High,High,High,7,7,1,12,63,6,2.8,Medium,0
+P145,Sterling B2B Integr. — Energy,Logistics,8,12,759601,High,Medium,Medium,3,1,4,6,24,57,2.6,Critical,0
+P146,Maximo Asset Mgmt — Government,Energy,7,15,504388,Medium,High,Low,4,0,12,38,56,95,4.1,Critical,0
+P147,TRIRIGA Facilities — Healthcare,Real Estate,4,8,386546,Medium,High,High,7,5,6,18,28,78,4.0,Medium,0
+P148,Cognos Analytics — Insurance,Retail,3,7,235627,Low,Medium,Medium,20,3,3,6,15,33,4.1,Low,1
+P149,QRadar SIEM Setup — Logistics,Banking,4,10,360581,High,Medium,High,12,2,7,14,20,65,2.9,Low,1
+P150,z/OS Modernization — Healthcare,Finance,9,26,1343668,Very High,High,High,8,4,18,48,72,69,2.4,Medium,0
+P151,Cloud Migration — Logistics,Banking,5,11,576075,High,High,Low,3,2,2,4,40,45,2.0,High,0
+P152,watsonx.ai POC — Manufacturing,Retail,4,9,127660,Medium,Low,High,10,0,5,17,32,66,4.7,Medium,1
+P153,ERP Integration — Telecom,Manufacturing,11,24,1564494,Very High,High,Medium,9,7,2,5,66,20,2.6,Low,1
+P154,Data Analytics Platform — Manufacturing,Healthcare,4,20,824248,High,Low,Medium,19,7,16,13,16,73,2.8,Low,1
+P155,CRM Implementation — Logistics,Insurance,3,9,256955,Medium,High,Medium,10,6,4,5,12,43,4.5,Low,1
+P156,AI Chatbot Development — Banking,Telecom,2,5,83254,Low,Medium,High,6,4,2,4,12,43,4.9,Medium,1
+P157,Legacy Modernization — Logistics,Government,17,23,1523603,Very High,High,Medium,5,4,22,106,119,85,4.1,Medium,1
+P158,Supply Chain Optim. — Retail,Logistics,8,14,564655,High,High,High,13,3,9,33,48,59,4.3,Low,1
+P159,Digital Transformation — Energy,Energy,13,13,1845212,Very High,High,Medium,7,2,9,32,52,79,2.5,Medium,0
+P160,Mobile App Dev — Fintech,Fintech,3,5,148472,Medium,High,Medium,4,0,4,14,18,83,3.7,Medium,1
+P161,Data Warehouse Migr. — Government,Banking,5,15,1026242,High,Medium,Low,10,1,9,8,15,71,5.0,Medium,1
+P162,IoT Platform Setup — Energy,Manufacturing,5,14,433789,High,High,High,10,1,7,16,30,46,4.0,Low,1
+P163,HR System Upgrade — Logistics,Retail,4,7,333776,Medium,Medium,High,10,0,7,11,12,85,4.9,Medium,0
+P164,Cybersecurity Assess. — Fintech,Banking,3,5,235113,Medium,Low,Low,15,6,1,1,9,20,3.8,Low,1
+P165,Cloud Cost Optim. — Fintech,Technology,3,9,98557,Low,Low,Low,10,7,1,3,18,15,2.7,Medium,1
+P166,Blockchain POC — Fintech,Finance,4,10,392270,High,High,High,16,4,6,10,16,57,4.6,Low,1
+P167,API Gateway Impl. — Manufacturing,Telecom,7,14,435278,Medium,Medium,High,9,7,7,22,49,57,2.1,Medium,1
+P168,Data Governance — Energy,Healthcare,6,11,718584,High,Low,Medium,16,4,4,10,24,26,4.6,Low,1
+P169,Microservices Migr. — Banking,Technology,7,16,871569,Very High,High,Low,17,5,3,9,42,20,2.3,Low,1
+P170,Customer Analytics — Retail,Retail,6,6,260301,Medium,Medium,Medium,19,3,6,48,48,98,3.4,Low,1
+P171,OpenShift Migration — Telecom,Banking,10,16,967581,High,Medium,Medium,2,3,7,16,60,60,3.7,High,0
+P172,watsonx Governance — Insurance,Insurance,6,11,345132,High,Medium,Low,0,3,8,15,30,95,3.1,Critical,0
+P173,SAP S/4HANA Upgrade — Logistics,Manufacturing,14,27,2077215,Very High,Medium,High,9,3,10,17,56,46,3.0,Medium,0
+P174,IBM Cloud Pak Deploy — Banking,Government,10,17,844404,High,High,High,18,5,6,29,80,26,2.5,Low,1
+P175,Sterling B2B Integr. — Logistics,Logistics,7,16,435259,High,High,Low,16,6,2,4,21,20,2.4,Low,1
+P176,Maximo Asset Mgmt — Energy,Energy,5,12,446691,Medium,High,High,12,7,10,25,30,78,2.0,Low,1
+P177,TRIRIGA Facilities — Telecom,Real Estate,6,7,365763,Medium,Low,High,12,2,6,31,36,79,2.3,Low,1
+P178,Cognos Analytics — Banking,Retail,3,7,164004,Low,Low,Medium,10,3,4,8,18,58,5.0,Medium,1
+P179,QRadar SIEM Setup — Energy,Banking,3,9,362911,High,Low,Medium,0,0,1,2,24,27,4.1,Critical,0
+P180,z/OS Modernization — Banking,Finance,16,18,2049425,Very High,High,Medium,2,0,16,58,80,95,4.8,High,0
+P181,Cloud Migration — Telecom,Banking,10,12,588289,High,High,Low,4,1,12,46,60,95,2.9,Critical,0
+P182,watsonx.ai POC — Government,Retail,3,9,180502,Medium,Medium,Low,17,5,2,5,21,20,2.2,Low,1
+P183,ERP Integration — Fintech,Manufacturing,16,17,1312663,Very High,Medium,Medium,0,3,15,66,96,95,3.1,High,0
+P184,Data Analytics Platform — Insurance,Healthcare,5,13,561163,High,High,Low,4,6,5,6,20,43,4.1,Medium,0
+P185,CRM Implementation — Retail,Insurance,4,11,216468,Medium,High,High,16,6,2,3,16,20,3.3,Low,1
+P186,AI Chatbot Development — Government,Telecom,3,7,125460,Low,Low,High,8,6,1,3,15,28,3.2,Medium,1
+P187,Legacy Modernization — Logistics,Government,11,20,1675769,Very High,Medium,Medium,1,2,5,3,33,42,3.3,Critical,0
+P188,Supply Chain Optim. — Fintech,Logistics,7,11,434928,High,High,Medium,18,6,5,10,21,41,3.0,Low,1
+P189,Digital Transformation — Healthcare,Energy,7,16,1969642,Very High,Medium,Medium,4,5,7,10,42,66,2.5,High,0
+P190,Mobile App Dev — Healthcare,Fintech,3,6,240021,Medium,High,Low,9,3,3,3,9,50,3.8,Medium,1
+P191,Data Warehouse Migr. — Retail,Banking,8,13,1021486,High,Medium,Low,3,7,13,39,48,95,2.4,High,0
+P192,IoT Platform Setup — Telecom,Manufacturing,5,12,475906,High,Medium,High,4,6,9,24,35,85,3.6,Medium,1
+P193,HR System Upgrade — Fintech,Retail,3,10,261063,Medium,Low,Medium,17,6,7,11,15,64,2.3,Low,1
+P194,Cybersecurity Assess. — Retail,Banking,3,5,175345,Medium,Low,Medium,9,2,5,24,24,90,3.0,Low,1
+P195,Cloud Cost Optim. — Retail,Technology,3,9,107259,Low,Medium,Medium,13,3,6,12,18,59,3.6,Low,1
+P196,Blockchain POC — Logistics,Finance,4,11,255695,High,Low,High,6,1,6,15,32,62,4.0,Medium,1
+P197,API Gateway Impl. — Healthcare,Telecom,4,11,311646,Medium,High,High,8,6,11,32,32,95,3.2,Low,1
+P198,Data Governance — Logistics,Healthcare,6,16,851277,High,High,Low,6,1,3,8,42,25,4.4,Medium,1
+P199,Microservices Migr. — Fintech,Technology,10,21,1174667,Very High,Medium,High,6,1,20,52,60,85,3.0,Medium,1
+P200,Customer Analytics — Government,Retail,3,6,161150,Medium,Low,High,14,2,3,4,9,48,3.1,Low,1
+P201,OpenShift Migration — Banking,Banking,6,15,851552,High,Low,Low,2,2,11,12,24,95,3.5,Critical,0
+P202,watsonx Governance — Healthcare,Insurance,5,9,441005,High,Medium,Medium,4,7,9,32,35,85,3.2,Medium,1
+P203,SAP S/4HANA Upgrade — Energy,Manufacturing,11,22,1847386,Very High,Low,High,13,7,6,19,66,21,3.6,Low,1
+P204,IBM Cloud Pak Deploy — Retail,Government,10,11,980293,High,High,Low,6,6,9,29,40,82,2.3,Medium,0
+P205,Sterling B2B Integr. — Healthcare,Logistics,6,18,739624,High,High,High,11,5,8,11,24,43,4.6,Low,1
+P206,Maximo Asset Mgmt — Retail,Energy,7,12,409038,Medium,High,Medium,16,2,10,43,49,73,3.0,Low,1
+P207,TRIRIGA Facilities — Government,Real Estate,3,11,281435,Medium,Low,Low,10,2,1,3,15,21,4.1,Medium,1
+P208,Cognos Analytics — Logistics,Retail,3,8,150858,Low,Low,Medium,2,7,7,12,18,95,2.2,High,0
+P209,QRadar SIEM Setup — Healthcare,Banking,6,8,228105,High,High,Medium,14,7,2,15,48,21,3.9,Low,1
+P210,z/OS Modernization — Logistics,Finance,11,19,1357624,Very High,Medium,Medium,5,2,18,57,77,95,3.7,Critical,0
+P211,Cloud Migration — Retail,Banking,4,15,380294,High,High,Low,2,6,8,5,12,80,2.6,High,0
+P212,watsonx.ai POC — Banking,Retail,4,6,136543,Medium,Medium,High,4,0,6,14,16,85,3.2,Medium,1
+P213,ERP Integration — Logistics,Manufacturing,9,14,1278690,Very High,High,Medium,10,7,9,53,72,60,2.0,Low,1
+P214,Data Analytics Platform — Manufacturing,Healthcare,3,14,929227,High,Medium,Low,5,5,2,1,9,25,3.1,Medium,1
+P215,CRM Implementation — Healthcare,Insurance,3,10,323167,Medium,High,High,15,5,3,7,18,23,4.2,Low,1
+P216,AI Chatbot Development — Fintech,Telecom,2,4,117671,Low,Low,Low,8,6,4,9,10,85,2.9,Medium,1
+P217,Legacy Modernization — Healthcare,Government,12,30,1337554,Very High,High,High,8,4,28,96,96,90,2.6,Low,1
+P218,Supply Chain Optim. — Energy,Logistics,6,10,599824,High,Medium,Low,2,0,10,14,18,95,5.0,High,0
+P219,Digital Transformation — Energy,Energy,11,20,1977175,Very High,Low,Low,2,1,3,3,33,32,2.0,High,0
+P220,Mobile App Dev — Energy,Fintech,4,7,186318,Medium,Medium,Low,1,2,6,17,28,95,2.8,High,0
+P221,Data Warehouse Migr. — Fintech,Banking,7,16,1065831,High,Low,Low,15,6,3,6,35,20,4.2,Low,1
+P222,IoT Platform Setup — Insurance,Manufacturing,6,10,526133,High,High,Low,8,0,3,4,18,35,4.1,Medium,1
+P223,HR System Upgrade — Fintech,Retail,3,7,299196,Medium,Low,Medium,19,1,3,10,24,42,4.3,Low,1
+P224,Cybersecurity Assess. — Energy,Banking,4,5,181358,Medium,Medium,Low,5,2,1,2,24,32,3.1,High,0
+P225,Cloud Cost Optim. — Government,Technology,1,9,79032,Low,Low,Low,19,5,1,1,6,20,3.1,Low,1
+P226,Blockchain POC — Banking,Finance,3,8,451884,High,Low,High,4,1,6,7,15,88,3.7,Critical,0
+P227,API Gateway Impl. — Fintech,Telecom,8,8,390226,Medium,Medium,Low,2,5,5,21,40,83,2.3,High,0
+P228,Data Governance — Banking,Healthcare,6,12,931210,High,Medium,Low,5,3,4,8,48,56,2.5,High,0
+P229,Microservices Migr. — Retail,Technology,13,14,1221123,Very High,High,Low,5,4,14,98,104,85,2.3,Medium,1
+P230,Customer Analytics — Fintech,Retail,3,6,273207,Medium,High,Low,10,5,4,15,24,68,3.4,Medium,0
+P231,OpenShift Migration — Healthcare,Banking,9,13,993714,High,Medium,High,5,4,4,12,45,37,4.6,Medium,0
+P232,watsonx Governance — Insurance,Insurance,4,13,348614,High,Medium,Low,3,7,2,1,16,40,3.4,High,0
+P233,SAP S/4HANA Upgrade — Retail,Manufacturing,13,31,1283930,Very High,High,High,10,4,26,89,104,75,4.5,Low,1
+P234,IBM Cloud Pak Deploy — Healthcare,Government,9,20,788265,High,Low,Low,4,4,2,7,72,31,2.8,High,0
+P235,Sterling B2B Integr. — Retail,Logistics,4,10,747513,High,Low,Low,9,0,2,2,12,25,4.5,Medium,1
+P236,Maximo Asset Mgmt — Retail,Energy,6,10,487569,Medium,Medium,Low,13,3,1,3,18,20,4.7,Low,1
+P237,TRIRIGA Facilities — Insurance,Real Estate,3,9,230277,Medium,Medium,High,10,6,7,19,24,75,3.5,Low,1
+P238,Cognos Analytics — Healthcare,Retail,3,9,121365,Low,High,Medium,14,4,4,10,24,40,3.5,Low,1
+P239,QRadar SIEM Setup — Government,Banking,5,11,288541,High,Medium,Medium,8,6,9,11,15,85,4.3,Medium,1
+P240,z/OS Modernization — Healthcare,Finance,9,15,1708770,Very High,Medium,High,5,0,1,9,45,21,4.4,Medium,0
+P241,Cloud Migration — Fintech,Banking,6,14,646040,High,Low,Low,9,6,1,4,24,19,3.1,Medium,0
+P242,watsonx.ai POC — Healthcare,Retail,2,8,196993,Medium,Medium,High,8,3,3,5,14,37,4.5,Low,1
+P243,ERP Integration — Banking,Manufacturing,12,14,1181510,Very High,Medium,High,13,3,6,43,84,34,4.4,Low,1
+P244,Data Analytics Platform — Manufacturing,Healthcare,3,16,1033645,High,Medium,High,6,5,4,4,21,26,4.9,Medium,0
+P245,CRM Implementation — Government,Insurance,5,9,329245,Medium,High,High,8,5,8,32,40,85,2.5,Medium,1
+P246,AI Chatbot Development — Healthcare,Telecom,2,6,73914,Low,High,Low,17,6,6,6,6,90,4.6,Low,1
+P247,Legacy Modernization — Telecom,Government,16,18,1994659,Very High,Medium,Low,5,1,11,49,128,72,2.7,Critical,0
+P248,Supply Chain Optim. — Government,Logistics,6,12,494807,High,High,Low,10,4,2,6,30,20,4.4,Low,1
+P249,Digital Transformation — Retail,Energy,9,16,1548325,Very High,Low,Low,0,3,4,10,54,40,2.5,Critical,0
+P250,Mobile App Dev — Government,Fintech,3,9,152526,Medium,High,Medium,5,1,2,4,21,36,3.0,Medium,1
+P251,Data Warehouse Migr. — Manufacturing,Banking,6,12,714496,High,Medium,Low,15,4,4,12,36,27,4.0,Low,1
+P252,IoT Platform Setup — Insurance,Manufacturing,3,8,320102,High,Low,High,0,1,8,9,12,95,2.1,High,0
+P253,HR System Upgrade — Insurance,Retail,6,9,319103,Medium,Medium,Medium,15,6,5,10,18,52,2.6,Low,1
+P254,Cybersecurity Assess. — Government,Banking,3,5,124766,Medium,Medium,High,16,5,1,2,9,20,4.4,Low,1
+P255,Cloud Cost Optim. — Fintech,Technology,4,8,156654,Low,High,Low,8,4,4,10,24,57,2.2,Medium,1
+P256,Blockchain POC — Manufacturing,Finance,3,12,337514,High,Medium,Low,5,3,3,1,12,54,2.4,Critical,0
+P257,API Gateway Impl. — Fintech,Telecom,7,10,515025,Medium,High,Medium,8,6,2,5,21,20,3.7,Low,1
+P258,Data Governance — Logistics,Healthcare,8,16,510134,High,High,Low,7,1,5,7,32,44,4.8,Medium,0
+P259,Microservices Migr. — Telecom,Technology,10,19,847593,Very High,Medium,High,12,6,13,27,40,63,2.1,Low,1
+P260,Customer Analytics — Government,Retail,3,9,189670,Medium,Low,Low,10,1,5,8,18,62,4.9,Medium,0
+P261,OpenShift Migration — Energy,Banking,9,10,719401,High,Medium,Low,5,7,7,35,72,81,4.3,High,0
+P262,watsonx Governance — Healthcare,Insurance,5,14,488160,High,Low,Low,2,2,10,9,15,82,2.6,High,0
+P263,SAP S/4HANA Upgrade — Energy,Manufacturing,11,31,1806459,Very High,Medium,High,4,0,21,19,33,95,2.7,High,0
+P264,IBM Cloud Pak Deploy — Healthcare,Government,7,12,1084722,High,Medium,Low,1,1,12,43,56,95,2.9,High,0
+P265,Sterling B2B Integr. — Healthcare,Logistics,7,15,519782,High,High,Low,8,0,7,18,49,56,4.6,Medium,1
+P266,Maximo Asset Mgmt — Energy,Energy,4,14,345528,Medium,Medium,Medium,18,4,12,28,32,81,3.3,Low,1
+P267,TRIRIGA Facilities — Telecom,Real Estate,6,9,216485,Medium,High,High,9,5,9,48,48,98,3.7,Low,1
+P268,Cognos Analytics — Government,Retail,5,8,225547,Low,High,Low,17,4,5,28,40,54,2.6,Low,1
+P269,QRadar SIEM Setup — Healthcare,Banking,5,11,404214,High,Medium,Medium,17,4,11,30,30,94,2.8,Low,1
+P270,z/OS Modernization — Insurance,Finance,10,24,1808676,Very High,Low,High,1,5,21,47,60,95,3.5,High,0
+P271,Cloud Migration — Insurance,Banking,9,12,644418,High,Low,High,2,1,11,35,45,95,2.7,High,0
+P272,watsonx.ai POC — Government,Retail,4,7,109867,Medium,Low,High,12,1,1,7,32,20,3.4,Low,1
+P273,ERP Integration — Manufacturing,Manufacturing,7,24,895386,Very High,Medium,Low,4,6,7,7,35,31,5.0,Medium,1
+P274,Data Analytics Platform — Logistics,Healthcare,5,11,773149,High,Low,Low,3,2,4,4,20,54,3.5,Critical,0
+P275,CRM Implementation — Healthcare,Insurance,4,7,236876,Medium,High,Low,11,5,3,5,12,36,4.3,Low,1
+P276,AI Chatbot Development — Manufacturing,Telecom,3,5,74025,Low,Low,Medium,8,4,4,15,21,85,2.5,Medium,0
+P277,Legacy Modernization — Manufacturing,Government,13,29,1802951,Very High,Low,High,16,6,7,13,52,23,2.1,Low,1
+P278,Supply Chain Optim. — Banking,Logistics,4,15,722693,High,High,Low,9,4,7,11,32,56,4.3,Medium,1
+P279,Digital Transformation — Energy,Energy,11,17,1374266,Very High,High,High,18,2,9,36,66,46,2.6,Low,1
+P280,Mobile App Dev — Healthcare,Fintech,3,8,149202,Medium,Low,Medium,16,1,2,6,21,20,2.8,Low,1
+P281,Data Warehouse Migr. — Fintech,Banking,7,15,686035,High,Medium,Medium,9,3,9,25,42,53,4.1,Low,1
+P282,IoT Platform Setup — Manufacturing,Manufacturing,6,9,320876,High,High,Low,7,1,9,16,18,85,4.7,Medium,0
+P283,HR System Upgrade — Telecom,Retail,6,12,225537,Medium,Low,Low,10,6,11,30,30,85,4.2,Low,1
+P284,Cybersecurity Assess. — Government,Banking,3,5,195347,Medium,Medium,Medium,15,5,1,3,15,20,2.5,Low,1
+P285,Cloud Cost Optim. — Fintech,Technology,3,9,87496,Low,High,Medium,7,1,1,2,12,13,3.2,Medium,1
+P286,Blockchain POC — Energy,Finance,3,11,432941,High,Medium,Medium,4,7,3,4,18,37,2.3,Medium,1
+P287,API Gateway Impl. — Energy,Telecom,7,12,418203,Medium,High,Low,7,1,11,30,35,85,3.3,Medium,0
+P288,Data Governance — Healthcare,Healthcare,10,14,460705,High,Low,Low,6,7,3,14,70,26,4.6,Medium,0
+P289,Microservices Migr. — Banking,Technology,10,18,1344169,Very High,Medium,Low,7,7,3,12,60,18,4.4,Medium,1
+P290,Customer Analytics — Healthcare,Retail,3,7,228798,Medium,High,Low,6,4,1,1,9,28,4.7,Medium,1
+P291,OpenShift Migration — Insurance,Banking,11,12,890393,High,Low,Low,5,5,10,48,66,95,4.1,Critical,0
+P292,watsonx Governance — Retail,Insurance,6,11,347724,High,High,High,11,2,3,10,36,21,4.5,Low,1
+P293,SAP S/4HANA Upgrade — Logistics,Manufacturing,18,24,1745877,Very High,Medium,Low,3,5,7,14,144,50,2.3,Critical,0
+P294,IBM Cloud Pak Deploy — Fintech,Government,9,20,632608,High,Medium,High,1,0,16,15,27,95,3.7,High,0
+P295,Sterling B2B Integr. — Logistics,Logistics,5,16,447942,High,High,High,12,6,11,25,35,59,3.3,Low,1
+P296,Maximo Asset Mgmt — Telecom,Energy,7,9,428706,Medium,High,High,12,5,9,35,35,93,4.1,Low,1
+P297,TRIRIGA Facilities — Government,Real Estate,6,7,344183,Medium,Medium,High,19,5,2,14,42,20,4.1,Low,1
+P298,Cognos Analytics — Insurance,Retail,4,9,184271,Low,Low,Low,1,1,7,8,12,93,2.1,Critical,0
+P299,QRadar SIEM Setup — Healthcare,Banking,5,7,242698,High,Low,Medium,9,3,7,24,25,85,4.3,Medium,1
+P300,z/OS Modernization — Insurance,Finance,14,22,1306106,Very High,Medium,Medium,0,0,10,38,112,66,4.8,Critical,0
+P301,Cloud Migration — Manufacturing,Banking,6,14,626155,High,High,High,5,5,8,13,24,68,4.3,Medium,0
+P302,watsonx.ai POC — Banking,Retail,5,5,198559,Medium,Medium,High,12,6,5,15,15,94,2.1,Low,1
+P303,ERP Integration — Telecom,Manufacturing,10,22,910036,Very High,High,High,8,0,5,10,50,34,4.3,Medium,0
+P304,Data Analytics Platform — Insurance,Healthcare,6,20,811539,High,Medium,Low,6,6,17,19,24,85,3.6,Medium,0
+P305,CRM Implementation — Banking,Insurance,3,11,306404,Medium,Medium,Medium,8,0,9,17,24,85,2.3,Medium,0
+P306,AI Chatbot Development — Logistics,Telecom,3,5,129115,Low,Medium,Low,10,4,1,3,18,25,3.6,Medium,1
+P307,Legacy Modernization — Healthcare,Government,9,29,1569517,Very High,High,High,18,1,17,17,27,56,2.5,Low,1
+P308,Supply Chain Optim. — Banking,Logistics,9,13,433649,High,Low,High,2,6,9,44,72,88,3.9,High,0
+P309,Digital Transformation — Government,Energy,6,13,1808925,Very High,Medium,Medium,0,3,9,9,18,87,4.7,High,0
+P310,Mobile App Dev — Fintech,Fintech,4,8,219799,Medium,Low,Medium,2,0,2,5,32,50,4.1,Critical,0
+P311,Data Warehouse Migr. — Manufacturing,Banking,6,18,860735,High,High,Low,10,0,13,31,48,84,3.4,Medium,1
+P312,IoT Platform Setup — Energy,Manufacturing,5,14,596590,High,Low,High,8,5,14,39,40,85,4.9,Medium,1
+P313,HR System Upgrade — Healthcare,Retail,5,7,199259,Medium,High,High,12,5,6,34,40,83,2.6,Low,1
+P314,Cybersecurity Assess. — Telecom,Banking,2,6,188478,Medium,Low,Medium,9,7,1,2,14,18,3.9,Medium,1
+P315,Cloud Cost Optim. — Fintech,Technology,2,8,97700,Low,Medium,Medium,19,1,5,9,14,55,4.7,Low,1
+P316,Blockchain POC — Manufacturing,Finance,3,10,425386,High,Low,High,2,0,7,6,12,85,2.9,Critical,0
+P317,API Gateway Impl. — Energy,Telecom,6,10,394387,Medium,Low,Low,1,4,8,18,30,95,3.5,Critical,0
+P318,Data Governance — Banking,Healthcare,6,15,762043,High,High,Low,1,0,12,11,18,95,4.5,High,0
+P319,Microservices Migr. — Energy,Technology,10,20,1484020,Very High,Low,High,4,2,16,46,80,92,3.1,Critical,0
+P320,Customer Analytics — Manufacturing,Retail,3,7,144631,Medium,Low,Medium,18,2,2,6,21,20,4.3,Low,1
+P321,OpenShift Migration — Government,Banking,10,13,675867,High,Medium,Low,2,3,4,7,60,51,2.2,High,0
+P322,watsonx Governance — Fintech,Insurance,5,11,327602,High,High,High,16,1,11,25,25,97,4.1,Low,1
+P323,SAP S/4HANA Upgrade — Fintech,Manufacturing,10,28,1630273,Very High,Low,High,7,4,21,21,30,85,3.1,Medium,1
+P324,IBM Cloud Pak Deploy — Healthcare,Government,4,19,814239,High,Low,Low,5,4,8,3,12,68,2.6,High,0
+P325,Sterling B2B Integr. — Manufacturing,Logistics,6,12,452188,High,Low,High,8,7,11,32,36,85,2.6,Medium,1
+P326,Maximo Asset Mgmt — Insurance,Energy,6,8,420235,Medium,High,Medium,9,4,1,4,24,22,4.8,Medium,1
+P327,TRIRIGA Facilities — Fintech,Real Estate,6,8,322370,Medium,Medium,High,10,2,8,36,36,91,2.7,Low,1
+P328,Cognos Analytics — Manufacturing,Retail,4,6,208247,Low,Medium,Low,8,1,3,11,24,57,2.7,Medium,1
+P329,QRadar SIEM Setup — Government,Banking,5,8,448394,High,High,Low,5,1,1,3,35,22,2.3,Critical,0
+P330,z/OS Modernization — Fintech,Finance,12,20,1088650,Very High,Medium,Medium,5,3,17,49,72,95,4.8,High,0
+P331,Cloud Migration — Banking,Banking,5,9,491999,High,High,Medium,20,4,4,6,15,37,3.8,Low,1
+P332,watsonx.ai POC — Fintech,Retail,4,6,98255,Medium,Low,Low,10,5,6,14,16,85,3.2,Medium,1
+P333,ERP Integration — Government,Manufacturing,10,17,1351708,Very High,High,High,13,7,7,26,60,38,2.5,Low,1
+P334,Data Analytics Platform — Manufacturing,Healthcare,7,19,889198,High,High,Medium,9,2,8,14,42,51,2.3,Medium,1
+P335,CRM Implementation — Government,Insurance,4,10,363917,Medium,Medium,Low,7,6,3,7,24,30,2.3,Medium,1
+P336,AI Chatbot Development — Insurance,Telecom,3,6,114812,Low,Medium,Low,16,2,5,8,9,74,3.9,Low,1
+P337,Legacy Modernization — Government,Government,11,28,2014766,Very High,Medium,Low,2,2,23,33,44,95,4.0,Critical,0
+P338,Supply Chain Optim. — Insurance,Logistics,6,13,636153,High,High,Medium,6,1,9,10,18,82,4.8,Medium,0
+P339,Digital Transformation — Energy,Energy,7,23,1452496,Very High,Medium,High,6,0,13,24,49,64,2.8,Medium,1
+P340,Mobile App Dev — Logistics,Fintech,5,9,243840,Medium,High,Medium,15,7,5,25,40,45,4.9,Low,1
+P341,Data Warehouse Migr. — Banking,Banking,11,19,888641,High,Low,High,6,6,9,14,33,52,3.9,Medium,1
+P342,IoT Platform Setup — Manufacturing,Manufacturing,6,10,382996,High,Low,Medium,2,5,7,27,48,95,2.2,High,0
+P343,HR System Upgrade — Manufacturing,Retail,6,11,321737,Medium,Low,Medium,10,3,8,33,48,85,2.7,Medium,1
+P344,Cybersecurity Assess. — Insurance,Banking,4,4,126889,Medium,High,Low,17,0,4,28,28,96,4.3,Low,1
+P345,Cloud Cost Optim. — Banking,Technology,2,10,154944,Low,Low,Low,4,3,5,3,12,69,4.3,High,0
+P346,Blockchain POC — Fintech,Finance,5,9,395652,High,Medium,Medium,3,1,3,8,30,56,4.1,Critical,0
+P347,API Gateway Impl. — Government,Telecom,4,11,501315,Medium,Medium,High,11,4,3,8,28,22,2.7,Low,1
+P348,Data Governance — Healthcare,Healthcare,9,12,873619,High,High,High,20,2,5,26,54,34,3.7,Low,1
+P349,Microservices Migr. — Telecom,Technology,10,24,865968,Very High,Low,Medium,9,7,24,39,40,85,4.4,Medium,1
+P350,Customer Analytics — Telecom,Retail,6,7,229569,Medium,Low,Low,9,6,5,11,18,78,2.3,Medium,0
+P351,OpenShift Migration — Energy,Banking,7,12,780183,High,Medium,High,5,0,5,11,35,63,3.2,Critical,0
+P352,watsonx Governance — Manufacturing,Insurance,4,14,431316,High,Medium,Low,10,7,11,23,28,73,4.3,Low,1
+P353,SAP S/4HANA Upgrade — Government,Manufacturing,15,32,1701488,Very High,Low,Medium,4,1,26,28,45,95,2.5,Critical,0
+P354,IBM Cloud Pak Deploy — Retail,Government,6,15,1065869,High,Low,Low,9,7,6,15,48,49,3.2,Medium,1
+P355,Sterling B2B Integr. — Government,Logistics,5,13,444470,High,Medium,High,4,0,8,21,35,70,2.1,Medium,1
+P356,Maximo Asset Mgmt — Insurance,Energy,5,10,339569,Medium,High,Medium,10,2,3,4,20,37,2.1,Medium,1
+P357,TRIRIGA Facilities — Telecom,Real Estate,5,7,394182,Medium,High,High,12,7,5,15,20,65,3.9,Low,1
+P358,Cognos Analytics — Telecom,Retail,3,6,128283,Low,Medium,Low,10,6,3,8,15,42,2.8,Low,1
+P359,QRadar SIEM Setup — Healthcare,Banking,4,10,396003,High,Medium,Medium,2,4,8,16,24,90,2.0,High,0
+P360,z/OS Modernization — Fintech,Finance,11,22,1482122,Very High,Low,Medium,20,6,6,27,88,24,4.5,Low,1
+P361,Cloud Migration — Fintech,Banking,9,13,424636,High,Low,Low,8,4,12,56,63,85,3.2,Medium,1
+P362,watsonx.ai POC — Retail,Retail,3,7,113475,Medium,Medium,Medium,11,2,5,7,9,64,4.9,Low,1
+P363,ERP Integration — Government,Manufacturing,8,19,1067206,Very High,Low,Medium,4,5,10,21,48,66,3.4,Medium,0
+P364,Data Analytics Platform — Banking,Healthcare,3,15,627627,High,Low,High,11,6,14,14,15,83,4.5,Low,1
+P365,CRM Implementation — Energy,Insurance,3,11,214731,Medium,Medium,Medium,16,7,11,12,12,99,3.2,Low,1
+P366,AI Chatbot Development — Fintech,Telecom,2,5,85916,Low,Low,High,12,3,3,3,6,58,4.9,Low,1
+P367,Legacy Modernization — Banking,Government,10,28,1312501,Very High,Low,Medium,9,7,2,14,70,14,4.1,Medium,1
+P368,Supply Chain Optim. — Healthcare,Logistics,4,15,684557,High,Medium,High,3,2,13,7,12,95,3.5,High,0
+P369,Digital Transformation — Energy,Energy,6,16,1735619,Very High,High,Medium,1,7,9,6,18,70,4.1,High,0
+P370,Mobile App Dev — Energy,Fintech,3,9,168545,Medium,Medium,Medium,20,1,9,12,12,95,3.6,Low,1
+P371,Data Warehouse Migr. — Logistics,Banking,8,12,596793,High,Low,High,5,3,6,16,56,63,3.0,High,0
+P372,IoT Platform Setup — Banking,Manufacturing,7,9,381685,High,High,High,10,5,7,43,56,68,2.3,Low,1
+P373,HR System Upgrade — Retail,Retail,3,9,179781,Medium,High,High,19,7,7,18,24,75,3.6,Low,1
+P374,Cybersecurity Assess. — Banking,Banking,2,7,199624,Medium,Low,Medium,10,7,7,5,6,85,4.4,Medium,0
+P375,Cloud Cost Optim. — Healthcare,Technology,3,6,81414,Low,High,Low,11,1,1,3,15,20,4.8,Low,1
+P376,Blockchain POC — Retail,Finance,5,8,380704,High,High,High,14,6,3,15,35,30,4.2,Low,1
+P377,API Gateway Impl. — Telecom,Telecom,4,9,372436,Medium,High,Medium,13,2,6,24,32,61,3.6,Low,1
+P378,Data Governance — Logistics,Healthcare,7,15,859815,High,Low,Medium,3,3,6,8,49,55,3.7,Critical,0
+P379,Microservices Migr. — Banking,Technology,13,14,741690,Very High,Medium,Low,2,0,5,10,91,50,3.6,Critical,0
+P380,Customer Analytics — Healthcare,Retail,6,10,269639,Medium,Medium,Medium,17,2,9,38,42,86,2.3,Low,1
+P381,OpenShift Migration — Fintech,Banking,7,16,535750,High,High,Medium,19,3,13,40,49,72,4.2,Low,1
+P382,watsonx Governance — Healthcare,Insurance,7,9,527797,High,Low,Medium,0,6,1,5,56,29,2.2,High,0
+P383,SAP S/4HANA Upgrade — Manufacturing,Manufacturing,16,31,2340102,Very High,High,Low,8,6,21,79,128,69,2.2,Medium,1
+P384,IBM Cloud Pak Deploy — Banking,Government,5,18,786265,High,Medium,Medium,4,1,15,26,35,94,2.7,High,0
+P385,Sterling B2B Integr. — Energy,Logistics,7,12,575960,High,Medium,High,11,2,7,35,56,51,4.3,Low,1
+P386,Maximo Asset Mgmt — Healthcare,Energy,6,13,328948,Medium,High,Low,13,6,2,6,30,20,3.0,Low,1
+P387,TRIRIGA Facilities — Healthcare,Real Estate,4,10,200083,Medium,Medium,High,11,5,5,8,16,40,3.8,Low,1
+P388,Cognos Analytics — Insurance,Retail,4,6,208789,Low,High,Low,0,0,1,1,12,40,2.7,High,0
+P389,QRadar SIEM Setup — Banking,Banking,4,7,278707,High,Medium,High,19,3,5,12,16,61,3.6,Low,1
+P390,z/OS Modernization — Insurance,Finance,10,27,1630014,Very High,High,High,4,0,9,13,40,43,2.9,Medium,0
+P391,Cloud Migration — Retail,Banking,9,14,451076,High,High,Medium,19,4,2,6,27,20,4.6,Low,1
+P392,watsonx.ai POC — Logistics,Retail,5,7,160196,Medium,Medium,High,8,3,1,4,20,17,3.5,Medium,0
+P393,ERP Integration — Energy,Manufacturing,10,15,1071295,Very High,High,Medium,8,4,6,23,50,31,2.7,Low,1
+P394,Data Analytics Platform — Government,Healthcare,8,13,711400,High,Medium,High,1,2,7,23,64,76,2.3,High,0
+P395,CRM Implementation — Manufacturing,Insurance,3,7,398812,Medium,Low,High,11,7,5,11,15,64,3.6,Low,1
+P396,AI Chatbot Development — Retail,Telecom,2,6,101666,Low,High,Low,19,2,2,4,12,28,4.0,Low,1
+P397,Legacy Modernization — Insurance,Government,11,28,1503731,Very High,Medium,Medium,5,6,1,5,55,31,4.9,High,0
+P398,Supply Chain Optim. — Retail,Logistics,5,11,445249,High,High,Low,2,4,1,3,35,32,3.8,High,0
+P399,Digital Transformation — Government,Energy,11,17,1502440,Very High,Medium,Medium,0,5,16,76,88,95,2.6,High,0
+P400,Mobile App Dev — Healthcare,Fintech,4,5,167780,Medium,Low,Low,6,3,4,11,16,85,4.3,Medium,1
+P401,Data Warehouse Migr. — Energy,Banking,8,18,967995,High,High,High,9,5,13,42,64,81,3.2,Medium,1
+P402,IoT Platform Setup — Healthcare,Manufacturing,4,11,568996,High,Low,High,8,6,4,11,28,30,5.0,Low,1
+P403,HR System Upgrade — Retail,Retail,4,9,215796,Medium,High,Low,10,2,5,12,24,57,3.3,Medium,1
+P404,Cybersecurity Assess. — Retail,Banking,4,4,215120,Medium,Low,Low,5,6,2,10,24,60,3.0,Medium,1
+P405,Cloud Cost Optim. — Energy,Technology,2,8,154201,Low,High,Medium,7,1,3,5,16,45,2.3,Medium,1
+P406,Blockchain POC — Banking,Finance,5,7,362334,High,High,Low,19,5,1,4,20,20,3.7,Low,1
+P407,API Gateway Impl. — Logistics,Telecom,5,10,475216,Medium,Low,Low,3,2,8,15,25,95,2.4,High,0
+P408,Data Governance — Healthcare,Healthcare,10,14,457817,High,Medium,Medium,0,3,8,17,40,79,3.8,High,0
+P409,Microservices Migr. — Insurance,Technology,13,17,1199049,Very High,High,Medium,8,2,7,15,39,41,2.4,Medium,1
+P410,Customer Analytics — Telecom,Retail,4,6,159768,Medium,High,High,7,4,2,4,16,41,3.8,Medium,1
+P411,OpenShift Migration — Energy,Banking,12,10,644629,High,High,Low,10,1,6,39,72,61,4.3,Medium,0
+P412,watsonx Governance — Fintech,Insurance,5,9,382241,High,High,High,6,1,1,3,15,20,3.5,Medium,0
+P413,SAP S/4HANA Upgrade — Retail,Manufacturing,19,23,1333438,Very High,Low,High,8,7,19,102,114,72,3.5,Low,1
+P414,IBM Cloud Pak Deploy — Healthcare,Government,4,17,622665,High,Medium,Medium,5,6,7,5,28,55,3.2,High,0
+P415,Sterling B2B Integr. — Banking,Logistics,8,11,432440,High,Low,High,17,5,5,27,56,38,4.3,Low,1
+P416,Maximo Asset Mgmt — Logistics,Energy,7,9,493471,Medium,Medium,Low,2,0,8,31,42,95,3.9,Critical,0
+P417,TRIRIGA Facilities — Retail,Real Estate,6,9,350942,Medium,Low,Low,2,5,9,24,30,95,3.7,High,0
+P418,Cognos Analytics — Telecom,Retail,5,6,120927,Low,Medium,Low,2,2,4,23,40,92,3.7,High,0
+P419,QRadar SIEM Setup — Healthcare,Banking,5,8,248765,High,Medium,Low,10,7,4,11,25,51,4.5,Medium,0
+P420,z/OS Modernization — Energy,Finance,15,21,1067926,Very High,Medium,High,0,2,16,68,105,92,2.6,Critical,0
+P421,Cloud Migration — Retail,Banking,9,9,578599,High,Low,High,0,1,8,35,54,95,2.0,Critical,0
+P422,watsonx.ai POC — Manufacturing,Retail,4,8,130310,Medium,Low,Medium,9,3,5,18,32,74,3.0,Medium,0
+P423,ERP Integration — Fintech,Manufacturing,8,15,1584970,Very High,Medium,High,2,1,9,27,56,88,2.6,High,0
+P424,Data Analytics Platform — Government,Healthcare,4,11,863427,High,Low,Medium,0,7,6,13,28,72,2.2,Critical,0
+P425,CRM Implementation — Retail,Insurance,4,11,382167,Medium,Medium,Medium,16,7,11,32,32,93,3.8,Low,1
+P426,AI Chatbot Development — Manufacturing,Telecom,4,6,97598,Low,Medium,High,5,7,2,3,12,40,2.3,Medium,1
+P427,Legacy Modernization — Manufacturing,Government,19,25,2578006,Very High,Medium,Medium,6,5,13,39,76,59,4.4,Medium,1
+P428,Supply Chain Optim. — Logistics,Logistics,5,12,631364,High,Low,Medium,4,6,9,8,15,95,4.5,High,0
+P429,Digital Transformation — Telecom,Energy,9,17,1626918,Very High,Low,High,4,6,6,11,54,64,2.2,High,0
+P430,Mobile App Dev — Insurance,Fintech,4,6,222765,Medium,High,Medium,10,7,1,7,32,20,2.3,Low,1
+P431,Data Warehouse Migr. — Banking,Banking,12,11,653509,High,High,Low,17,5,10,67,72,89,3.5,Low,1
+P432,IoT Platform Setup — Government,Manufacturing,7,13,435186,High,High,Medium,6,7,5,13,42,52,2.6,Medium,1
+P433,HR System Upgrade — Energy,Retail,5,12,335800,Medium,Medium,Low,8,6,10,13,15,73,4.5,Low,1
+P434,Cybersecurity Assess. — Energy,Banking,5,5,225517,Medium,Medium,High,14,6,1,5,20,20,4.1,Low,1
+P435,Cloud Cost Optim. — Logistics,Technology,2,6,89681,Low,Low,Medium,9,5,5,9,12,83,4.5,Medium,0
+P436,Blockchain POC — Energy,Finance,5,12,260765,High,High,High,14,6,3,12,40,20,4.6,Low,1
+P437,API Gateway Impl. — Fintech,Telecom,7,11,323207,Medium,High,Low,4,0,7,23,49,81,3.7,Critical,0
+P438,Data Governance — Logistics,Healthcare,7,18,733393,High,Low,Low,2,7,12,9,21,95,4.9,High,0
+P439,Microservices Migr. — Logistics,Technology,10,20,1184754,Very High,High,High,8,1,8,20,60,53,4.1,Medium,1
+P440,Customer Analytics — Insurance,Retail,4,9,231390,Medium,Medium,Medium,19,5,6,16,24,57,4.9,Low,1
+P441,OpenShift Migration — Manufacturing,Banking,10,14,519744,High,High,Medium,0,2,8,27,70,72,3.7,High,0
+P442,watsonx Governance — Manufacturing,Insurance,6,14,405357,High,Medium,Low,4,4,3,5,42,34,2.8,High,0
+P443,SAP S/4HANA Upgrade — Manufacturing,Manufacturing,15,23,1391003,Very High,High,Low,8,7,23,54,60,85,2.5,Medium,1
+P444,IBM Cloud Pak Deploy — Insurance,Government,10,18,798203,High,Low,Low,5,7,13,21,40,89,4.2,High,0
+P445,Sterling B2B Integr. — Government,Logistics,8,10,475738,High,High,Low,6,4,7,30,48,75,3.4,Medium,0
+P446,Maximo Asset Mgmt — Telecom,Energy,3,15,385669,Medium,High,High,9,0,11,9,15,79,2.3,Medium,1
+P447,TRIRIGA Facilities — Manufacturing,Real Estate,4,11,248622,Medium,High,Low,8,7,10,20,24,85,4.3,Medium,0
+P448,Cognos Analytics — Healthcare,Retail,3,5,118067,Low,Low,High,12,6,1,2,9,20,2.3,Low,1
+P449,QRadar SIEM Setup — Fintech,Banking,3,10,241436,High,High,Low,8,3,10,21,24,85,4.9,Medium,0
+P450,z/OS Modernization — Telecom,Finance,14,17,1164146,Very High,Low,High,7,4,6,18,70,39,3.4,Medium,1
+P451,Cloud Migration — Fintech,Banking,6,14,422050,High,Low,Medium,1,6,1,3,36,18,3.0,High,0
+P452,watsonx.ai POC — Insurance,Retail,3,8,108885,Medium,High,Medium,19,1,7,10,12,86,4.7,Low,1
+P453,ERP Integration — Energy,Manufacturing,14,14,1198069,Very High,High,Medium,7,0,11,86,112,83,4.8,Medium,1
+P454,Data Analytics Platform — Energy,Healthcare,6,18,787758,High,Low,Medium,4,1,13,24,48,91,3.6,Critical,0
+P455,CRM Implementation — Banking,Insurance,6,9,338185,Medium,Medium,Low,5,1,7,12,18,82,3.1,Medium,0
+P456,AI Chatbot Development — Fintech,Telecom,4,6,85920,Low,High,Medium,4,5,4,7,12,67,3.5,Medium,1
+P457,Legacy Modernization — Retail,Government,11,22,2409834,Very High,Medium,Low,9,7,21,50,55,85,3.6,Medium,0
+P458,Supply Chain Optim. — Fintech,Logistics,5,15,609710,High,Low,Low,4,2,11,23,35,80,4.2,Medium,1
+P459,Digital Transformation — Retail,Energy,6,20,1112064,Very High,Low,Medium,0,0,6,10,48,51,4.7,Critical,0
+P460,Mobile App Dev — Energy,Fintech,3,9,160880,Medium,High,High,17,5,4,8,18,34,4.4,Low,1
+P461,Data Warehouse Migr. — Logistics,Banking,6,19,1084654,High,Low,Medium,6,2,2,8,42,13,3.0,Medium,1
+P462,IoT Platform Setup — Fintech,Manufacturing,4,12,334511,High,Low,Medium,9,6,11,25,28,89,4.3,Low,1
+P463,HR System Upgrade — Banking,Retail,6,9,303797,Medium,High,Medium,5,2,8,40,48,85,2.6,Medium,1
+P464,Cybersecurity Assess. — Fintech,Banking,4,6,194118,Medium,Low,High,9,4,1,5,32,20,3.0,Low,1
+P465,Cloud Cost Optim. — Manufacturing,Technology,2,9,123336,Low,Low,Low,7,3,4,4,12,58,2.8,Medium,1
+P466,Blockchain POC — Manufacturing,Finance,5,7,385490,High,High,Medium,16,6,3,8,20,42,2.8,Low,1
+P467,API Gateway Impl. — Retail,Telecom,4,8,404173,Medium,Medium,Medium,11,7,2,5,16,20,3.8,Low,1
+P468,Data Governance — Government,Healthcare,6,10,816496,High,High,Medium,8,3,4,11,36,42,2.2,Medium,1
+P469,Microservices Migr. — Logistics,Technology,8,19,864499,Very High,Low,High,3,3,12,22,40,75,3.0,Critical,0
+P470,Customer Analytics — Retail,Retail,4,9,176857,Medium,High,High,11,2,5,17,28,50,4.4,Low,1
+P471,OpenShift Migration — Telecom,Banking,8,14,940154,High,Medium,Low,1,7,4,8,56,56,4.5,High,0
+P472,watsonx Governance — Energy,Insurance,5,10,623633,High,Low,Low,3,0,3,3,35,50,3.3,Critical,0
+P473,SAP S/4HANA Upgrade — Telecom,Manufacturing,12,30,2047783,Very High,High,Low,1,7,4,7,72,42,2.7,High,0
+P474,IBM Cloud Pak Deploy — Manufacturing,Government,6,17,606484,High,Medium,High,3,4,16,37,48,95,2.5,High,0
+P475,Sterling B2B Integr. — Banking,Logistics,9,13,745798,High,Low,High,16,7,6,36,72,39,4.1,Low,1
+P476,Maximo Asset Mgmt — Telecom,Energy,5,13,455455,Medium,Low,High,18,3,10,29,35,76,4.4,Low,1
+P477,TRIRIGA Facilities — Telecom,Real Estate,6,7,271774,Medium,High,High,5,5,5,12,18,82,3.1,Medium,0
+P478,Cognos Analytics — Insurance,Retail,3,6,177290,Low,Low,Medium,14,3,5,22,24,78,4.3,Low,1
+P479,QRadar SIEM Setup — Retail,Banking,3,9,338340,High,High,High,6,1,9,19,21,85,3.4,Medium,1
+P480,z/OS Modernization — Manufacturing,Finance,9,27,1137785,Very High,Low,Low,15,4,13,18,36,41,4.9,Low,1
+P481,Cloud Migration — Banking,Banking,10,12,544546,High,Medium,Medium,0,2,5,14,60,57,3.4,Critical,0
+P482,watsonx.ai POC — Energy,Retail,5,6,196982,Medium,High,High,16,6,6,25,25,93,3.7,Low,1
+P483,ERP Integration — Manufacturing,Manufacturing,11,17,890841,Very High,Medium,Medium,5,4,10,25,44,63,2.7,Medium,1
+P484,Data Analytics Platform — Manufacturing,Healthcare,7,13,1064995,High,Low,Low,2,2,12,42,56,95,2.5,Critical,0
+P485,CRM Implementation — Manufacturing,Insurance,3,11,334766,Medium,Low,High,15,5,6,6,12,54,3.3,Low,1
+P486,AI Chatbot Development — Manufacturing,Telecom,4,7,75923,Low,Medium,Medium,17,5,6,26,28,78,3.9,Low,1
+P487,Legacy Modernization — Fintech,Government,18,27,2591208,Very High,Low,Low,3,1,11,35,144,56,4.2,Critical,0
+P488,Supply Chain Optim. — Retail,Logistics,8,13,428842,High,Low,Medium,3,3,1,5,56,28,3.8,High,0
+P489,Digital Transformation — Logistics,Energy,13,16,1489988,Very High,High,Medium,6,5,2,20,104,12,3.2,Medium,0
+P490,Mobile App Dev — Fintech,Fintech,5,6,231899,Medium,Medium,Low,7,6,4,22,40,73,4.4,Medium,0
+P491,Data Warehouse Migr. — Government,Banking,9,12,776035,High,High,Medium,12,1,9,33,45,68,4.8,Low,1
+P492,IoT Platform Setup — Insurance,Manufacturing,4,11,471393,High,Medium,High,17,2,3,4,16,20,4.5,Low,1
+P493,HR System Upgrade — Government,Retail,4,11,201791,Medium,High,High,12,4,1,1,16,20,2.9,Low,1
+P494,Cybersecurity Assess. — Logistics,Banking,2,7,198243,Medium,Low,High,7,4,1,1,6,21,3.5,Medium,1
+P495,Cloud Cost Optim. — Telecom,Technology,4,9,109348,Low,Low,Medium,5,2,1,4,20,13,3.7,Medium,0
+P496,Blockchain POC — Insurance,Finance,4,12,314716,High,High,Low,6,1,5,7,20,44,3.5,Medium,1
+P497,API Gateway Impl. — Telecom,Telecom,4,13,361506,Medium,Low,Low,3,5,9,16,28,94,4.5,High,0
+P498,Data Governance — Retail,Healthcare,10,11,561759,High,High,High,8,3,9,29,40,85,4.4,Medium,1
+P499,Microservices Migr. — Energy,Technology,9,24,804755,Very High,High,Medium,17,7,5,7,27,20,3.0,Low,1
+P500,Customer Analytics — Retail,Retail,6,7,252323,Medium,High,Low,1,1,1,4,48,26,2.7,High,0

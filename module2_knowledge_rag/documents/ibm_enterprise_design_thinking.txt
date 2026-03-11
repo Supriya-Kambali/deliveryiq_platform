@@ -1,0 +1,218 @@
+IBM ENTERPRISE DESIGN THINKING — COMPLETE REFERENCE
+====================================================
+Source: ibm.com/design/thinking, ibm.com/training/enterprise-design-thinking
+Content verified from IBM public sources
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT IS ENTERPRISE DESIGN THINKING?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Enterprise Design Thinking (EDT) is IBM's own methodology — an offshoot of
+design thinking specifically designed for large, dispersed enterprise teams.
+Standard design thinking breaks down at enterprise scale. EDT adds strategies,
+tactics, and activities that uniquely scale design thinking across teams of
+all shapes and sizes, whether co-located or widely dispersed.
+
+Core mission: Give teams a shared language to align faster, focus on what
+matters, and deliver with empathy and speed.
+
+Core premise: We are not measured by the features and functions we ship.
+We are measured by how well we fulfill our users' needs.
+
+IBM is a pioneer in Enterprise Design Thinking. It has helped thousands of
+teams across industries adopt a more aligned, human-centered approach to
+operations and innovation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE THREE PRINCIPLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. FOCUS ON USER OUTCOMES
+Drive business by helping users achieve their goals. Shift the conversation
+from features and functions to users and user outcomes. When teams focus on
+user outcomes, they deliver more useful, usable, and desirable solutions.
+They elevate professions and redefine industries.
+
+Not every organization puts users first — some have explicit business rationale
+(e.g., cost of delivery over UX in a commoditized industry). Design Thinking
+requires acknowledging this tension honestly.
+
+2. RESTLESS REINVENTION
+Stay essential by treating everything as a prototype. Everything is a prototype.
+Being essential — and staying essential — requires a continuous conversation
+with users, responding to their changing needs through rapid prototyping and
+constant iteration.
+
+3. DIVERSE EMPOWERED TEAMS
+Move faster by empowering diverse teams to act. Building diverse teams requires
+actively seeking people with different perspectives across identity, experience,
+and expertise. While it may seem counterintuitive, every dimension of diversity
+is vital to a team's ability to manage complexity and generate breakthrough ideas.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE LOOP — IBM'S CONTINUOUS LEARNING CYCLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The Loop represents IBM's continuous cycle of understanding and delivering.
+While you can start anywhere on the Loop, IBM recommends beginning with
+Reflection to form intent.
+
+OBSERVE — Immerse yourself in the real world
+- Conduct user research in the actual context where users work
+- Do not rely on assumptions — we are not our users
+- Design research leads teams to continuously build understanding and empathy
+- Methods: contextual inquiry, user interviews, field observation, journey mapping
+
+REFLECT — Come together and look within
+- Synthesize observations as a team
+- Share what you saw, heard, and felt
+- Identify patterns, tensions, and opportunities
+- Align on the most critical problems to solve
+
+MAKE — Give concrete form to abstract ideas
+- Build prototypes — physical, digital, or conceptual
+- Prototypes don't have to be working software
+- Make ideas tangible so you can get feedback from real users
+- The act of making reveals what you don't yet understand
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE THREE KEYS — SCALING DESIGN THINKING TO ENTERPRISE TEAMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Complex problems require complex teams. Project management frameworks help
+manage that complexity. IBM may divide teams into "squads" or "workstreams,"
+or divide time into "sprints" or "phases." The three Keys align teams across
+both space and time.
+
+KEY 1: HILLS — Align teams on meaningful user outcomes
+
+Hills are statements of intent written as meaningful user outcomes.
+They tell you WHERE to go, not HOW to get there. This empowers teams to explore
+breakthrough ideas without losing sight of the goal.
+
+A Hill is NOT a feature list. A Hill is a user outcome statement.
+Example of a weak Hill: "Build a cloud migration portal"
+Example of a strong Hill: "A mid-sized bank's IT team can migrate 80% of their
+on-premise workloads to IBM Cloud without engaging external consultants"
+
+Hills define success based on discrete user outcomes. They turn human needs into
+project goals by aligning the whole team around a common understanding of success,
+without prescribing tactics that sub-teams should figure out independently.
+
+When you use Enterprise Design Thinking, you use Hills to define intended user
+outcomes AND the breakdown of your teams. For each Hill team, assign a core
+leadership team with functional leads from each discipline. Grant them authority
+for day-to-day triage and hold them accountable for achieving their outcome.
+
+KEY 2: PLAYBACKS — Stay aligned by regularly exchanging feedback
+
+Playbacks are regular check-ins that bring users, stakeholders, and teams
+together to tell stories and exchange feedback. They reveal misalignment and
+measure progress against the big-picture problem being solved.
+
+Playbacks capture the nuances of users' context by telling stories from their
+perspective — not from the perspective of the delivery team's internal progress.
+They are a "safe space" to surface misalignment before it becomes a blocker.
+
+Cadence: Playbacks should happen regularly — aligned to sprint cycles. Not just
+at project milestones.
+
+KEY 3: SPONSOR USERS — Invite users into the work
+
+Sponsor Users are real-world users that regularly contribute their domain
+expertise to your team. They help teams stay in touch with real users' real-world
+needs throughout the project — not just at requirements gathering.
+
+Sponsor Users are crucial for keeping the team grounded in reality. They are
+partners in design, not just subjects of research.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MEASURING SUCCESS IN ENTERPRISE DESIGN THINKING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are what you measure. Paying attention only to revenue and operating costs
+undermines the team's effort to focus on problems that matter most to users.
+
+IBM recommends choosing appropriate USER OUTCOME METRICS:
+- Usability: Can users accomplish their goals efficiently?
+- Usefulness: Does the solution solve the real problem?
+- Desirability: Do users want to use this solution?
+
+Measure these both in development and in-market. Not just at launch.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE IBM DESIGN THINKING TOOLKIT — PRACTICAL ACTIVITIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IBM provides a public toolkit of guided activities. Key ones for delivery
+consultants:
+
+- HILLS WORKSHOP: Clearly state intent in terms of user and market value.
+  Use when: team needs alignment on what success looks like.
+
+- STAKEHOLDER MAP: Identify project stakeholders, their expectations, and
+  their relationships to each other.
+  Use when: starting a new engagement or when stakeholder dynamics are unclear.
+
+- AS-IS SCENARIO MAP: Build a better understanding of users' current experience.
+  Use when: the team lacks empathy for what users go through today.
+
+- EMPATHY MAP: Build empathy for users through a conversation informed by
+  team observations.
+  Use when: team is designing for users they haven't spent time with.
+
+- ASSUMPTIONS MAP: When the team needs a "reality check," identify assumptions
+  and the best ways to address them.
+  Use when: the project is moving fast and the team hasn't validated key beliefs.
+
+- PRIORITIZATION GRID: Decide the next move by focusing on the intersection
+  of importance and feasibility.
+  Use when: the team has many options and needs a structured way to choose.
+
+- AI ETHICS EXPLORATION: Determine why you would or wouldn't use AI to solve
+  users' problems. Brainstorm AI's impact on people and the world.
+  Use when: considering AI as part of the solution.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOW EDT CONNECTS TO IBM GARAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Enterprise Design Thinking is a foundational practice within IBM Garage.
+It is primarily used in the THINK phase, but its principles apply throughout:
+
+- Think: Observe users, define Hills, run Playbacks with stakeholders
+- Transform: Validate designs with Sponsor Users, run Playbacks at sprint demos
+- Thrive: Embed Hills-based governance into the client's operating model
+
+The IBM Garage Badge Program includes an IBM Garage Methodology Explorer
+certification that covers Design Thinking alongside Agile, DevOps, and Analytics.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONSULTANT QUICK REFERENCE — COMMON EDT QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q: Client says they already did design thinking workshops. What do we add?
+A: Standard Design Thinking is for small teams. IBM EDT adds the Keys (Hills,
+Playbacks, Sponsor Users) specifically to scale across large enterprise teams
+that are geographically distributed and cross-functional. Ask if they had real
+Sponsor Users involved throughout, not just at kickoff.
+
+Q: How do we run a Hills workshop in a 2-hour session?
+A: 1. Set context: share user research findings (15 min)
+   2. Individually write candidate Hills (20 min)
+   3. Share and cluster similar Hills (15 min)
+   4. Vote on the most impactful (10 min)
+   5. Refine top 3 Hills as a group (30 min)
+   6. Test each Hill: Is it a user outcome or a feature? Rewrite if it's a feature.
+
+Q: A client PM is resistant to Playbacks. How to convince them?
+A: Playbacks are not status meetings — they are misalignment detectors. Every
+week teams spend building in the wrong direction because stakeholders weren't
+aligned costs 5x more than the Playback itself. Frame it as risk reduction, not
+an extra ceremony.
+
+Q: How does EDT apply to AI projects?
+A: IBM has specific EDT toolkit activities for AI: identifying data sources,
+ethical impact brainstorming, and AI assumption mapping. The Hill for an AI
+project should still be a user outcome — not "build an AI model" but "a claims
+processor can resolve 90% of routine claims without human escalation."
