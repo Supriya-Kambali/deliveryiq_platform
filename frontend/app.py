@@ -83,6 +83,132 @@ if "authenticated" not in st.session_state:
     st.session_state["user_role"] = None
     st.session_state["current_page"] = "🏠 Home"
 
+# ── File-based session persistence ───────────────────────────────
+import json as _json, time as _time, os as _os
+from pathlib import Path as _Path
+
+_SESSION_DIR  = _Path.home() / ".deliveryiq"
+_SESSION_FILE = _SESSION_DIR / "session.json"
+_SESSION_TTL  = 60 * 60 * 24 * 7  # 7 days
+
+def _save_session(username, role, page="🏠 Home", analysis=None):
+    _SESSION_DIR.mkdir(parents=True, exist_ok=True)
+    _SESSION_FILE.write_text(_json.dumps({
+        "username": username, "role": role,
+        "expires": _time.time() + _SESSION_TTL,
+        "last_page": page,
+        "last_analysis": analysis or {}
+    }))
+
+def _update_session(**kwargs):
+    """Update specific fields in the session file without full re-save."""
+    try:
+        if not _SESSION_FILE.exists():
+            return
+        data = _json.loads(_SESSION_FILE.read_text())
+        data.update(kwargs)
+        _SESSION_FILE.write_text(_json.dumps(data))
+    except Exception:
+        pass
+
+def _load_session():
+    try:
+        if not _SESSION_FILE.exists():
+            return None
+        data = _json.loads(_SESSION_FILE.read_text())
+        if data.get("expires", 0) < _time.time():
+            _SESSION_FILE.unlink()
+            return None
+        return data
+    except Exception:
+        return None
+
+def _clear_session():
+    try:
+        if _SESSION_FILE.exists():
+            _SESSION_FILE.unlink()
+    except Exception:
+        pass
+
+# Restore session on page load / hard refresh
+if not st.session_state.get("authenticated"):
+    _saved = _load_session()
+    if _saved:
+        st.session_state["authenticated"] = True
+        st.session_state["username"]       = _saved["username"]
+        st.session_state["user_role"]      = _saved["role"]
+        st.session_state["_db_loaded"]     = False
+        # Restore last page
+        if _saved.get("last_page"):
+            st.session_state["current_page"] = _saved["last_page"]
+        # Restore last analysis result
+        if _saved.get("last_analysis"):
+            _a = _saved["last_analysis"]
+            if _a.get("analysis_data"):
+                st.session_state["analysis_data"]      = _a["analysis_data"]
+                st.session_state["analysis_result"]    = _a["analysis_result"]
+                st.session_state["analysis_health"]    = _a["analysis_health"]
+                st.session_state["analysis_triggered"] = True
+                st.session_state["project_risk_level"] = _a.get("risk_level", "Medium")
+                st.session_state["project_health_score"] = _a.get("health_score", 70)
+
+# ── Cookie-based session persistence ─────────────────────────────
+import hmac as _hmac, hashlib as _hashlib, base64 as _base64, time as _time, json as _json, secrets as _secrets, os as _os
+SESSION_COOKIE = "deliveryiq_session"
+SESSION_TTL    = 60 * 60 * 24 * 7  # 7 days
+
+def _session_secret():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
+    except Exception:
+        pass
+    return os.environ.get("DELIVERYIQ_SESSION_SECRET", "ibm-deliveryiq-secret-2024")
+
+def create_session_token(username, role):
+    secret = _session_secret()
+    payload = _json.dumps({"u": username, "r": role, "exp": int(_time.time()) + SESSION_TTL})
+    encoded = _base64.b64encode(payload.encode()).decode()
+    sig = _hmac.new(secret.encode(), encoded.encode(), _hashlib.sha256).hexdigest()
+    return f"{encoded}.{sig}"
+
+def verify_session_token(token):
+    try:
+        secret = _session_secret()
+        encoded, sig = token.rsplit(".", 1)
+        if not _hmac.compare_digest(_hmac.new(secret.encode(), encoded.encode(), _hashlib.sha256).hexdigest(), sig):
+            return None
+        payload = _json.loads(_base64.b64decode(encoded).decode())
+        if payload.get("exp", 0) < int(_time.time()):
+            return None
+        return {"username": payload["u"], "role": payload["r"]}
+    except Exception:
+        return None
+
+try:
+    from streamlit_cookies_controller import CookieController
+    _cookies = CookieController()
+    _COOKIES_AVAILABLE = True
+except Exception:
+    _COOKIES_AVAILABLE = False
+    _cookies = None
+
+if _COOKIES_AVAILABLE and not st.session_state.get("authenticated"):
+    try:
+        _token = _cookies.get(SESSION_COOKIE)
+        if _token:
+            _session = verify_session_token(_token)
+            if _session:
+                st.session_state["authenticated"] = True
+                st.session_state["username"]       = _session["username"]
+                st.session_state["user_role"]      = _session["role"]
+                st.session_state["_db_loaded"]     = False
+        elif not st.session_state.get("_cookie_check_done"):
+            st.session_state["_cookie_check_done"] = True
+            st.rerun()
+    except Exception:
+        pass
+
 # ─────────────────────────────────────────────────────────────────
 # IBM CARBON DESIGN SYSTEM CSS
 # WHY CUSTOM CSS?
@@ -195,14 +321,14 @@ IBM_CSS = """
         flex-shrink: 0;
     }
     .ibm-topbar-search {
-        flex: 1;
+        flex: 0 0 380px;
         padding: 0 16px;
         display: flex;
         align-items: center;
     }
     .ibm-topbar-search input {
         width: 100%;
-        max-width: 480px;
+        max-width: 340px;
         background: #F4F4F4;
         border: none;
         border-radius: 4px;
@@ -215,7 +341,7 @@ IBM_CSS = """
     }
     .ibm-topbar-search input::placeholder { color: #8D8D8D; }
     .ibm-topbar-search input:focus { background: #4C4C4C; outline: none; }
-    .ibm-topbar-actions { display: flex; align-items: center; margin-left: auto; }
+    .ibm-topbar-actions { display: flex; align-items: center; margin-left: 0; }
     .ibm-topbar-icon {
         width: 48px; height: 52px;
         display: flex; align-items: center; justify-content: center;
@@ -838,6 +964,8 @@ def render_login_page():
             st.session_state["user_role"] = role
             st.session_state["username"]  = username.strip()
             st.session_state["login_error"] = ""
+            _save_session(username.strip(), role)
+
             # Reset to Home after login
             st.session_state["current_page"] = "🏠 Home"
             st.rerun()
@@ -951,6 +1079,7 @@ def render_sidebar():
             if st.button(page_label if not is_active else f"● {page_label}",
                          key=f"nav_{page_key}", use_container_width=True):
                 st.session_state.current_page = page_key
+                _update_session(last_page=page_key)
                 st.rerun()
 
 
@@ -1056,7 +1185,7 @@ def render_topbar(page_title: str, breadcrumb: str = "IBM Consulting / DeliveryI
         <div class="ibm-topbar-search">
             <input placeholder="Search resources, projects, modules..." />
         </div>
-        <div class="ibm-topbar-actions">
+        <div class="ibm-topbar-actions" style="margin-left:auto;">
             <div class="ibm-topbar-page-info">
                 <span class="page-dot"></span>
                 {ts}
@@ -1067,7 +1196,7 @@ def render_topbar(page_title: str, breadcrumb: str = "IBM Consulting / DeliveryI
     
     # ── HEADER POPOVERS (NOTIFICATIONS & PROFILE) ───────────────────
     # Float right to align with where the topbar actions are
-    col_empty, col_icons = st.columns([8, 2])
+    col_empty, col_icons = st.columns([6, 2])
     
     with col_icons:
         sub_col1, sub_col2 = st.columns(2)
@@ -1121,6 +1250,8 @@ def render_topbar(page_title: str, breadcrumb: str = "IBM Consulting / DeliveryI
                 if st.button("Logout", use_container_width=True, key="logout_button"):
                     st.session_state["authenticated"] = False
                     st.session_state["user_role"] = None
+                    _clear_session()
+
                     st.rerun()
     
     st.markdown(f"""
@@ -1914,7 +2045,7 @@ def render_risk_dashboard():
             except ImportError:
                 PDF_ENABLED = False
                 def generate_pdf_report(*args, **kwargs):
-                    return b"PDF generation unavailable. Please install reportlab."
+                    return None
 
             st.markdown('<div class="report-card"><div class="report-title">Share Delivery Report</div>', unsafe_allow_html=True)
             
@@ -1944,7 +2075,12 @@ def render_risk_dashboard():
                         st.markdown(f'<div class="info-box">Sending report to: {email_list}</div>', unsafe_allow_html=True)
 
                         report = generate_project_report(data, result, health)
-                        pdf_file = generate_pdf_report(report)
+                        try:
+                            import os as _os4
+                            _raw_pdf = generate_pdf_report(report)
+                            pdf_file = _raw_pdf if (_raw_pdf and isinstance(_raw_pdf, str) and _os4.path.exists(_raw_pdf)) else None
+                        except Exception:
+                            pdf_file = None
 
                         # Prepare structured data for HTML email
                         project_name = data.get("project_name", "Unknown Project")
@@ -1968,14 +2104,15 @@ def render_risk_dashboard():
                         st.markdown('<div class="success-box">DeliveryIQ report sent successfully!</div>', unsafe_allow_html=True)
 
                         # Download button
-                        with open(pdf_file, "rb") as f:
-                            st.download_button(
-                                label="Download Report PDF",
-                                data=f,
-                                file_name="deliveryiq_report.pdf",
-                                mime="application/pdf",
-                                use_container_width=True
-                            )
+                        if pdf_file:
+                            with open(pdf_file, "rb") as f:
+                                st.download_button(
+                                    label="Download Report PDF",
+                                    data=f,
+                                    file_name="deliveryiq_report.pdf",
+                                    mime="application/pdf",
+                                    use_container_width=True
+                                )
                     except Exception as e:
                         st.error(f"Error: {e}")
             st.markdown('</div>', unsafe_allow_html=True)
