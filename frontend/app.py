@@ -1146,6 +1146,7 @@ def render_sidebar():
         <div style='height:1px; background:#E0E0E0; margin:8px 0 10px 0;'></div>
         """, unsafe_allow_html=True)
         if st.button("⎋  Sign out", key="logout_btn", use_container_width=True):
+            _clear_session()
             st.session_state.clear()
             st.rerun()
 
@@ -1249,6 +1250,11 @@ def render_topbar(page_title: str, breadcrumb: str = "IBM Consulting / DeliveryI
 
                 if st.button("Logout", use_container_width=True, key="logout_button"):
                     st.session_state["authenticated"] = False
+                    st.session_state["user_role"] = None
+                    st.session_state["current_page"] = "🏠 Home"
+                    st.session_state["_db_loaded"] = False
+                    _clear_session()
+                    st.rerun()
                     st.session_state["user_role"] = None
                     _clear_session()
 
