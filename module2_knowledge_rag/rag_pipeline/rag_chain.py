@@ -49,7 +49,12 @@ except ImportError:
 try:
     from langchain.chains import ConversationalRetrievalChain
 except ImportError:
-    from langchain_community.chains import ConversationalRetrievalChain
+    try:
+        from langchain_community.chains import ConversationalRetrievalChain
+    except ImportError:
+        # Build a simple replacement using langchain_core
+        from langchain_core.runnables import RunnablePassthrough
+        ConversationalRetrievalChain = None
 try:
     from langchain.memory import ConversationBufferWindowMemory
 except ImportError:
