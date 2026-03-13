@@ -12,7 +12,7 @@ def get_llm(temperature=0.1, max_tokens=1024):
         try:
             from langchain_groq import ChatGroq
             return ChatGroq(
-                model="llama3-8b-8192",
+                model="llama-3.3-70b-versatile",
                 api_key=groq_key,
                 temperature=temperature,
                 max_tokens=max_tokens,
@@ -37,7 +37,7 @@ def call_groq(prompt, system="You are an IBM delivery consultant AI assistant.",
             from groq import Groq
             client = Groq(api_key=groq_key)
             response = client.chat.completions.create(
-                model="llama3-8b-8192",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": prompt}

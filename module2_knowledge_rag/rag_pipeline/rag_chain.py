@@ -252,12 +252,12 @@ class IBMKnowledgeRAG:
         try:
             if _groq_key and ChatGroq:
                 self.llm = ChatGroq(
-                    model="llama3-8b-8192",
+                    model="llama-3.3-70b-versatile",
                     api_key=_groq_key,
                     temperature=0.1,
                     max_tokens=1024,
                 )
-                print(f"   Connected to Groq (llama3-8b-8192)")
+                print(f"   Connected to Groq (llama-3.3-70b-versatile)")
             else:
                 self.llm = Ollama(
                 model=OLLAMA_MODEL,

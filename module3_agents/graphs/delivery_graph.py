@@ -112,12 +112,12 @@ class IBMDeliveryGraph:
         try:
             if _groq_key2 and _GROQ_AVAILABLE:
                 self.llm = ChatGroq(
-                    model="llama3-8b-8192",
+                    model="llama-3.3-70b-versatile",
                     api_key=_groq_key2,
                     temperature=0.1,
                     max_tokens=1024,
                 )
-                print("   ✅ Connected to Groq (llama3-8b-8192)")
+                print("   ✅ Connected to Groq (llama-3.3-70b-versatile)")
             else:
                 self.llm = Ollama(
                     model=self.ollama_model,
