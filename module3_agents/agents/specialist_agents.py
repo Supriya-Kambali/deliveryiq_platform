@@ -163,6 +163,18 @@ Provide a helpful, professional IBM-style response. Include:
 IBM DELIVERYIQ RESPONSE:"""
 
 
+
+def _llm_text(response):
+    """Extract plain string from any LLM response type."""
+    if response is None:
+        return ""
+    if isinstance(response, str):
+        return response
+    if hasattr(response, "content"):
+        return str(response.content)
+    return str(response)
+
+
 class PlannerAgent:
     """
     Creates IBM Garage-aligned project plans and timelines.
@@ -197,7 +209,7 @@ class PlannerAgent:
                 health_score=state.get("project_health_score", 70),
                 request=state.get("user_request", "")
             )
-            response = self.llm.invoke(prompt_text)
+            response = _llm_text(self.llm.invoke(prompt_text))
 
         except Exception as e:
             response = self._fallback_plan(state)
@@ -271,7 +283,7 @@ class RiskAgent:
                 health_score=state.get("project_health_score", 70),
                 request=state.get("user_request", "")
             )
-            response = self.llm.invoke(prompt_text)
+            response = _llm_text(self.llm.invoke(prompt_text))
 
         except Exception as e:
             response = self._fallback_risks(state)
@@ -347,7 +359,7 @@ class ReportAgent:
                 date=today,
                 request=state.get("user_request", "")
             )
-            response = self.llm.invoke(prompt_text)
+            response = _llm_text(self.llm.invoke(prompt_text))
 
         except Exception as e:
             response = self._fallback_report(state, today)
@@ -433,7 +445,7 @@ class StakeholderAgent:
                 health_score=state.get("project_health_score", 70),
                 request=state.get("user_request", "")
             )
-            response = self.llm.invoke(prompt_text)
+            response = _llm_text(self.llm.invoke(prompt_text))
 
         except Exception as e:
             response = self._fallback_email(state)
@@ -506,7 +518,7 @@ class GeneralAgent:
             prompt_text = self.prompt.format(
                 request=state.get("user_request", "")
             )
-            response = self.llm.invoke(prompt_text)
+            response = _llm_text(self.llm.invoke(prompt_text))
         except Exception as e:
             response = f"""IBM DeliveryIQ Response:
 
