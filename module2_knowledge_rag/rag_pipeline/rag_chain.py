@@ -38,9 +38,6 @@ from langchain_community.document_loaders import TextLoader, DirectoryLoader
 try:
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 except ImportError:
-    try:
-    from langchain_text_splitters import RecursiveCharacterTextSplitter
-except ImportError:
     from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -49,10 +46,6 @@ try:
     from langchain_groq import ChatGroq
 except ImportError:
     ChatGroq = None
-try:
-    from langchain_text_splitters import RecursiveCharacterTextSplitter
-except ImportError:
-    pass
 try:
     from langchain.chains import ConversationalRetrievalChain
 except ImportError:
