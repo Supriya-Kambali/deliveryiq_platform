@@ -1428,7 +1428,8 @@ def render_home():
     with col_chart1:
         # Risk Trend Line Chart
         weeks  = ["Wk 1","Wk 2","Wk 3","Wk 4","Wk 5","Wk 6"]
-        scores = [82, 78, 75, 71, health, health]
+        health_val = st.session_state.get('project_health_score', 70)
+        scores = [82, 78, 75, 71, health_val, health_val]
         trend_fig = go.Figure()
         trend_fig.add_trace(go.Scatter(
             x=weeks, y=scores, mode="lines+markers",
