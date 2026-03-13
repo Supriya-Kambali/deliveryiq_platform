@@ -89,3 +89,6 @@ requests>=2.31.0                 # HTTP requests
 aiohttp>=3.9.0                   # Async HTTP (for FastAPI)
 tiktoken>=0.5.0                  # Token counting for LLM context management
 torch>=2.1.0                     # PyTorch (required by transformers + sentence-transformers)
+groq
+langchain-groq
+langchain-text-splitters

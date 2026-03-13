@@ -45,6 +45,12 @@ from typing import Optional
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from langchain_community.llms import Ollama
+try:
+    from langchain_groq import ChatGroq
+    _GROQ_AVAILABLE = True
+except ImportError:
+    _GROQ_AVAILABLE = False
+    ChatGroq = None
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 
@@ -100,10 +106,21 @@ class IBMDeliveryGraph:
         print("🔵 Building IBM DeliveryIQ Agent Graph...")
 
         # Initialize LLM
-        print("🤖 Connecting to Ollama LLM...")
+        print("🤖 Connecting to LLM (Groq/Ollama)...")
+        import os as _os2
+        _groq_key2 = _os2.environ.get("GROQ_API_KEY", "")
         try:
-            self.llm = Ollama(
-                model=self.ollama_model,
+            if _groq_key2 and _GROQ_AVAILABLE:
+                self.llm = ChatGroq(
+                    model="llama3-8b-8192",
+                    api_key=_groq_key2,
+                    temperature=0.1,
+                    max_tokens=1024,
+                )
+                print("   ✅ Connected to Groq (llama3-8b-8192)")
+            else:
+                self.llm = Ollama(
+                    model=self.ollama_model,
                 temperature=0.2,
                 num_ctx=4096
             )

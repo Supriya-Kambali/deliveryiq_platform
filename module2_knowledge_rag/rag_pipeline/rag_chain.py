@@ -38,13 +38,33 @@ from langchain_community.document_loaders import TextLoader, DirectoryLoader
 try:
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 except ImportError:
+    try:
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+except ImportError:
     from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import Ollama
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferWindowMemory
-from langchain.prompts import PromptTemplate, ChatPromptTemplate
+try:
+    from langchain_groq import ChatGroq
+except ImportError:
+    ChatGroq = None
+try:
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+except ImportError:
+    pass
+try:
+    from langchain.chains import ConversationalRetrievalChain
+except ImportError:
+    from langchain_community.chains import ConversationalRetrievalChain
+try:
+    from langchain.memory import ConversationBufferWindowMemory
+except ImportError:
+    from langchain_community.memory import ConversationBufferWindowMemory
+try:
+    from langchain.prompts import PromptTemplate, ChatPromptTemplate
+except ImportError:
+    from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 import warnings
@@ -228,9 +248,20 @@ class IBMKnowledgeRAG:
         # Step 6: Initialize local LLM via Ollama
         # WHY OLLAMA? Runs Llama 3 / Mistral locally — no API costs,
         # no data sent to external servers, works offline
-        print("🤖 Step 5: Connecting to local LLM (Ollama)...")
+        print("🤖 Step 5: Connecting to LLM (Groq/Ollama)...")
+        import os as _os
+        _groq_key = _os.environ.get("GROQ_API_KEY", "")
         try:
-            self.llm = Ollama(
+            if _groq_key and ChatGroq:
+                self.llm = ChatGroq(
+                    model="llama3-8b-8192",
+                    api_key=_groq_key,
+                    temperature=0.1,
+                    max_tokens=1024,
+                )
+                print(f"   Connected to Groq (llama3-8b-8192)")
+            else:
+                self.llm = Ollama(
                 model=OLLAMA_MODEL,
                 temperature=0.1,      # Low temperature = more factual, less creative
                 num_ctx=4096,         # Context window size

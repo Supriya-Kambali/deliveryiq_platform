@@ -3229,12 +3229,24 @@ Keep it factual, concise and professional. No bullet points — prose only."""
 
                     report_text = ""
                     try:
-                        import requests as _req
-                        resp = _req.post("http://localhost:11434/api/generate",
-                            json={"model": "llama3.2", "prompt": report_prompt, "stream": False},
-                            timeout=60)
-                        if resp.status_code == 200:
-                            report_text = resp.json().get("response", "").strip()
+                        import os as _os3
+                        _gkey = _os3.environ.get("GROQ_API_KEY", "")
+                        if _gkey:
+                            from groq import Groq as _Groq
+                            _gc = _Groq(api_key=_gkey)
+                            _gresp = _gc.chat.completions.create(
+                                model="llama3-8b-8192",
+                                messages=[{"role": "user", "content": report_prompt}],
+                                temperature=0.1, max_tokens=1024,
+                            )
+                            report_text = _gresp.choices[0].message.content.strip()
+                        else:
+                            import requests as _req
+                            resp = _req.post("http://localhost:11434/api/generate",
+                                json={"model": "llama3.2", "prompt": report_prompt, "stream": False},
+                                timeout=60)
+                            if resp.status_code == 200:
+                                report_text = resp.json().get("response", "").strip()
                     except Exception:
                         pass
 
