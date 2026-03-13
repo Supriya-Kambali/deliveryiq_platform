@@ -155,7 +155,8 @@ class SupervisorAgent:
         # Use LLM to classify the request
         try:
             prompt_text = self.prompt.format(request=request)
-            response = self.llm.invoke(prompt_text).strip().lower()
+            _raw = self.llm.invoke(prompt_text)
+            response = (_raw.content if hasattr(_raw, 'content') else str(_raw)).strip().lower()
 
             # Extract just the agent name (LLM might add extra text)
             agent = "general"
