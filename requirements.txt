@@ -29,9 +29,6 @@ joblib>=1.3.0                    # Model serialization (save/load ML models)
 # ─────────────────────────────────────────────────────────────────
 # WEEK 2: LangChain + RAG + Vector Databases
 # ─────────────────────────────────────────────────────────────────
-langchain>=0.1.0                 # Core LangChain framework
-langchain-community>=0.0.20      # Community integrations (Ollama, ChromaDB, etc.)
-langchain-core>=0.1.0            # LCEL, runnables, output parsers
 chromadb>=0.4.0                  # Local vector database for RAG
 sentence-transformers>=2.2.0     # HuggingFace embeddings (all-MiniLM-L6-v2)
 pypdf>=3.0.0                     # Load PDF documents for RAG
@@ -89,10 +86,10 @@ requests>=2.31.0                 # HTTP requests
 aiohttp>=3.9.0                   # Async HTTP (for FastAPI)
 tiktoken>=0.5.0                  # Token counting for LLM context management
 torch>=2.1.0                     # PyTorch (required by transformers + sentence-transformers)
-groq
-langchain-text-splitterslangchain==0.3.15
+
+langchain==0.3.15
 langchain-core==0.3.83
 langchain-community==0.3.15
 langchain-text-splitters==0.3.11
 langchain-groq==0.2.4
-groq
+groq>=0.4.0
