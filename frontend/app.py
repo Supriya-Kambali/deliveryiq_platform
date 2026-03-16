@@ -931,10 +931,8 @@ def render_login_page():
     st.markdown("""
     <div style='background:#FFFFFF; border:1px solid #E0E0E0; border-radius:8px;
                 padding:32px; box-shadow:0 2px 8px rgba(0,0,0,0.08);'>
-        <div style='font-size:18px; font-weight:600; color:#161616;
-                    margin-bottom:4px;'>Sign in</div>
         <div style='font-size:13px; color:#6F6F6F; margin-bottom:24px;'>
-            Use your IBM DeliveryIQ credentials
+            Use your IBM DeliveryIQ credentials to sign in
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -965,24 +963,17 @@ def render_login_page():
             st.session_state["username"]  = username.strip()
             st.session_state["login_error"] = ""
             _save_session(username.strip(), role)
-
-            # Reset to Home after login
             st.session_state["current_page"] = "🏠 Home"
             st.rerun()
         else:
             st.session_state["login_error"] = "invalid"
 
-    # Show error outside the form so it persists
     if st.session_state.get("login_error") == "invalid":
         st.error("❌ Invalid username or password. Please try again.")
 
-    # ── Hint panel for demo ───────────────────────────────────────
-    st.markdown("""
-    <div style='margin-top:24px; background:#F4F4F4; border-radius:6px;
-                padding:14px 16px; border:1px solid #E0E0E0;'>
-        <div style='font-size:12px; font-weight:600; color:#525252;
-                    text-transform:uppercase; letter-spacing:0.06em;
-                    margin-bottom:10px;'>Demo Credentials</div>
+    # ── Demo credentials — hidden behind toggle ───────────────────
+    with st.expander("🔑 Show demo credentials"):
+        st.markdown("""
         <table style='width:100%; border-collapse:collapse; font-size:12px;'>
             <tr style='border-bottom:1px solid #E0E0E0;'>
                 <th style='text-align:left; padding:4px 8px; color:#6F6F6F;'>Username</th>
@@ -1008,8 +999,7 @@ def render_login_page():
                     padding:2px 8px; border-radius:10px; font-size:11px;'>Limited</span></td>
             </tr>
         </table>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────────────────────────
