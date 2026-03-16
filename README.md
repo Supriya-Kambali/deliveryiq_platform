@@ -1,222 +1,202 @@
-# 🔵 IBM DeliveryIQ
-## AI-Powered Delivery Intelligence for IBM Consultants
+# IBM DeliveryIQ — AI-Powered Delivery Intelligence Platform
 
-> *"From project chaos to delivery clarity — powered by AI"*
+> Built by **Supriya P Kambali** · IBM Internship Project · 2024
 
----
-
-## 🎯 What is IBM DeliveryIQ?
-
-IBM DeliveryIQ is an AI-powered platform built specifically for **IBM Delivery Consultants** (and interns in consulting roles) that automates the most time-consuming parts of project delivery:
-
-- ✅ Predicts project risks **before** they become problems
-- ✅ Auto-generates IBM-format status reports in seconds
-- ✅ Answers questions from IBM delivery frameworks and past projects
-- ✅ Orchestrates AI agents to plan, research, write, and advise
-- ✅ Coaches career growth within IBM's consulting track
+IBM DeliveryIQ is an AI platform that helps IBM delivery consultants manage project risk, generate status reports, and surface delivery insights — saving 2–3 hours of manual work every week.
 
 ---
 
-## 🔴 The Problem
+## The Problem
 
-IBM Delivery Consultants spend **60-70% of their time** on:
-- Writing weekly status reports (2-3 hours each)
-- Manually tracking risks in Excel spreadsheets
-- Searching through hundreds of IBM documents for the right template
-- Writing client emails and stakeholder updates
-- Repeating the same mistakes from past projects (no lessons learned system)
+IBM delivery consultants spend **2–3 hours every Monday** manually:
+- Compiling weekly status reports from scattered notes
+- Updating risk scores in spreadsheets
+- Writing emails to stakeholders
+- Searching through documentation for delivery best practices
 
-**Result:** Less time for actual consulting and client value delivery.
-
----
-
-## 🟢 The Solution
-
-IBM DeliveryIQ uses **4 AI modules** — each built from one week of the AI/ML training program — to automate and augment every aspect of delivery consulting.
+DeliveryIQ automates all of this.
 
 ---
 
-## 📦 4 Modules — 4 Weeks of Learning
-
-### Module 1: Risk Dashboard (Week 1 — ML Fundamentals)
-**Why we use ML here:**
-> Project risk assessment is a **prediction problem** — exactly what Machine Learning solves.
-> Instead of a consultant guessing "this project feels risky," we train ML models on historical
-> project data to **quantify risk with probability scores**.
-
-- Scikit-learn classifiers predict risk level (Low/Medium/High/Critical)
-- Linear regression forecasts project completion probability
-- Matplotlib/Seaborn visualize project health in real-time dashboards
-- RAG/Amber/Green status across Timeline, Budget, Scope, Quality, Risk
-
----
-
-### Module 2: Knowledge RAG Engine (Week 2 — LangChain + RAG)
-**Why we use RAG here:**
-> IBM has thousands of delivery frameworks, templates, and past project lessons.
-> A consultant can't read all of them. RAG (Retrieval-Augmented Generation) lets you
-> **ask questions in plain English and get answers from IBM's actual documents** —
-> with source citations so you can trust the answer.
-
-- LangChain chains connect questions → IBM docs → LLM → answers
-- Milvus vector database stores IBM delivery documents as searchable embeddings
-- ChromaDB as lightweight fallback for quick local queries
-- Conversation memory so the chatbot remembers your project context
-
----
-
-### Module 3: Multi-Agent Delivery System (Week 3 — LangGraph)
-**Why we use agents here:**
-> A single LLM can answer questions. But delivery consulting requires **multiple specialized
-> tasks happening in sequence**: research → plan → write → review → communicate.
-> LangGraph orchestrates specialized AI agents that each do one thing excellently,
-> then pass results to the next agent — like a real consulting team.
-
-- **Supervisor Agent**: Routes your request to the right specialist agent
-- **Planner Agent**: Creates IBM Garage-aligned project plans and WBS
-- **Risk Agent**: Proactively identifies and mitigates project risks
-- **Report Agent**: Generates IBM-format status reports automatically
-- **Stakeholder Agent**: Drafts professional client communication emails
-- Human-in-the-loop: You approve/reject agent decisions at key checkpoints
-
----
-
-### Module 4: Fine-Tuned Intelligence (Week 4 — HuggingFace + QLoRA + Docker)
-**Why we fine-tune here:**
-> A general LLM knows about project management generically. But IBM has its OWN
-> methodology, language, report formats, and consulting style. Fine-tuning with QLoRA
-> teaches the model to **speak IBM** — using IBM's exact terminology, report structure,
-> and consulting communication style. This is the difference between a generic AI
-> and an IBM-specific AI.
-
-- QLoRA fine-tuning on IBM consulting Q&A dataset (4-bit quantization, runs on Mac M4 Pro)
-- PEFT LoRA adapters — efficient fine-tuning without full model retraining
-- Kaggle dataset preparation for IBM delivery scenarios
-- Docker Compose packages the entire platform for one-command deployment
-- Kubernetes enables scaling for team-wide IBM deployment
-
----
-
-## 🏛️ Architecture
+## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    IBM DeliveryIQ Platform                      │
-│                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │              Streamlit Frontend (IBM Carbon UI)          │   │
-│  │   [Risk Dashboard] [Knowledge] [Agents] [Career]        │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                           ↕ FastAPI                             │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    Core AI Engine                        │   │
-│  │                                                          │   │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐  │   │
-│  │  │ ML Models   │  │ RAG Engine  │  │ LangGraph Agents│  │   │
-│  │  │ (Scikit-    │  │ (LangChain  │  │ (Supervisor +   │  │   │
-│  │  │  learn)     │  │  + Milvus)  │  │  4 Specialists) │  │   │
-│  │  └─────────────┘  └─────────────┘  └─────────────────┘  │   │
-│  │                                                          │   │
-│  │  ┌──────────────────────────────────────────────────┐   │   │
-│  │  │         Fine-Tuned LLM (QLoRA + Ollama)          │   │   │
-│  │  └──────────────────────────────────────────────────┘   │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │              Infrastructure (Docker + K8s)               │   │
-│  │   [Milvus] [ChromaDB] [Redis] [PostgreSQL] [Ollama]     │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│           IBM Consultants / Project Managers     │
+│                    (Browser)                     │
+└────────────────────┬────────────────────────────┘
+                     │
+┌────────────────────▼────────────────────────────┐
+│              Streamlit Frontend                  │
+│   Login · Role-based nav · Session persistence  │
+│         Weekly Check-In · Dashboards            │
+└──┬──────────┬──────────┬──────────┬─────────────┘
+   │          │          │          │
+┌──▼──┐  ┌───▼──┐  ┌────▼──┐  ┌───▼──────┐
+│ M1  │  │  M2  │  │  M3   │  │    M4    │
+│Risk │  │ RAG  │  │Agents │  │ MLOps /  │
+│Dash │  │  KB  │  │       │  │Fine-tune │
+└──┬──┘  └───┬──┘  └────┬──┘  └───┬──────┘
+   │          │          │          │
+┌──▼──┐  ┌───▼──────────▼──┐  ┌───▼──────┐
+│ sklearn  │   Groq API       │  │ ChromaDB │
+│ RF model │  llama-3.3-70b   │  │ Vectors  │
+└──────┘  └──────────────────┘  └──────────┘
+                     │
+┌────────────────────▼────────────────────────────┐
+│         SQLite · ~/.deliveryiq/ · GitHub         │
+│    Projects · risk snapshots · check-in reports  │
+└─────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📁 Project Structure
+## Modules
 
-```
-IBM_DeliveryIQ/
-├── module1_risk_dashboard/     ← Week 1: ML + Visualizations
-│   ├── models/                 (risk_predictor.py, health_scorer.py)
-│   ├── visualizations/         (dashboard.py, charts.py)
-│   └── data/                   (sample_projects.csv)
-│
-├── module2_knowledge_rag/      ← Week 2: LangChain + RAG + Vector DBs
-│   ├── rag_pipeline/           (loader.py, chunker.py, retriever.py, chain.py)
-│   ├── vector_stores/          (milvus_store.py, chroma_store.py)
-│   └── documents/              (IBM delivery templates + frameworks)
-│
-├── module3_agents/             ← Week 3: LangGraph Multi-Agent System
-│   ├── agents/                 (supervisor.py, planner.py, risk.py, report.py, stakeholder.py)
-│   ├── tools/                  (search_tool.py, report_tool.py, calendar_tool.py)
-│   └── graphs/                 (delivery_graph.py)
-│
-├── module4_finetune/           ← Week 4: HuggingFace + QLoRA + Docker
-│   ├── fine_tuning/            (prepare_data.py, qlora_train.py, inference.py)
-│   ├── career_tools/           (badge_recommender.py, promotion_advisor.py)
-│   └── kaggle_data/            (dataset_prep.py)
-│
-├── frontend/                   ← Streamlit UI
-│   ├── app.py                  (main entry point)
-│   └── pages/                  (risk.py, knowledge.py, agents.py, career.py)
-│
-├── api/                        ← FastAPI Backend
-│   ├── main.py
-│   └── routes/                 (risk_routes.py, rag_routes.py, agent_routes.py)
-│
-├── infrastructure/             ← DevOps
-│   ├── docker/                 (Dockerfile.api, Dockerfile.agents, Dockerfile.llm)
-│   ├── docker-compose.yml
-│   └── kubernetes/             (deployments/, services/)
-│
-├── requirements.txt
-├── .env.example
-└── README.md                   ← This file
-```
+### Module 1 — Risk Dashboard
+ML-powered project health scoring using a **Random Forest classifier** trained on 500 IBM project records.
+
+- **17 features**: team size, budget, complexity, stakeholder engagement, timeline buffer, and more
+- **82% accuracy** · 81.67% F1 score
+- Outputs: risk level (Low / Medium / High / Critical), health score (0–100), RAG status, recommendations
+- Generates and emails a PDF delivery report
+
+### Module 2 — Knowledge Base
+RAG (Retrieval-Augmented Generation) pipeline over IBM delivery documentation.
+
+- **Embeddings**: `all-MiniLM-L6-v2` · 384 dimensions
+- **Vector store**: ChromaDB with cosine similarity search
+- **LLM**: Groq API (llama-3.3-70b-versatile)
+- 92%+ confidence on IBM Garage methodology queries
+
+### Module 3 — AI Agents
+LangGraph multi-agent system with intelligent request routing.
+
+- **Supervisor agent** classifies intent and routes to the right specialist
+- **Specialist agents**: Planner, Risk Analyst, Report Writer, Stakeholder Comms, General
+- Returns structured delivery plans, risk assessments, and stakeholder emails
+
+### Module 4 — MLOps & Fine-tuning
+Fine-tuning pipeline for IBM-specific delivery intelligence.
+
+- **QLoRA** fine-tuning on `llama3.2` with IBM delivery dataset
+- 21 domain-specific examples covering IBM Garage methodology
+- Model overview, training metrics, and deployment pipeline UI
+
+### Weekly Check-In ⭐ New
+The core time-saving feature — a **3-minute Monday flow** that replaces manual status reporting.
+
+- **6 questions**: what did you complete, blockers, budget pulse, stakeholder mood, team morale, next week plan
+- Auto-generates a 3-paragraph IBM-style status report via Groq LLM
+- Updates risk score and health score automatically
+- 🔴 **Alert banner** if project is trending toward RED
+- Saves all reports and history to SQLite — full trend chart over time
 
 ---
 
-## 🚀 Quick Start
+## Tech Stack
 
-### Option 1: Run Locally (Recommended for Demo)
+| Layer | Technology |
+|---|---|
+| Frontend | Streamlit · Python |
+| ML model | scikit-learn · Random Forest |
+| RAG pipeline | LangChain · ChromaDB · HuggingFace embeddings |
+| Agent framework | LangGraph · LangChain |
+| LLM (cloud) | Groq API · llama-3.3-70b-versatile |
+| LLM (local) | Ollama · llama3.2 (fallback) |
+| Fine-tuning | QLoRA · PEFT · Transformers |
+| Persistence | SQLite · Python pathlib |
+| PDF generation | ReportLab |
+| Email | Gmail SMTP · python-dotenv |
+| Deployment | Streamlit Cloud · GitHub |
+
+---
+
+## Setup
+
+### Prerequisites
+- Python 3.10+
+- [Ollama](https://ollama.com) (for local LLM — optional if using Groq)
+- A [Groq API key](https://console.groq.com) (free)
+
+### Install
+
 ```bash
-# 1. Install dependencies
+git clone https://github.com/Supriya-Kambali/deliveryiq_platform.git
+cd deliveryiq_platform
 pip install -r requirements.txt
-
-# 2. Make sure Ollama is running with Llama 3
-ollama serve
-ollama pull llama3
-
-# 3. Launch the app
-cd frontend
-streamlit run app.py
 ```
 
-### Option 2: Docker Compose (Full Stack)
+### Configure environment
+
+Create a `.env` file in the project root:
+
+```env
+GROQ_API_KEY=your_groq_api_key_here
+DELIVERYIQ_EMAIL=your_gmail@gmail.com
+DELIVERYIQ_EMAIL_PASSWORD=your_app_password
+DELIVERYIQ_SESSION_SECRET=any_random_secret_string
+```
+
+### Run
+
 ```bash
-docker-compose up --build
-# Access at http://localhost:8501
+streamlit run frontend/app.py
+```
+
+### Demo credentials
+
+| Username | Password | Role |
+|---|---|---|
+| supriyakambali@ibm.com | manager123 | Full access |
+| rahul@ibm.com | employee123 | Partial |
+| ananya@ibm.com | intern123 | Limited |
+
+---
+
+## Project Structure
+
+```
+deliveryiq_platform/
+├── frontend/
+│   ├── app.py                  # Main Streamlit app (3800+ lines)
+│   ├── auth.py                 # Role-based authentication
+│   └── session_manager.py      # Session token management
+├── module1_risk_dashboard/
+│   ├── data/sample_projects.csv
+│   └── models/
+│       ├── risk_predictor.py   # Random Forest model
+│       └── risk_model.pkl      # Trained model (82% accuracy)
+├── module2_knowledge_rag/
+│   ├── rag_pipeline/rag_chain.py
+│   └── vector_stores/          # ChromaDB embeddings
+├── module3_agents/
+│   ├── agents/
+│   │   ├── supervisor.py       # Intent classification + routing
+│   │   └── specialist_agents.py
+│   └── graphs/delivery_graph.py
+├── module4_finetune/
+│   └── kaggle_data/ibm_delivery_dataset.json
+├── utils/
+│   ├── persistence.py          # SQLite layer
+│   ├── email_service.py        # Gmail SMTP
+│   ├── pdf_generator.py        # ReportLab PDF
+│   ├── report_generator.py     # Report text
+│   └── llm_helper.py          # Groq / Ollama helper
+├── requirements.txt
+└── .env                        # Not committed — see setup above
 ```
 
 ---
 
-## 🗺️ All 4 Weeks Covered
+## Live Demo
 
-| Week | What You Learned | How IBM DeliveryIQ Uses It |
-|------|-----------------|---------------------------|
-| **Week 1** | NumPy, Pandas, Scikit-learn, Matplotlib | Risk prediction ML models + project health dashboard |
-| **Week 2** | LangChain, RAG, Milvus, ChromaDB | IBM knowledge chatbot with source citations |
-| **Week 3** | LangGraph, Multi-agents, Tool calling | 5 AI agents: Planner, Risk, Report, Stakeholder, Supervisor |
-| **Week 4** | HuggingFace, QLoRA, Docker, Kubernetes | Fine-tuned IBM-style LLM + full containerized deployment |
+🔗 [View on Streamlit Cloud](https://supriya-kambali-deliveryiq-platform.streamlit.app)
 
 ---
 
-## 👩‍💼 Built By
+## Author
 
-**Supriya P Kambali**
-IBM Delivery Consultant Intern
-AI/ML Training Program — 4-Week Final Project
-March 2026
-
----
-
-*IBM DeliveryIQ — Because great delivery starts with great intelligence.*
+**Supriya P Kambali**  
+IBM Intern · AI & Delivery Intelligence  
+Built as part of the IBM Garage 4-week internship programme
