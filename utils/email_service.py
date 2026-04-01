@@ -1,3 +1,4 @@
+import os
 import smtplib
 import threading
 from email.mime.multipart import MIMEMultipart
@@ -5,20 +6,34 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-print("DEBUG: Loading utils/email_service.py [v4 with HTML/CSS support]")
+print("DEBUG: Loading utils/email_service.py [v5 - secrets based]")
 
-def send_delivery_report(recipients, subject, report_data, pdf_file):
+# ── Load credentials from Streamlit secrets or environment ────────
+try:
+    import streamlit as st
+    GMAIL_USER     = st.secrets["GMAIL_USER"]
+    GMAIL_PASSWORD = st.secrets["GMAIL_PASSWORD"]
+except Exception:
+    GMAIL_USER     = os.environ.get("GMAIL_USER", "")
+    GMAIL_PASSWORD = os.environ.get("GMAIL_PASSWORD", "")
+
+
+def send_delivery_report(recipients, subject, report_data, pdf_file=None):
     """
-    Send a professional HTML/CSS delivery report with a PDF attachment.
+    Send a professional HTML/CSS delivery report with an optional PDF attachment.
     """
     print(f"DEBUG: send_delivery_report called with report_data type: {type(report_data)}")
-    
+
+    if not GMAIL_USER or not GMAIL_PASSWORD:
+        print("ERROR: Gmail credentials not configured in Streamlit secrets.")
+        return False
+
     msg = MIMEMultipart("alternative")
-    msg["From"] = "supriyakambali67@gmail.com"
-    msg["To"] = ", ".join(recipients)
+    msg["From"]    = GMAIL_USER
+    msg["To"]      = ", ".join(recipients) if isinstance(recipients, list) else recipients
     msg["Subject"] = subject
 
-    # Construct the HTML body using the report_data dictionary
+    # ── HTML body ─────────────────────────────────────────────────
     try:
         html_content = f"""
         <html>
@@ -60,19 +75,14 @@ def send_delivery_report(recipients, subject, report_data, pdf_file):
         </body>
         </html>
         """
-        # Ensure it's a string
-        if not isinstance(html_content, str):
-            print(f"ERROR: html_content is {type(html_content)}, converting to string")
-            html_content = str(html_content)
-            
         msg.attach(MIMEText(html_content, "html"))
         print("DEBUG: Attached HTML body")
-        
+
     except Exception as e:
         print(f"ERROR constructing HTML body: {e}")
         msg.attach(MIMEText("Error generating report content.", "plain"))
 
-    # Attach PDF
+    # ── Attach PDF (optional) ─────────────────────────────────────
     if pdf_file:
         try:
             print(f"Attaching PDF: {pdf_file}")
@@ -85,12 +95,12 @@ def send_delivery_report(recipients, subject, report_data, pdf_file):
         except Exception as e:
             print(f"Error attaching PDF: {e}")
 
-    # SMTP Login and Send
+    # ── SMTP send ─────────────────────────────────────────────────
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)  # 10s timeout — won't hang forever
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
         server.starttls()
-        server.login("supriyakambali67@gmail.com", "vzht gmfq swfl mocq")
-        server.sendmail("supriyakambali67@gmail.com", recipients, msg.as_string())
+        server.login(GMAIL_USER, GMAIL_PASSWORD)
+        server.sendmail(GMAIL_USER, recipients, msg.as_string())
         server.quit()
         print("Email sent successfully")
         return True
