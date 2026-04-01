@@ -3196,7 +3196,7 @@ def render_weekly_checkin():
 
 Project: {project_name}
 Week: {this_week}
-Health Score: {new_health}/100 (was {last_health} last week, trend: {trend_delta:+d} points)
+Health Score: {new_health}/100 (was {last_health} last week, trend: {int(trend_delta):+d} points)
 Risk Level: {new_risk}
 RAG Status: {rag}
 
@@ -3309,7 +3309,7 @@ NEXT WEEK COMMITMENTS
             rc = risk_colors.get(new_r, "#525252")
 
             k1, k2, k3, k4 = st.columns(4)
-            k1.metric("New Health Score", f"{new_h}/100", f"{tdelta:+d} vs last week")
+            k1.metric("New Health Score", f"{new_h}/100", f"{int(tdelta):+d} vs last week")
             k2.metric("Risk Level", new_r)
             k3.metric("RAG Status", r["rag"])
             k4.metric("Trend", trend)
@@ -3366,8 +3366,10 @@ NEXT WEEK COMMITMENTS
                 )
             with col_email:
                 if st.button("📧 Send to Team", use_container_width=True):
-                    st.session_state.current_page = "📊 Risk Dashboard"
-                    st.info("Go to Risk Dashboard → Share Delivery Report to email this.")
+                    report_text = r.get("report", "")
+                    project_name = st.session_state.get("project_name", "IBM Project")
+                    st.success(f"✅ Report for **{project_name}** copied! Paste it into your email or Teams message.")
+                    st.code(report_text, language=None)
             with col_clear:
                 if st.button("✕ Clear", use_container_width=True):
                     del st.session_state["checkin_result"]
